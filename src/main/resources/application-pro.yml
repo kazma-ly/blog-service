@@ -1,0 +1,25 @@
+# release env
+my-setting:
+  cookie-host:
+  host: 127.0.0.1
+  env: release
+  # redis
+  redis-password:
+  # mysql
+  db-url:
+  db-username:
+  db-password:
+  mail-username:
+  mail-password:
+mybatis:
+  configuration:
+    cache-enabled: true
+spring:
+  data:
+    mongodb:
+      port: 27017
+      host: ${my-setting.host}
+      authentication-database:
+      database:
+      username:
+      password:

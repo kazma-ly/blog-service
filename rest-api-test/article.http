@@ -1,0 +1,14 @@
+@local = http://127.0.0.1:1331
+@server = https://kazma233.me/api
+
+### 获取文章列表
+GET {{local}}/articles HTTP/1.1
+
+### 日志统计
+GET {{local}}/statistics/article?start=2019-01-01&end=2019-03-24 HTTP/1.1
+
+### 搜索引擎同步
+PUT {{local}}/search/syncSearchIndex HTTP/1.1
+
+### 搜索文章
+GET {{local}}/search/article?keyword=test HTTP/1.1

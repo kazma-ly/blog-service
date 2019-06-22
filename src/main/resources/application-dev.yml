@@ -1,0 +1,5 @@
+# test env
+spring:
+  data:
+    mongodb:
+      uri: mongodb://${my-setting.host}:27017/blog

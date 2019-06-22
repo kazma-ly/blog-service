@@ -1,0 +1,151 @@
+my-setting:
+  # server domain name
+  cookie-host: 127.0.0.1
+  # most host
+  host: 127.0.0.1
+  #
+  env: debug
+  # redis
+  redis-password:
+  # mysql
+  db-url: jdbc:mysql://${my-setting.host}:3306/blog?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+  db-username: root
+  db-password: pw123456
+  # email
+  mail-username:
+  mail-password:
+
+# mybatis
+mybatis:
+  configuration:
+    #
+    #二级缓存的局限性
+    #mybatis二级缓存对细粒度的数据级别的缓存实现不好，
+    #  比如如下需求：对商品信息进行缓存，由于商品信息查询访问量大，但是要求用户每次都能查询最新的商品信息，
+    #  此时如果使用mybatis的二级缓存就无法实现当一个商品变化时只刷新该商品的缓存信息而不刷新其它商品的信息，
+    #  因为mybaits的二级缓存区域以mapper为单位划分，当一个商品信息变化会将所有商品信息的缓存数据全部清空。
+    #  解决此类问题需要在业务层根据需求对数据有针对性缓存。所以在项目实际应用中，一般会整合专门的缓存框架实现缓存处理。
+    #
+    # 全局映射器启用缓存 二级缓存 调试的时候关闭
+    cache-enabled: false
+    #查询时，关闭关联对象及时加载以提高性能
+    lazy-loading-enabled: true
+    # 当设置为true的时候，延迟加载的对象可能被任何延迟属性全部加载。否则，每个属性都按需加载
+    aggressive-lazy-loading: false
+    # 对于未知的SQL查询，允许返回不同的结果集以达到通用的效果
+    multiple-result-sets-enabled: true
+    # 允许使用列标签代替列名
+    use-column-label: true
+    # 允许使用自定义的主键值(比如由程序生成的UUID 32位编码作为键值)，数据表的PK生成策略将被覆盖
+    use-generated-keys: true
+    # 给予被嵌套的resultMap以字段-属性的映射支持 下划线转换成大小写
+    auto-mapping-behavior: full
+    #
+    #对于批量更新操作缓存SQL以提高性能
+    #配置默认的执行器。
+    #   SIMPLE 就是普通的执行器；
+    #   REUSE 执行器会重用预处理语句（prepared statements）；
+    #   BATCH 执行器将重用语句并执行批量更新。
+    #
+    default-executor-type: reuse
+    # 是否启用下划线与驼峰式命名规则的映射
+    map-underscore-to-camel-case: true
+    # 如果值(value)为null的话,那么key也不会被加入到map中 设为true 则没问题
+    call-setters-on-nulls: true
+  # map位置
+  mapper-locations: classpath:mapper/*/*.xml
+  type-handlers-package: com.kazma233.blogsystem.dao
+  # type-aliases-package: com.kazma233.blogsystem.entity.text,com.kazma233.blogsystem.entity.user
+
+# pageHelper
+pagehelper:
+  helper-dialect: mysql
+  offset-as-page-num: true
+  # 设置为true时，使用RowBounds分页会进行count查询
+  row-bounds-with-count: true
+  # 设置为true时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果
+  page-size-zero: true
+  # 启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页
+  # 禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据
+  reasonable: false
+  #params:
+
+# redis
+spring:
+  # redis 配置
+  redis:
+    host: ${my-setting.host}
+    port: 6379
+    password: ${my-setting.redis-password}
+    timeout: 1m
+    lettuce:
+      pool:
+        # 连接池中的最大空闲连接
+        max-idle: 8
+        # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1s
+        # 连接池最大连接数
+        max-active: 8
+  # 数据源配置
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: ${my-setting.db-username}
+    password: ${my-setting.db-password}
+    url: ${my-setting.db-url}
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      auto-commit: true
+      connection-timeout: 60000
+      idle-timeout: 60000
+      connection-init-sql: SELECT 1
+  # i18n资源文件位置
+  messages:
+    basename: i18n/i18n
+    encoding: UTF-8
+  output:
+    # 多彩输出
+    ansi:
+      enabled: always
+  servlet:
+    # 文件上传大小限制
+    multipart:
+      max-file-size: 3MB
+  cache:
+    type: redis
+  mail:
+    default-encoding: UTF-8
+    host: smtp.163.com
+    port: 25
+    protocol: smtp
+    username: ${my-setting.mail-username}
+    password: ${my-setting.mail-password}
+    properties:
+      mail:
+        smtp:
+          auth: true  # 需要验证登录名和密码
+        starttls:
+          enable: true  # 需要TLS认证 保证发送邮件安全验证
+          required: true
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    locale: zh_CN
+    time-zone: GMT+8
+
+# 监控
+management:
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+server:
+  port: 1331
+  # jetty的问题
+  connection-timeout: 60S
+
