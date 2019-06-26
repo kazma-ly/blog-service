@@ -48,19 +48,21 @@ class RemoteTool(object):
         # 信任主机
         ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         if self.key is None:
-            ssh_client.connect(hostname=host,
-                               port=port,
-                               username=username,
-                               password=password,
-                               timeout=60)
+            ssh_client.connect(
+                hostname=host,
+                port=port,
+                username=username,
+                password=password,
+                timeout=60)
         else:
             print('ssh key connect')
-            ssh_client.connect(hostname=host,
-                               port=port,
-                               username=username,
-                               password=paramiko,
-                               pkey=self.key,
-                               timeout=60)
+            ssh_client.connect(
+                hostname=host,
+                port=port,
+                username=username,
+                password=paramiko,
+                pkey=self.key,
+                timeout=60)
 
         return ssh_client
 
@@ -71,9 +73,8 @@ class RemoteTool(object):
             transport.connect(username=username, password=password)
         else:
             print('sftp key connect')
-            transport.connect(username=username,
-                              password=password,
-                              pkey=self.key)
+            transport.connect(
+                username=username, password=password, pkey=self.key)
         sftp = paramiko.SFTPClient.from_transport(transport)
         return transport, sftp
 
@@ -89,25 +90,20 @@ class RemoteTool(object):
         Raises:
             无异常
         '''
-        rec_line = show_line
-        print("命令： " + command + "\n")
+        total_line = 0
+        print("命令： " + command, end="\n")
         _, stdout, _ = ssh_client.exec_command(command)
-
-        res = stdout.readline()
-        print(res)
-        while show_line >= 0 and res and res != "":
-            show_line = show_line - 1
-            res = stdout.readline()
-            print(res)
-
-        return rec_line > show_line
+        for line in stdout:
+            print(line, end='')
+            total_line += 1
+        # 用于判断行数
+        return total_line > show_line
 
     def del_remote_dir(self, ssh_client, path):
         '''
         删除远程服务器上的文件
         '''
-        lastPath = "/blog" + path
-        self.exec_command(ssh_client, "rm -rf " + lastPath)
+        self.exec_command(ssh_client, "rm -rf " + path)
 
     def create_dir_if_not_exits(self, sftp, path):
         try:
@@ -115,8 +111,8 @@ class RemoteTool(object):
         except IOError:
             try:
                 sftp.mkdir(path, 0o755)
-            except Exception:
-                pass
+            except Exception as e:
+                print(e)
 
 
 def putback(put_size, file_size):
@@ -127,4 +123,4 @@ def putback(put_size, file_size):
         file_size: 文件总大小
     '''
     progress = put_size / file_size * 100
-    print('上传进度: {:0.3f}'.format(progress) + '%', end='\n', flush=True)
+    print('上传进度: {:0.3f}'.format(progress) + '%', end='\r', flush=True)

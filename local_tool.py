@@ -26,6 +26,4 @@ class LocalTool(object):
         commons 是字符串(命令)数组
         '''
         print(commons)
-        retcode = subprocess.call(commons, shell=True)
-        print(retcode)
-        return retcode
+        return subprocess.call(commons, shell=True)

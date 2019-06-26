@@ -8,6 +8,13 @@ from remote_tool import RemoteTool
 from local_tool import LocalTool
 import requests
 import os
+import sys
+
+LOCAL_SSH_KEY_PATH = r''
+LOCAL_FILE_PATH = r'build/libs/blog-service-4.0.0.jar'
+SERVER_PATH = r''
+SERVER_FILE_PATH = SERVER_PATH + '/blog.jar'
+EXEC_SERVER_COMMAND = r'nohup java -jar ' + SERVER_FILE_PATH + r' --spring.profiles.active=pro >/dev/null 2>&1 &'
 
 
 def main():
@@ -17,32 +24,41 @@ def main():
     username = env.get('SERVER_USERNAME')
     password = None  # env.get('SERVER_PASSWORD')
 
-    tool = RemoteTool(r'D:/asw-key.pem')
-    # 打包java项目
-    localTool = LocalTool()
-    isOk = localTool.package_java()
-    if not isOk:
-        print("请检查java打包")
+    argv = sys.argv
+
+    if '-h' in argv:
+        print(
+            'SKIP_BUILD: 跳过构建\nSKIP_SHUT_DOWN: 跳过停止SpringBoot项目\nSKIP_UPLOAD_JAR: 跳过上传jar'
+        )
         return
 
-    # 优雅停止SpringBoot老项目
-    try:
-        requests.post("http://" + host + ":1331/actuator/shutdown")
-    except Exception as e:  # 有可能服务已经关掉了
-        print(e)
+    tool = RemoteTool(LOCAL_SSH_KEY_PATH)
+    if 'SKIP_BUILD' not in argv:
+        localTool = LocalTool()
+        isOk = localTool.package_java()
+        if not isOk:
+            print("请检查java打包")
+            return
 
-    transport, sftp = tool.connect_file_server(host, port, username, password)
-    # 检查远程是否有这个目录
-    tool.create_dir_if_not_exits(sftp, '/home/ubuntu/blog/server')
-    tool.upload_one_file(sftp, './build/libs/blog-service-4.0.0.jar', '/home/ubuntu/blog/server/blog.jar')
+    if 'SKIP_SHUT_DOWN' not in argv:
+        while True:
+            try:
+                requests.post("http://" + host + ":1331/actuator/shutdown")
+            except Exception as e:
+                print(e)
+                break
+
+    if 'SKIP_UPLOAD_JAR' not in argv:
+        transport, sftp = tool.connect_file_server(host, port, username,
+                                                   password)
+        # 检查远程是否有这个目录
+        tool.create_dir_if_not_exits(sftp, SERVER_PATH)
+        tool.upload_one_file(sftp, LOCAL_FILE_PATH, SERVER_FILE_PATH)
+        transport.close()
 
     # 连接到服务器 返回当前session
     ssh_client = tool.connect_server(host, port, username, password)
-    # 发送命令
-    tool.exec_command(ssh_client, 'java -jar /home/ubuntu/blog/server/blog.jar --spring.profiles.active=pro')
-
-    # 释放资源
-    transport.close()
+    tool.exec_command(ssh_client, EXEC_SERVER_COMMAND)
     ssh_client.close()
 
 
