@@ -112,14 +112,8 @@ public class UserController {
      * 注册
      */
     @PostMapping(value = "/register")
-    public BaseResult doRegister(@RequestParam("key") String key, @RequestParam("code") String code,
-                                 @RequestBody @Validated(AddGroup.class) User user, BindingResult bindingResult) {
+    public BaseResult doRegister(@RequestBody @Validated(AddGroup.class) User user, BindingResult bindingResult) {
         ValidatedUtils.checkFieldErrors(bindingResult.getFieldErrors());
-
-        // 校验验证码
-        if (!checkCode(key, code)) {
-            throw new UserException(ResultEnums.VERIFICATION_CODE_ERROR);
-        }
 
         String uid = userService.doRegister(user);
         return BaseResult.createSuccessResult(ResultEnums.SUCCESS, uid);

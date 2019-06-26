@@ -28,7 +28,7 @@ public class User {
     @NotBlank(message = "{message.password.length}", groups = {UpdateGroup.class, AddGroup.class})
     private String password;
 
-    @NotBlank(message = "请选择一个权限", groups = {AddGroup.class, SetRoleGroup.class})
+    @NotBlank(message = "请选择一个权限", groups = {SetRoleGroup.class})
     private String roleId;
 
     private String enable;

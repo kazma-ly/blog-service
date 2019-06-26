@@ -61,6 +61,10 @@ create table blog_permission_table
     create_time            datetime     null comment '创建时间'
 );
 
+INSERT INTO `blog_permission_table` (`id`, `permission_name`, `permission_description`, `create_time`) VALUES ('1', 'admin', 'admin', now());
+INSERT INTO `blog_permission_table` (`id`, `permission_name`, `permission_description`, `create_time`) VALUES ('2', 'manage', 'manage', now());
+INSERT INTO `blog_permission_table` (`id`, `permission_name`, `permission_description`, `create_time`) VALUES ('3', 'normal', 'normal', now());
+
 drop table if exists blog_role_table;
 create table blog_role_table
 (
@@ -71,6 +75,9 @@ create table blog_role_table
     description     varchar(120) not null comment '角色描述',
     create_time     datetime     null
 ) comment '角色表';
+
+INSERT INTO `blog_role_table` (`id`, `role_name`, `permissions_ids`, `description`, `create_time`) VALUES ('1000', 'admin', '1,2,3', '管理员', now());
+INSERT INTO `blog_role_table` (`id`, `role_name`, `permissions_ids`, `description`, `create_time`) VALUES ('1001', 'normal', '3', '用户', now());
 
 drop table if exists user_table;
 create table user_table

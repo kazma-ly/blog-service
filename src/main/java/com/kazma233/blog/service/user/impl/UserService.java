@@ -83,9 +83,13 @@ public class UserService implements IUserService {
         user.setId(uid);
         user.setPassword(DigestUtils.sha256Hex(inputPasswordByte));
         user.setEnable(UserStatus.ENABLE.getCode());
-        // 全部都是普通用户
-        user.setRoleId("1001");
 
+        if ("admin".equals(user.getUsername())) {
+            user.setRoleId("1000");
+        }else {
+            // 全部都是普通用户
+            user.setRoleId("1001");
+        }
         userDao.insert(user);
         return uid;
     }
