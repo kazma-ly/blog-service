@@ -31,13 +31,6 @@ public class CommentController {
     @Autowired
     private ICommentService commentService;
 
-    /**
-     * 提交评论
-     *
-     * @param comment       评论信息
-     * @param bindingResult 数据校验
-     * @return 返回成功或者失败
-     */
     @PostMapping(value = "/comments")
     public BaseResult commit(@RequestBody @Validated Comment comment, BindingResult bindingResult) {
         ValidatedUtils.checkFieldErrors(bindingResult.getFieldErrors());
@@ -46,11 +39,6 @@ public class CommentController {
         return BaseResult.createResult(res);
     }
 
-    /**
-     * 获得某篇文章的评论
-     *
-     * @return 返回评论
-     */
     @GetMapping(value = "/comments")
     public BaseResult<PageInfo> articleComment(CommentQueryVO commentQueryVO) {
         commentQueryVO.init();

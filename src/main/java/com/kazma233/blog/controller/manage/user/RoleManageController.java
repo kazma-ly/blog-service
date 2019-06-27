@@ -36,7 +36,7 @@ public class RoleManageController {
     @GetMapping("/roles")
     public BaseResult all(RoleQueryVO roleQueryVO) {
         roleQueryVO.init();
-        PageInfo<RolePermissionsVO> pageInfo = roleService.queryByPage(roleQueryVO);
+        PageInfo<RolePermissionsVO> pageInfo = roleService.queryAllArgs(roleQueryVO);
         return BaseResult.createSuccessResult(ResultEnums.SUCCESS, pageInfo);
     }
 
@@ -57,7 +57,7 @@ public class RoleManageController {
     @PostMapping("/role")
     public BaseResult add(@Validated(AddGroup.class) Role role, BindingResult bindingResult) {
         ValidatedUtils.checkFieldErrors(bindingResult.getFieldErrors());
-        Role r = roleService.insert(role);
+        Role r = roleService.save(role);
         return BaseResult.createSuccessResult(ResultEnums.SUCCESS, r);
     }
 

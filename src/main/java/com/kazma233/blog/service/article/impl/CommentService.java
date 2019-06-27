@@ -9,10 +9,11 @@ import com.kazma233.blog.service.article.IArticleService;
 import com.kazma233.blog.service.article.ICommentService;
 import com.kazma233.blog.vo.article.CommentAndArticleVO;
 import com.kazma233.blog.vo.article.CommentQueryVO;
-import com.kazma233.common.SecretTool;
+import com.kazma233.common.RSATool;
 import com.kazma233.common.ThreadPoolUtils;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.kazma233.common.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-/**
- * 评论服务类
- * Created by mac_zly on 2017/4/26.
- *
- * @author kazma
- */
+
 @Service
 public class CommentService implements ICommentService {
 
@@ -52,7 +48,7 @@ public class CommentService implements ICommentService {
     @Transactional(rollbackFor = RuntimeException.class)
     public int insert(Comment comment) {
 
-        comment.setId(SecretTool.getInstance().generateValue());
+        comment.setId(Utils.generateID());
         comment.setCreateTime(LocalDateTime.now());
 
         int res = commentDao.insert(comment);
@@ -71,7 +67,7 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public PageInfo<CommentAndArticleVO> queryCommentAndArticleTitle(CommentQueryVO commentQueryVO) {
+    public PageInfo<CommentAndArticleVO> queryAllCommentAndArticleTitle(CommentQueryVO commentQueryVO) {
         PageHelper.startPage(commentQueryVO.getPage(), commentQueryVO.getCount());
         List<CommentAndArticleVO> commentAndArticleVOS = commentDao.findByArgsHasTitle(commentQueryVO);
         return new PageInfo<>(commentAndArticleVOS);
@@ -92,12 +88,6 @@ public class CommentService implements ICommentService {
         return commentDao.findByArgsHasTitle(commentQueryVO);
     }
 
-
-    /**
-     * 发送邮件
-     *
-     * @param comment comment对象
-     */
     private void sendEmail(Comment comment) {
         Article article = articleService.findById(comment.getArticleId());
         String content = article.getTitle() + ": \n" + comment.getNickname() + ": " + comment.getContent();

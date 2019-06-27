@@ -3,7 +3,7 @@ package com.kazma233.blog.middleware;
 import com.kazma233.blog.entity.user.Permission;
 import com.kazma233.blog.entity.user.Role;
 import com.kazma233.blog.entity.user.User;
-import com.kazma233.blog.enums.UserStatus;
+import com.kazma233.blog.enums.user.UserStatus;
 import com.kazma233.blog.service.user.IPermissionService;
 import com.kazma233.blog.service.user.IUserService;
 import lombok.extern.slf4j.Slf4j;
@@ -44,7 +44,7 @@ public class UserRealm extends AuthorizingRealm {
                 build();
 
         // 数据库查询
-        User dbUser = userService.doLoin(user);
+        User dbUser = userService.login(user);
 
         if (dbUser != null && UserStatus.ENABLE.getCode().equals(dbUser.getEnable())) {
             Session session = SecurityUtils.getSubject().getSession();
@@ -75,7 +75,7 @@ public class UserRealm extends AuthorizingRealm {
         if (role != null) {
             String permissionIds = role.getPermissionIds();
             String[] ids = permissionIds.split(",");
-            List<Permission> permissions = permissionService.queryPermissionByIds(ids);
+            List<Permission> permissions = permissionService.queryByIds(ids);
             permissions.forEach(permission -> {
                 simpleAuthorizationInfo.addStringPermission(permission.getPermissionName());
             });

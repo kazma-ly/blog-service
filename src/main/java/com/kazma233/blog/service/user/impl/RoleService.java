@@ -1,5 +1,7 @@
 package com.kazma233.blog.service.user.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.dao.user.PermissionDao;
 import com.kazma233.blog.dao.user.RoleDao;
 import com.kazma233.blog.entity.user.Permission;
@@ -7,14 +9,13 @@ import com.kazma233.blog.entity.user.Role;
 import com.kazma233.blog.service.user.IRoleService;
 import com.kazma233.blog.vo.user.RolePermissionsVO;
 import com.kazma233.blog.vo.user.RoleQueryVO;
-import com.kazma233.common.SecretTool;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.kazma233.common.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+
 
 @Service
 public class RoleService implements IRoleService {
@@ -25,7 +26,7 @@ public class RoleService implements IRoleService {
     private PermissionDao permissionDao;
 
     @Override
-    public PageInfo<RolePermissionsVO> queryByPage(RoleQueryVO roleQueryVO) {
+    public PageInfo<RolePermissionsVO> queryAllArgs(RoleQueryVO roleQueryVO) {
         PageHelper.startPage(roleQueryVO.getPage(), roleQueryVO.getCount());
 
         List<Role> roles = roleDao.queryAll(roleQueryVO);
@@ -54,10 +55,10 @@ public class RoleService implements IRoleService {
     }
 
     @Override
-    public Role insert(Role role) {
-        String roleId = SecretTool.getInstance().generateValue();
-        role.setId(roleId);
+    public Role save(Role role) {
+        role.setId(Utils.generateID());
         roleDao.insert(role);
+
         return role;
     }
 

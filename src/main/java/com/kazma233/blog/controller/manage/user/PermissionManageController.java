@@ -39,7 +39,7 @@ public class PermissionManageController {
     @GetMapping("/permissions")
     public BaseResult all(PermissionQueryVO permissionQueryVO) {
         permissionQueryVO.init();
-        PageInfo pageInfo = permissionService.queryPermissionByCondition(permissionQueryVO);
+        PageInfo pageInfo = permissionService.queryAllByCondition(permissionQueryVO);
         return BaseResult.createSuccessResult(ResultEnums.SUCCESS, pageInfo);
     }
 
@@ -60,7 +60,7 @@ public class PermissionManageController {
     @PostMapping("/permission")
     public BaseResult add(@Validated(AddGroup.class) @RequestBody Permission permission, BindingResult bindingResult) {
         ValidatedUtils.checkFieldErrors(bindingResult.getFieldErrors());
-        Integer result = permissionService.addPermission(permission);
+        Integer result = permissionService.save(permission);
         return BaseResult.createResult(result, permission);
     }
 
@@ -72,7 +72,7 @@ public class PermissionManageController {
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
     @DeleteMapping("/permission/{pid}")
     public BaseResult delete(@PathVariable("pid") String pid) {
-        Integer res = permissionService.deletePermissionById(pid);
+        Integer res = permissionService.deleteById(pid);
         return BaseResult.createResult(res);
     }
 
@@ -84,7 +84,7 @@ public class PermissionManageController {
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
     @DeleteMapping("/permission")
     public BaseResult deletes(@RequestParam("pids") List<String> pids) {
-        Integer res = permissionService.deletePermissionByIds(pids);
+        Integer res = permissionService.deleteByIds(pids);
         return BaseResult.createResult(res);
     }
 
@@ -95,7 +95,7 @@ public class PermissionManageController {
     @PutMapping("/permission")
     public BaseResult update(@RequestBody @Validated(UpdateGroup.class) Permission permission, BindingResult bindingResult) {
         ValidatedUtils.checkFieldErrors(bindingResult.getFieldErrors());
-        Integer res = permissionService.updatePermissionById(permission);
+        Integer res = permissionService.updateById(permission);
         return BaseResult.createResult(res);
     }
 

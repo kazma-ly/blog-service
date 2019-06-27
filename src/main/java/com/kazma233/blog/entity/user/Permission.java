@@ -1,8 +1,8 @@
 package com.kazma233.blog.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kazma233.blog.entity.group.AddGroup;
 import com.kazma233.blog.entity.group.UpdateGroup;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -10,11 +10,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-/**
- * 权限表
- *
- * @author zly
- */
 @Data
 public class Permission {
 

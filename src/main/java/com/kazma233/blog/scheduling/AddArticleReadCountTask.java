@@ -36,14 +36,13 @@ public class AddArticleReadCountTask {
             Map.Entry<String, Integer> next = iterator.next();
             Integer num = next.getValue();
             String uri = next.getKey();
-            // 等于0没必要插入
             if (num == 0) {
                 continue;
             }
             String[] urlSplit = uri.split("/");
             String tid = urlSplit[urlSplit.length - 1];
             log.info("insert: " + tid + ", num: " + num);
-            articleService.updateTextReadNum(tid, num);
+            articleService.updateViewNum(tid, num);
             iterator.remove();
         }
     }

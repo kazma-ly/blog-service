@@ -30,5 +30,5 @@ public interface ArticleCategoryDao {
     List<ArticleCategory> queryAll();
 
     @Select("select count(*) from blog_article_table where category_id = #{id}")
-    int queryCountByArticleId(String id);
+    int countByArticleId(String id);
 }

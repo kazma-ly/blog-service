@@ -30,7 +30,7 @@ public class ArticleController {
     @GetMapping(value = "/articles")
     public BaseResult articleList(ArticleQueryVO articleQueryVO) {
         articleQueryVO.init();
-        PageInfo<ArticleCategoryVO> articlePageInfo = articleService.queryPublishArticle(articleQueryVO);
+        PageInfo<ArticleCategoryVO> articlePageInfo = articleService.queryAllPublish(articleQueryVO);
 
         return BaseResult.createSuccessResult(ResultEnums.SUCCESS, articlePageInfo);
     }
@@ -44,7 +44,7 @@ public class ArticleController {
 
     @GetMapping("/articles/archive")
     public BaseResult archive() {
-        List<ArticleSimple> articleSimples = articleService.querySimpleArticleList();
+        List<ArticleSimple> articleSimples = articleService.queryAllSimple();
 
         Map<String, List<ArticleSimple>> lastResult = new LinkedHashMap<>();
         articleSimples.forEach(articleSimple -> {

@@ -7,19 +7,13 @@ import com.github.pagehelper.PageInfo;
 
 public interface IRoleService {
 
-    /**
-     * @param roleQueryVO 查询参数
-     */
-    PageInfo<RolePermissionsVO> queryByPage(RoleQueryVO roleQueryVO);
+    PageInfo<RolePermissionsVO> queryAllArgs(RoleQueryVO roleQueryVO);
 
     Role queryByRoleId(String roleId);
 
     Integer update(Role role);
 
-    /**
-     * 插入并且返回插入的对象
-     */
-    Role insert(Role role);
+    Role save(Role role);
 
     Integer delete(String roleId);
 

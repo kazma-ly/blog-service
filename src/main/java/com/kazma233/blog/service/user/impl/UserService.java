@@ -1,5 +1,7 @@
 package com.kazma233.blog.service.user.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.dao.mongo.MongoFileDao;
 import com.kazma233.blog.dao.user.RoleDao;
 import com.kazma233.blog.dao.user.UserDao;
@@ -7,15 +9,13 @@ import com.kazma233.blog.entity.mongo.MongoFile;
 import com.kazma233.blog.entity.user.Role;
 import com.kazma233.blog.entity.user.User;
 import com.kazma233.blog.enums.ResultEnums;
-import com.kazma233.blog.enums.UserStatus;
+import com.kazma233.blog.enums.user.UserStatus;
 import com.kazma233.blog.exception.UserException;
 import com.kazma233.blog.service.user.IUserService;
 import com.kazma233.blog.vo.user.UserChangePwVO;
 import com.kazma233.blog.vo.user.UserQueryVO;
 import com.kazma233.blog.vo.user.UserRoleVO;
-import com.kazma233.common.SecretTool;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
+import com.kazma233.common.Utils;
 import net.coobird.thumbnailator.Thumbnails;
 import net.coobird.thumbnailator.geometry.Positions;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -34,12 +34,6 @@ import java.nio.charset.Charset;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Created by mac_zly on 2017/3/29.
- *
- * @author kazma
- */
-
 @Service
 public class UserService implements IUserService {
 
@@ -51,7 +45,7 @@ public class UserService implements IUserService {
     private RoleDao roleDao;
 
     @Override
-    public User doLoin(User user) {
+    public User login(User user) {
         // 从数据库通过用户名查询该用户
         User encodeUser = userDao.queryByUsername(user.getUsername());
         if (encodeUser == null || StringUtils.isBlank(encodeUser.getId())) {
@@ -69,13 +63,10 @@ public class UserService implements IUserService {
         return encodeUser;
     }
 
-    /**
-     * 注册
-     */
     @Override
     @Transactional(rollbackFor = RuntimeException.class, propagation = Propagation.REQUIRED)
-    public String doRegister(User user) {
-        String uid = SecretTool.getInstance().generateValue();
+    public String register(User user) {
+        String uid = Utils.generateID();
 
         String inputPassword = user.getPassword();
         byte[] inputPasswordByte = inputPassword.getBytes(Charset.forName("UTF-8"));
@@ -86,7 +77,7 @@ public class UserService implements IUserService {
 
         if ("admin".equals(user.getUsername())) {
             user.setRoleId("1000");
-        }else {
+        } else {
             // 全部都是普通用户
             user.setRoleId("1001");
         }
@@ -94,9 +85,6 @@ public class UserService implements IUserService {
         return uid;
     }
 
-    /**
-     * 更新权限
-     */
     @Override
     public User updateRole(User user) {
         User updateRoleUser = new User();
@@ -111,14 +99,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public int insertUserAvatar(String uid, MultipartFile multipartFile) {
+    public int insertAvatar(String uid, MultipartFile multipartFile) {
         Optional<MongoFile> mongoFile = mongoFileDao.findById("avatar_" + uid);
         try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
             MongoFile mf = new MongoFile();
             mf.setId("avatar_" + uid);
             mf.setName(multipartFile.getOriginalFilename());
             mf.setContentType(multipartFile.getContentType());
-            clipFileToOut(multipartFile, outputStream);
+            clipAvatarFile(multipartFile, outputStream);
             mf.setContent(multipartFile.getBytes());
             if (!mongoFile.isPresent()) {
                 mongoFileDao.save(mf);
@@ -132,7 +120,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public MongoFile queryUserAvatar(String uid, boolean isClip) {
+    public MongoFile queryAvatar(String uid, boolean isClip) {
         if (isClip) {
             Optional<MongoFile> mongoFileOptional = mongoFileDao.findById("uid_" + uid + "_thum");
             if (mongoFileOptional.isPresent()) {
@@ -156,7 +144,7 @@ public class UserService implements IUserService {
         // 验证用户
         User checkUser = new User();
         checkUser.setUsername(user.getUsername());
-        checkUser.setPassword(getEncPw(user.getPassword()));
+        checkUser.setPassword(getEncodePw(user.getPassword()));
         User loginUser = userDao.findByUsernameAndPassword(checkUser);
         if (loginUser == null || StringUtils.isBlank(loginUser.getId())) {
             throw new UserException(ResultEnums.CHECK_USER_FAIL);
@@ -165,7 +153,7 @@ public class UserService implements IUserService {
         // 修改密码
         User updateUser = new User();
         updateUser.setId(loginUser.getId());
-        updateUser.setPassword(getEncPw(user.getNewPasswrod()));
+        updateUser.setPassword(getEncodePw(user.getNewPasswrod()));
         return userDao.update(updateUser);
     }
 
@@ -181,13 +169,7 @@ public class UserService implements IUserService {
         return roleDao.queryRoleByUid(uid);
     }
 
-    /**
-     * 裁剪头像
-     *
-     * @param multipartFile 原头像文件
-     * @param outputStream  输出的小头像文件
-     */
-    private void clipFileToOut(MultipartFile multipartFile, ByteArrayOutputStream outputStream) throws IOException {
+    private void clipAvatarFile(MultipartFile multipartFile, ByteArrayOutputStream outputStream) throws IOException {
         BufferedImage bufferedImage = ImageIO.read(multipartFile.getInputStream());
         int width = bufferedImage.getWidth();
         int height = bufferedImage.getHeight();
@@ -200,13 +182,7 @@ public class UserService implements IUserService {
 
     }
 
-    /**
-     * 获得加密的密码
-     *
-     * @param originPw 原密码
-     * @return 返回加密的密码
-     */
-    private String getEncPw(String originPw) {
+    private String getEncodePw(String originPw) {
         byte[] newPwByte = originPw.getBytes(Charset.forName("UTF-8"));
         return DigestUtils.sha256Hex(newPwByte);
     }

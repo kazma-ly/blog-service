@@ -1,10 +1,10 @@
 package com.kazma233.blog.entity.user;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.kazma233.blog.entity.group.AddGroup;
 import com.kazma233.blog.entity.group.SetRoleGroup;
 import com.kazma233.blog.entity.group.UpdateGroup;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -8,11 +8,6 @@ import lombok.Data;
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
-/**
- * 文章分类
- *
- * @author kazma
- */
 @Data
 public class ArticleCategory {
 

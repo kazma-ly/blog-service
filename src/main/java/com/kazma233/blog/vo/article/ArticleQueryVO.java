@@ -3,18 +3,13 @@ package com.kazma233.blog.vo.article;
 import com.kazma233.blog.vo.QueryVO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
-/**
- * @author zly
- * @date 2019/1/4
- **/
 @EqualsAndHashCode(callSuper = true)
 @Data
+@ToString
 public class ArticleQueryVO extends QueryVO {
 
-    /**
-     * 文章标题
-     */
     private String title;
 
     private String textState;

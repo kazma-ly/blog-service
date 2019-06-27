@@ -22,10 +22,10 @@ public class DataTransactionConfig implements TransactionManagementConfigurer {
     private HikariDataSource dataSource;
 
     // 事务管理
-//    @Bean(name = "transactionManager")
-//    public DataSourceTransactionManager transactionManager(DruidDataSource druidDataSource) {
-//        return new DataSourceTransactionManager(druidDataSource);
-//    }
+    /*@Bean(name = "transactionManager")
+    public DataSourceTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(dataSource);
+    }*/
 
 
     @Override

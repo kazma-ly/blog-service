@@ -2,8 +2,8 @@ package com.kazma233.blog.filter;
 
 import com.kazma233.blog.dao.mongo.MongoLogDao;
 import com.kazma233.blog.entity.mongo.MongoLog;
-import com.kazma233.common.SecretTool;
 import com.kazma233.common.ThreadPoolUtils;
+import com.kazma233.common.Utils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+
 
 @Component
 public class AllVisitsCountFilter implements HandlerInterceptor {
@@ -57,7 +58,7 @@ public class AllVisitsCountFilter implements HandlerInterceptor {
         }
 
         MongoLog mongoLog = new MongoLog();
-        mongoLog.setId(SecretTool.getInstance().generateValue());
+        mongoLog.setId(Utils.generateID());
         mongoLog.setIp(getClientIp(request));
         mongoLog.setPath(requestURI);
         mongoLog.setVisitTime(new Date());

@@ -23,7 +23,7 @@ public class CommentManageController {
     @GetMapping(value = "/comments")
     public BaseResult all(@Validated CommentQueryVO commentQueryVO) {
         commentQueryVO.init();
-        PageInfo<CommentAndArticleVO> pageInfo = commentService.queryCommentAndArticleTitle(commentQueryVO);
+        PageInfo<CommentAndArticleVO> pageInfo = commentService.queryAllCommentAndArticleTitle(commentQueryVO);
 
         return BaseResult.createSuccessResult(ResultEnums.SUCCESS, pageInfo);
     }

@@ -16,10 +16,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * @author zly
- * @date 2019/1/4
- **/
 @RestController
 @RequestMapping("/manage")
 public class ArticleCategoryManageController {
@@ -27,9 +23,6 @@ public class ArticleCategoryManageController {
     @Autowired
     private IArticleCategoryService articleCategoryService;
 
-    /**
-     * 查询所有分类
-     */
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
     @GetMapping("/categorys")
     public BaseResult queryAllCategory() {
@@ -37,9 +30,6 @@ public class ArticleCategoryManageController {
         return BaseResult.createSuccessResult(ResultEnums.SUCCESS, categories);
     }
 
-    /**
-     * 新增一个分类
-     */
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
     @PostMapping("/category")
     public BaseResult addCategory(@Validated(value = {AddGroup.class}) @RequestBody ArticleCategory category, BindingResult bindingResult) {
@@ -48,9 +38,6 @@ public class ArticleCategoryManageController {
         return BaseResult.createResult(res);
     }
 
-    /**
-     * 更新
-     */
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
     @PutMapping("/category")
     public BaseResult updateCategory(@Validated(value = {UpdateGroup.class}) @RequestBody ArticleCategory category, BindingResult bindingResult) {
@@ -59,9 +46,6 @@ public class ArticleCategoryManageController {
         return BaseResult.createResult(res);
     }
 
-    /**
-     * 删除一个分类
-     */
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
     @DeleteMapping("/category/{id}")
     public BaseResult deleteCategory(@PathVariable String id) {

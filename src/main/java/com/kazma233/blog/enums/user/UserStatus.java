@@ -1,13 +1,13 @@
-package com.kazma233.blog.enums;
+package com.kazma233.blog.enums.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ArticleStatus {
-    ENABLE("ENABLE", "启用文章"),
-    DISABLE("DISABLE", "禁用文章");
+public enum UserStatus {
+    ENABLE("ENABLE", "开启"),
+    DISABLE("DISABLE", "关闭");
 
     private String code;
     private String desc;
