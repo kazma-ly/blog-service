@@ -7,7 +7,7 @@ import lombok.ToString;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-@ToString
+@ToString(callSuper = true)
 public class ArticleQueryVO extends QueryVO {
 
     private String title;

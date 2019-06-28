@@ -19,7 +19,7 @@ public class ArticleVisitsCountFilter implements HandlerInterceptor {
 
     public static final ConcurrentHashMap<String, Integer> CONCURRENT_HASH_MAP = new ConcurrentHashMap<>();
 
-    private static final Pattern PATTERN = Pattern.compile("/article/\\b\\w{32}\\b");
+    private static final Pattern PATTERN = Pattern.compile("/articles/\\b\\w{32}\\b");
 
     private static ExecutorService EXECUTOR = new ThreadPoolExecutor(
             100,
