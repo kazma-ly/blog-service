@@ -7,7 +7,7 @@ import com.kazma233.blog.service.article.ICommentService;
 import com.kazma233.blog.utils.ValidatedUtils;
 import com.kazma233.blog.vo.article.CommentAndArticleVO;
 import com.kazma233.blog.vo.article.CommentQueryVO;
-import com.kazma233.blog.vo.article.LastCommentVO;
+import com.kazma233.blog.vo.article.RecentCommentVO;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
@@ -34,9 +34,9 @@ public class CommentController {
     @PostMapping(value = "/comments")
     public BaseResult commit(@RequestBody @Validated Comment comment, BindingResult bindingResult) {
         ValidatedUtils.checkFieldErrors(bindingResult.getFieldErrors());
-        int res = commentService.insert(comment);
+        commentService.insert(comment);
 
-        return BaseResult.createResult(res);
+        return BaseResult.createSuccessResult(ResultEnums.SUCCESS, null);
     }
 
     @GetMapping(value = "/comments")
@@ -47,34 +47,29 @@ public class CommentController {
         return BaseResult.createSuccessResult(ResultEnums.SUCCESS, pageInfo);
     }
 
-    /**
-     * 获得最近的50条评论
-     */
-    @GetMapping("/comments/last")
-    public BaseResult lastComment() {
-        List<CommentAndArticleVO> comments = commentService.queryLastComment(50);
+    @GetMapping("/comments/recent")
+    public BaseResult recentComment() {
+        List<CommentAndArticleVO> recentComments = commentService.queryRecentlyComment(50);
 
-        List<LastCommentVO> lastCommentVOS = new LinkedList<>();
-        comments.forEach(comment -> {
-            LastCommentVO lastComment = null;
-            for (LastCommentVO lastCommentVO : lastCommentVOS) {
-                if (lastCommentVO.getTitle().equals(comment.getArticleTitle())) {
-                    lastComment = lastCommentVO;
-                }
-            }
+        List<RecentCommentVO> recentCommentVOS = new LinkedList<>();
+        recentComments.forEach(comment -> {
+            
+            RecentCommentVO recentComment = recentCommentVOS.stream().
+                    filter(rc -> rc.getTitle().equals(comment.getArticleTitle())).
+                    findFirst().
+                    orElseGet(() -> {
+                        RecentCommentVO rcVO = RecentCommentVO.builder().
+                                title(comment.getArticleTitle()).
+                                comments(new LinkedList<>()).
+                                build();
+                        recentCommentVOS.add(rcVO);
+                        return rcVO;
+                    });
 
-            if (lastComment == null) {
-                lastComment = new LastCommentVO();
-                lastComment.setTitle(comment.getArticleTitle());
-                lastComment.setComments(new LinkedList<>());
-                lastCommentVOS.add(lastComment);
-            }
-
-            lastComment.getComments().add(comment);
-
+            recentComment.getComments().add(comment);
         });
 
-        return BaseResult.createResult(BaseResult.SUCCESS, lastCommentVOS);
+        return BaseResult.createResult(BaseResult.SUCCESS, recentCommentVOS);
     }
 
 }

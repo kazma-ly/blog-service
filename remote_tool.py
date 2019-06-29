@@ -96,8 +96,7 @@ class RemoteTool(object):
         for line in stdout:
             print(line, end='')
             total_line += 1
-        # 用于判断行数
-        return total_line > show_line
+        return total_line >= show_line
 
     def del_remote_dir(self, ssh_client, path):
         '''

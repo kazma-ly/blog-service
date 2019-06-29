@@ -46,19 +46,15 @@ public class CommentService implements ICommentService {
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public int insert(Comment comment) {
-
+    public void insert(Comment comment) {
         comment.setId(Utils.generateID());
         comment.setCreateTime(LocalDateTime.now());
 
-        int res = commentDao.insert(comment);
+        commentDao.insert(comment);
 
-        if (res == 1 && EnvStatus.RELEASE.getCode().equals(env)) {
-            // 发送邮件
+        if (EnvStatus.RELEASE.getCode().equals(env)) {
             ThreadPoolUtils.getCachedThreadPool().execute(() -> sendEmail(comment));
         }
-
-        return res;
     }
 
     @Override
@@ -81,7 +77,7 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public List<CommentAndArticleVO> queryLastComment(int num) {
+    public List<CommentAndArticleVO> queryRecentlyComment(int num) {
         CommentQueryVO commentQueryVO = new CommentQueryVO();
         commentQueryVO.setLimit(num);
         commentQueryVO.setOffset(0);

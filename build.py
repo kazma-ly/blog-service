@@ -40,13 +40,14 @@ def main():
             print("请检查java打包")
             return
 
+    # 连接到服务器 返回当前session
+    ssh_client = tool.connect_server(host, port, username, password)
     if 'SKIP_SHUT_DOWN' not in argv:
-        while True:
-            try:
-                requests.post("http://" + host + ":1331/actuator/shutdown")
-            except Exception as e:
-                print(e)
-                break
+        tool.exec_command(ssh_client, 'ps aux|grep java')
+        confirm = input("需要杀掉进程吗：")
+        if confirm is 'yes':
+            pid = input("请输入：")
+            tool.exec_command(ssh_client, 'kill -9 ' + pid)
 
     if 'SKIP_UPLOAD_JAR' not in argv:
         transport, sftp = tool.connect_file_server(host, port, username,
@@ -56,8 +57,6 @@ def main():
         tool.upload_one_file(sftp, LOCAL_FILE_PATH, SERVER_FILE_PATH)
         transport.close()
 
-    # 连接到服务器 返回当前session
-    ssh_client = tool.connect_server(host, port, username, password)
     tool.exec_command(ssh_client, EXEC_SERVER_COMMAND)
     ssh_client.close()
 

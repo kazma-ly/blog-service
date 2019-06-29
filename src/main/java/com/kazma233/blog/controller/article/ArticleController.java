@@ -46,14 +46,16 @@ public class ArticleController {
     public BaseResult archive() {
         List<ArticleSimple> articleSimples = articleService.queryAllSimple();
 
-        Map<String, List<ArticleSimple>> lastResult = new LinkedHashMap<>();
+        Map<String, List<ArticleSimple>> finallyResult = new LinkedHashMap<>();
         articleSimples.forEach(articleSimple -> {
-            String archiveDate = articleSimple.getArchiveDate();
-            List<ArticleSimple> ass = lastResult.computeIfAbsent(archiveDate, k -> new ArrayList<>());
+            List<ArticleSimple> ass = finallyResult.computeIfAbsent(
+                    articleSimple.getArchiveDate(),
+                    k -> new ArrayList<>()
+            );
             ass.add(articleSimple);
         });
 
-        return BaseResult.createSuccessResult(ResultEnums.SUCCESS, lastResult);
+        return BaseResult.createSuccessResult(ResultEnums.SUCCESS, finallyResult);
     }
 
 }

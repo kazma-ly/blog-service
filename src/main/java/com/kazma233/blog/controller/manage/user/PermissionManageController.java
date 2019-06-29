@@ -18,11 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/**
- * 权限管理
- *
- * @author kazma
- */
 @RestController
 @RequestMapping("/manage")
 public class PermissionManageController {
@@ -30,11 +25,6 @@ public class PermissionManageController {
     @Autowired
     private IPermissionService permissionService;
 
-    /**
-     * 查询权限 通过权限名字查询权限 可模糊查询
-     *
-     * @param permissionQueryVO 查询条件
-     */
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
     @GetMapping("/permissions")
     public BaseResult all(PermissionQueryVO permissionQueryVO) {
@@ -53,9 +43,6 @@ public class PermissionManageController {
 //        return BaseResult.createSuccessResult(ResultEnums.SUCCESS, roleInfoDTO);
 //    }
 
-    /**
-     * 增加权限
-     */
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
     @PostMapping("/permission")
     public BaseResult add(@Validated(AddGroup.class) @RequestBody Permission permission, BindingResult bindingResult) {
@@ -64,11 +51,6 @@ public class PermissionManageController {
         return BaseResult.createResult(result, permission);
     }
 
-    /**
-     * 删除权限
-     *
-     * @param pid 权限id
-     */
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
     @DeleteMapping("/permission/{pid}")
     public BaseResult delete(@PathVariable("pid") String pid) {
@@ -76,11 +58,6 @@ public class PermissionManageController {
         return BaseResult.createResult(res);
     }
 
-    /**
-     * 批量删除权限
-     *
-     * @param pids 权限ids
-     */
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
     @DeleteMapping("/permission")
     public BaseResult deletes(@RequestParam("pids") List<String> pids) {
@@ -88,9 +65,6 @@ public class PermissionManageController {
         return BaseResult.createResult(res);
     }
 
-    /**
-     * 修改权限
-     */
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
     @PutMapping("/permission")
     public BaseResult update(@RequestBody @Validated(UpdateGroup.class) Permission permission, BindingResult bindingResult) {

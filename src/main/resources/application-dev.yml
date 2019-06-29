@@ -1,5 +1,26 @@
-# test env
+my-setting:
+  cookie-host: 127.0.0.1
+  host: 192.168.1.233
+  env: debug
+  redis-password:
+  db-url: jdbc:mysql://${my-setting.host}:3306/blog?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+  db-username: root
+  db-password: pw123456
+  mail-username:
+  mail-password:
+
 spring:
   data:
     mongodb:
       uri: mongodb://${my-setting.host}:27017/blog
+
+management:
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'

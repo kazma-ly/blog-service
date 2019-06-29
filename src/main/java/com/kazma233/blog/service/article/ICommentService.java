@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface ICommentService {
 
-    int insert(Comment comment);
+    void insert(Comment comment);
 
     Integer deleteById(String cid);
 
@@ -18,11 +18,5 @@ public interface ICommentService {
 
     PageInfo<Comment> queryComment(CommentQueryVO commentQueryVO);
 
-    /**
-     * 查询最近的留言
-     *
-     * @param num 查询多少条
-     * @return 返回留言列表
-     */
-    List<CommentAndArticleVO> queryLastComment(int num);
+    List<CommentAndArticleVO> queryRecentlyComment(int num);
 }

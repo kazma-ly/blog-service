@@ -1,11 +1,8 @@
-# release env
 my-setting:
   cookie-host:
-  host: 127.0.0.1
-  env: release
-  # redis
+  host:
+  env:
   redis-password:
-  # mysql
   db-url:
   db-username:
   db-password:

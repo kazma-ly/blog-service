@@ -1,23 +1,23 @@
 package com.kazma233.blog.controller.manage.user;
 
+import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.entity.dto.BaseResult;
-import com.kazma233.blog.entity.user.User;
 import com.kazma233.blog.entity.group.SetRoleGroup;
+import com.kazma233.blog.entity.user.User;
 import com.kazma233.blog.enums.ResultEnums;
 import com.kazma233.blog.service.user.IUserService;
 import com.kazma233.blog.utils.ValidatedUtils;
 import com.kazma233.blog.vo.user.UserQueryVO;
 import com.kazma233.blog.vo.user.UserRoleVO;
-import com.github.pagehelper.PageInfo;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-/**
- * 用户管理
- */
 @RestController
 @RequestMapping("/manage")
 public class UserManageController {
@@ -25,10 +25,6 @@ public class UserManageController {
     @Autowired
     private IUserService userService;
 
-    /**
-     * 查询所有用户
-     * 进行管理
-     */
     @RequiresPermissions({"admin"})
     @GetMapping(value = "/users")
     public BaseResult all(UserQueryVO userQueryVO) {
@@ -37,9 +33,6 @@ public class UserManageController {
         return BaseResult.createSuccessResult(ResultEnums.SUCCESS, pageInfo);
     }
 
-    /**
-     * 更新用户角色
-     */
     @RequiresPermissions({"admin"})
     @PutMapping(value = "/user")
     public BaseResult serUserPermission(@Validated(SetRoleGroup.class) User user, BindingResult bindingResult) {
