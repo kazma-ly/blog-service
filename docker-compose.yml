@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  blog:
+    build: .
+    ports:
+      - 1331:1331
+
+networks:
+  blog-service:
