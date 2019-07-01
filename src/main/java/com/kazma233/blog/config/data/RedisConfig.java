@@ -22,12 +22,12 @@ import java.util.Map;
 
 /**
  * redis配置
- *
- * @author kazma
  */
 @Configuration
 @EnableCaching
 public class RedisConfig extends CachingConfigurerSupport {
+
+    private static final int GLOBAL_EXP_SECOND = 1800;
 
     @Autowired
     private LettuceConnectionFactory connectionFactory;
@@ -36,7 +36,7 @@ public class RedisConfig extends CachingConfigurerSupport {
     public CacheManager cacheManager() {
         return new RedisCacheManager(
                 RedisCacheWriter.nonLockingRedisCacheWriter(connectionFactory),
-                getRedisCacheConfigurationWithTtl(30 * 60)
+                getRedisCacheConfigurationWithTtl(GLOBAL_EXP_SECOND)
         );
     }
 
