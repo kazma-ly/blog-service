@@ -97,8 +97,8 @@ spring:
     type: redis
   mail:
     default-encoding: UTF-8
-    host: smtp.qq.com
-    port: 465
+    host: smtp.163.com
+    port: 25
     protocol: smtp
     username: ${my-setting.mail-username}
     password: ${my-setting.mail-password}
@@ -109,6 +109,8 @@ spring:
         starttls:
           enable: true  # 需要TLS认证 保证发送邮件安全验证
           required: true
+        ssl:
+          enable: true
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     locale: zh_CN

@@ -5,7 +5,7 @@
     <select id="findByArgsHasTitle" resultType="com.kazma233.blog.vo.article.CommentAndArticleVO">
         SELECT
         bct.*,
-        bat.title
+        bat.title as articleTitle
         FROM blog_comment_table bct JOIN blog_article_table bat ON bct.article_id = bat.id
         <where>
             <if test="articleId != null">

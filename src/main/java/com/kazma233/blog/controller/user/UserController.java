@@ -76,7 +76,7 @@ public class UserController {
 
         // shiro 认证
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(user.getUsername(), user.getPassword());
-        // usernamePasswordToken.setRememberMe(true);
+        usernamePasswordToken.setRememberMe(true);
         Subject subject = SecurityUtils.getSubject();
         subject.login(usernamePasswordToken);
         if (subject.isAuthenticated()) {

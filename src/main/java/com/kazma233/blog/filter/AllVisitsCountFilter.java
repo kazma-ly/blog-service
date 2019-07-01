@@ -47,10 +47,6 @@ public class AllVisitsCountFilter implements HandlerInterceptor {
 
     private void insertVisitInfo(HttpServletRequest request) {
         String requestURI = request.getRequestURI();
-        if (requestURI.startsWith("/manage") || requestURI.startsWith("/statistics")) {
-            return;
-        }
-
         for (String uri : NO_VIEW_LOG_URI) {
             if (requestURI.startsWith(uri)) {
                 return;
