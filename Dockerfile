@@ -2,7 +2,7 @@ FROM openjdk:11
 
 CMD mkdir /var/blog
 
-COPY ./build/libs/blog-service-4.0.0.jar /var/blog/blog.jar
+COPY ./blog-service-4.0.0.jar /var/blog/blog.jar
 
 EXPOSE 1331
 

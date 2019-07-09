@@ -1,18 +1,16 @@
 package com.kazma233.blog.service.article.impl;
 
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.dao.article.CommentDao;
 import com.kazma233.blog.entity.article.Article;
 import com.kazma233.blog.entity.article.Comment;
-import com.kazma233.blog.enums.EnvStatus;
 import com.kazma233.blog.service.article.IArticleService;
 import com.kazma233.blog.service.article.ICommentService;
 import com.kazma233.blog.vo.article.CommentAndArticleVO;
 import com.kazma233.blog.vo.article.CommentQueryVO;
-import com.kazma233.common.RSATool;
 import com.kazma233.common.ThreadPoolUtils;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.kazma233.common.Utils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,8 +37,6 @@ public class CommentService implements ICommentService {
 
     @Value("${my-setting.mail-username}")
     private String mailUsername;
-    @Value("${my-setting.env}")
-    private String env;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CommentService.class);
 
@@ -52,9 +48,7 @@ public class CommentService implements ICommentService {
 
         commentDao.insert(comment);
 
-        if (EnvStatus.RELEASE.getCode().equals(env)) {
-            ThreadPoolUtils.getCachedThreadPool().execute(() -> sendEmail(comment));
-        }
+        ThreadPoolUtils.getCachedThreadPool().execute(() -> sendEmail(comment));
     }
 
     @Override

@@ -1,10 +1,71 @@
-version: '3'
+version: '3.1'
 
 services:
+  mongo:
+    image: mongo
+    container_name: blog-mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: pw123456
+    volumes:
+      - /var/docker-data/mongodb/:/data/db/
+    networks:
+      - blog-net
+  redis:
+    image: redis
+    container_name: blog-redis
+    environment:
+      REDIS_PASSWORD: pw123456
+    ports:
+      - 6379:6379
+    volumes:
+      - /var/docker-data/redis:/data
+    restart: always
+    command: redis-server --requirepass pw123456
+    logging:
+      driver: syslog
+    networks:
+      - blog-net
+  mysql:
+    image: mysql
+    container_name: blog-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: pw123456
+    ports:
+      - 3306:3306
+    volumes:
+      - /var/docker-data/mysql:/var/lib/mysql
+    restart: always
+    networks:
+      - blog-net
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+  elasticsearch:
+    image: elasticsearch:7.0.1
+    container_name: my-elasticsearch
+    environment:
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - blog-net
+    restart: always
   blog:
     build: .
+    container_name: blog-service
     ports:
       - 1331:1331
+    networks:
+      - blog-net
+    restart: always
+    depends_on:
+      - mongo
+      - mysql
+      - redis
+      - elasticsearch
 
 networks:
-  blog-service:
+  blog-net:

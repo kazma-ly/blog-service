@@ -9,6 +9,6 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "my-setting")
 public class WebSettings {
 
-    private String host;
+    private String elasticHost;
     private String cookieHost;
 }

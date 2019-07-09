@@ -125,7 +125,7 @@ public class SearchService implements ISearchService {
     }
 
     private RestHighLevelClient createRestClient() {
-        return new RestHighLevelClient(RestClient.builder(new HttpHost(webSettings.getHost(), 9200, "http")));
+        return new RestHighLevelClient(RestClient.builder(new HttpHost(webSettings.getElasticHost(), 9200, "http")));
     }
 
     /**

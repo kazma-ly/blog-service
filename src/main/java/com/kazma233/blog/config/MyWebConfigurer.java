@@ -2,8 +2,8 @@ package com.kazma233.blog.config;
 
 import com.kazma233.blog.filter.AllVisitsCountFilter;
 import com.kazma233.blog.filter.AllowAccessFilter;
-import com.kazma233.blog.filter.SecurityFilter;
 import com.kazma233.blog.filter.ArticleVisitsCountFilter;
+import com.kazma233.blog.filter.SecurityFilter;
 import com.kazma233.blog.middleware.StringToDateConverter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

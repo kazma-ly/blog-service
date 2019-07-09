@@ -1,19 +1,23 @@
 my-setting:
   cookie-host: 127.0.0.1
-  host: 192.168.1.233
-  env: debug
-  redis-password:
-  db-url: jdbc:mysql://${my-setting.host}:3306/blog?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
-  db-username: root
-  db-password: pw123456
+  elastic-host: 192.168.23.119
+  redis-host: 192.168.23.119
+  redis-password: pw123456
+  mysql-url: jdbc:mysql://192.168.23.119:3306/blog?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+  mysql-username: root
+  mysql-password: pw123456
   mail-username:
   mail-password:
 
 spring:
   data:
     mongodb:
-      uri: mongodb://${my-setting.host}:27017/blog
-
+      port: 27017
+      host: 192.168.23.119
+      database: blog
+      authentication-database: admin
+      username: admin
+      password: pw123456
 management:
   endpoint:
     health:

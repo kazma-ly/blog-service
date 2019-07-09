@@ -1,22 +1,19 @@
 my-setting:
   cookie-host:
-  host:
-  env:
+  elastic-host:
+  redis-host:
   redis-password:
-  db-url:
-  db-username:
-  db-password:
+  mysql-url:
+  mysql-username:
+  mysql-password:
   mail-username:
   mail-password:
-mybatis:
-  configuration:
-    cache-enabled: true
 spring:
   data:
     mongodb:
-      port: 27017
-      host: ${my-setting.host}
-      authentication-database:
+      port:
+      host:
       database:
+      authentication-database:
       username:
       password:
