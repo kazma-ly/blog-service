@@ -2,11 +2,13 @@ package com.kazma233.blog.service.search.impl;
 
 import com.kazma233.blog.config.properties.WebSettings;
 import com.kazma233.blog.dao.article.ArticleDao;
-import com.kazma233.blog.exception.MyException;
+import com.kazma233.blog.entity.article.vo.ArticleCategoryVO;
+import com.kazma233.blog.entity.article.vo.ArticleQueryVO;
+import com.kazma233.blog.entity.result.enums.Status;
 import com.kazma233.blog.exception.SearchException;
+import com.kazma233.blog.exception.parent.CustomizeException;
 import com.kazma233.blog.service.search.ISearchService;
-import com.kazma233.blog.vo.article.ArticleCategoryVO;
-import com.kazma233.blog.vo.article.ArticleQueryVO;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
 import org.elasticsearch.action.index.IndexRequest;
@@ -20,7 +22,6 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -30,13 +31,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@AllArgsConstructor
 @Slf4j
 @Service
 public class SearchService implements ISearchService {
 
-    @Autowired
     private ArticleDao articleDao;
-    @Autowired
     private WebSettings webSettings;
 
     private static final String ARTICLE_INDEX = "article_index";
@@ -69,7 +69,8 @@ public class SearchService implements ISearchService {
                 }
             } catch (IOException e) {
                 log.error("处理索引时，部分发生错误: ", e);
-                throw new SearchException("处理索引时，部分发生错误: " + e.getLocalizedMessage(), 500);
+
+                throw new SearchException(Status.SOME_SEARCH_ENGINE_INDEX_ERROR);
             }
 
             if (articleCategoryVOS.size() < count) {
@@ -104,8 +105,9 @@ public class SearchService implements ISearchService {
                 articleSearchEntities.add(sourceAsMap);
             }
         } catch (IOException e) {
-            log.error("处理索引时，部分发生错误: ", e);
-            throw new SearchException("搜索发生异常:" + e.getLocalizedMessage());
+            log.error("搜索发生异常: ", e);
+
+            throw new SearchException(Status.SEARCH_ENGINE_ERROR);
         }
 
         return articleSearchEntities;
@@ -134,7 +136,7 @@ public class SearchService implements ISearchService {
      * @param obj 实体类
      * @param <T> 实体类类型
      * @return 返回map
-     * @throws MyException 获取数据失败
+     * @throws CustomizeException 获取数据失败
      */
     private static <T> Map<String, Object> bean2Map(T obj) {
         Map<String, Object> entityMap = new HashMap<>();
@@ -156,7 +158,7 @@ public class SearchService implements ISearchService {
                     entityMap.put(name, val);
                 } catch (IllegalAccessException e) {
                     log.error("Bean to map erro: ", e);
-                    throw new SearchException("Bean to map error", 500);
+                    throw new SearchException(Status.SEARCH_ENGINE_BEAN_TO_MAP_ERROR);
                 }
             }
             base = base.getSuperclass();

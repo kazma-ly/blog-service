@@ -3,38 +3,26 @@ package com.kazma233.blog.config;
 import com.kazma233.blog.filter.AllVisitsCountFilter;
 import com.kazma233.blog.filter.AllowAccessFilter;
 import com.kazma233.blog.filter.ArticleVisitsCountFilter;
-import com.kazma233.blog.filter.SecurityFilter;
-import com.kazma233.blog.middleware.StringToDateConverter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import lombok.AllArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Scope;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 import javax.servlet.Filter;
 import javax.servlet.Servlet;
 import java.util.List;
-import java.util.Locale;
 
+@AllArgsConstructor
 @Configuration
 public class MyWebConfigurer implements WebMvcConfigurer {
 
-    @Autowired
-    private StringToDateConverter stringToDateConverter;
-    @Autowired
-    private LocaleChangeInterceptor localeChangeInterceptor;
-    @Autowired
+//    private LocaleChangeInterceptor localeChangeInterceptor;
     private AllVisitsCountFilter allVisitsCountFilter;
 
     // 资源处理
@@ -48,17 +36,15 @@ public class MyWebConfigurer implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 
         registry.addInterceptor(allVisitsCountFilter).order(0).addPathPatterns("/**");
-        registry.addInterceptor(new SecurityFilter()).order(1).addPathPatterns("/**");
         registry.addInterceptor(new AllowAccessFilter()).order(2).addPathPatterns("/**");
         registry.addInterceptor(new ArticleVisitsCountFilter()).order(3).addPathPatterns("/", "/comments/**", "/search/**", "/articles/**");
 
-        registry.addInterceptor(localeChangeInterceptor);
+//        registry.addInterceptor(localeChangeInterceptor);
     }
 
     // 格式化
     @Override
     public void addFormatters(FormatterRegistry registry) {
-        registry.addConverter(stringToDateConverter);
     }
 
     @Override
@@ -102,48 +88,47 @@ public class MyWebConfigurer implements WebMvcConfigurer {
         return servletServletRegistrationBean;
     }
 
-    // 国际化 暂时下面的不需要
-    @Bean
-    public LocaleResolver localeResolver() {
-        SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
-        sessionLocaleResolver.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
-        return sessionLocaleResolver;
-    }
-
-    @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-    public LocaleChangeInterceptor localeChangeInterceptor() {
-        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-        localeChangeInterceptor.setParamName("locale");
-        return localeChangeInterceptor;
-    }
-
     @Override
     public void addCorsMappings(CorsRegistry registry) {
 
     }
 
-    // 跨域请求
-    /*@Bean
-    CorsConfiguration buildConfig() {
-        CorsConfiguration corsConfiguration = new CorsConfiguration();
-        // 放行哪些原始域
-        corsConfiguration.addAllowedOrigin("*");
-        // 放行哪些原始域(头部信息)
-        corsConfiguration.addAllowedHeader("*");
-        // 放行哪些原始域(请求方式)
-        corsConfiguration.addAllowedMethod("*");
-        // 是否发送Cookie信息
-        corsConfiguration.setAllowCredentials(true);
-        // 暴露哪些头部信息（因为跨域访问默认不能获取全部头部信息）
-//         corsConfiguration.addExposedHeader("");
-        return corsConfiguration;
-    }
+//    // 跨域请求
+//    @Bean
+//    CorsConfiguration buildConfig() {
+//        CorsConfiguration corsConfiguration = new CorsConfiguration();
+//        // 放行哪些原始域
+//        corsConfiguration.addAllowedOrigin("*");
+//        // 放行哪些原始域(头部信息)
+//        corsConfiguration.addAllowedHeader("*");
+//        // 放行哪些原始域(请求方式)
+//        corsConfiguration.addAllowedMethod("*");
+//        // 是否发送Cookie信息
+//        corsConfiguration.setAllowCredentials(true);
+//        // 暴露哪些头部信息（因为跨域访问默认不能获取全部头部信息）
+//         corsConfiguration.addExposedHeader("Content-Type, X-Requested-With, Connection, Host, Accept, Accept-Encoding, Accept-Language, Cache-Control");
+//        return corsConfiguration;
+//    }
+//
+//    @Bean
+//    public CorsFilter corsFilter(CorsConfiguration corsConfiguration) {
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", corsConfiguration);
+//        return new CorsFilter(source);
+//    }
 
-    @Bean
-    public CorsFilter corsFilter(CorsConfiguration corsConfiguration) {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", corsConfiguration);
-        return new CorsFilter(source);
-    }*/
+//    @Bean
+//    public LocaleResolver localeResolver() {
+//        SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
+//        sessionLocaleResolver.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
+//        return sessionLocaleResolver;
+//    }
+//
+//    @Bean
+//    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+//    public LocaleChangeInterceptor localeChangeInterceptor() {
+//        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
+//        localeChangeInterceptor.setParamName("locale");
+//        return localeChangeInterceptor;
+//    }
 }

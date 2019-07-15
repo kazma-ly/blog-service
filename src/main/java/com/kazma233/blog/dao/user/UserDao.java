@@ -2,8 +2,8 @@ package com.kazma233.blog.dao.user;
 
 
 import com.kazma233.blog.entity.user.User;
-import com.kazma233.blog.vo.user.UserQueryVO;
-import com.kazma233.blog.vo.user.UserRoleVO;
+import com.kazma233.blog.entity.user.vo.UserQueryVO;
+import com.kazma233.blog.entity.user.vo.UserRoleVO;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
@@ -21,9 +21,9 @@ public interface UserDao {
     @Select("SELECT * from user_table WHERE id = #{id}")
     User queryById(String id);
 
-    int insert(User user);
+    void insert(User user);
 
-    int update(User user);
+    void update(User user);
 
     List<UserRoleVO> queryAllUserByArgs(UserQueryVO userQueryVO);
 }

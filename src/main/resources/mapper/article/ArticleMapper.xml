@@ -13,9 +13,10 @@
         <result column="state" jdbcType="VARCHAR" property="state"/>
         <result column="category_id" jdbcType="VARCHAR" property="categoryId"/>
         <result column="tags" jdbcType="VARCHAR" property="tags"/>
+        <result column="uid" jdbcType="VARCHAR" property="uid"/>
     </resultMap>
 
-    <resultMap id="FullResultMap" extends="BaseResultMap" type="com.kazma233.blog.vo.article.ArticleFull">
+    <resultMap id="FullResultMap" extends="BaseResultMap" type="com.kazma233.blog.entity.article.vo.ArticleFull">
         <id column="content" jdbcType="VARCHAR" property="content"/>
     </resultMap>
 
@@ -60,8 +61,8 @@
         where id = #{id,jdbcType=VARCHAR}
     </select>
 
-    <select id="queryArticleByArgs" parameterType="com.kazma233.blog.vo.article.ArticleQueryVO"
-            resultType="com.kazma233.blog.vo.article.ArticleCategoryVO">
+    <select id="queryArticleByArgs" parameterType="com.kazma233.blog.entity.article.vo.ArticleQueryVO"
+            resultType="com.kazma233.blog.entity.article.vo.ArticleCategoryVO">
         select
         bat.id,
         bat.title,
@@ -99,6 +100,9 @@
                 <when test="startTime != null and endTime != null">
                     AND bat.create_time between #{startTime} and #{endTime}
                 </when>
+                <when test="uid != null">
+                    AND bat.uid = #{uid}
+                </when>
             </choose>
         </where>
         ORDER BY create_time DESC
@@ -110,7 +114,7 @@
         </if>
     </select>
 
-    <insert id="insert" parameterType="com.kazma233.blog.vo.article.ArticleFull">
+    <insert id="insert" parameterType="com.kazma233.blog.entity.article.vo.ArticleFull">
         insert into blog_article_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -145,6 +149,9 @@
             </if>
             <if test="content != null">
                 content,
+            </if>
+            <if test="uid != null">
+                uid,
             </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -181,10 +188,13 @@
             <if test="content != null">
                 #{content,jdbcType=VARCHAR},
             </if>
+            <if test="uid != null">
+                #{uid,jdbcType=VARCHAR},
+            </if>
         </trim>
     </insert>
 
-    <update id="updateByIdSelective" parameterType="com.kazma233.blog.vo.article.ArticleFull">
+    <update id="updateByIdSelective" parameterType="com.kazma233.blog.entity.article.vo.ArticleFull">
         update blog_article_table
         <set>
             <if test="title != null">
@@ -221,7 +231,7 @@
         where id = #{id,jdbcType=VARCHAR}
     </update>
 
-    <update id="updateByPrimaryKey" parameterType="com.kazma233.blog.vo.article.ArticleFull">
+    <update id="updateByPrimaryKey" parameterType="com.kazma233.blog.entity.article.vo.ArticleFull">
         update blog_article_table
         set title        = #{title,jdbcType=VARCHAR},
             subtitle     = #{subtitle,jdbcType=VARCHAR},

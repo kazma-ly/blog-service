@@ -8,9 +8,9 @@ public interface IArticleCategoryService {
 
     List<ArticleCategory> queryAll();
 
-    int insertCategory(ArticleCategory category);
+    void insertCategory(ArticleCategory category);
 
-    int updateCategory(ArticleCategory category);
+    void updateCategory(ArticleCategory category);
 
-    int deleteCategory(String id);
+    void deleteCategory(String id);
 }

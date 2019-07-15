@@ -1,6 +1,7 @@
 package com.kazma233.blog.entity.article;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -38,5 +39,8 @@ public class Comment {
     private String net;
 
     private String regerOriginId;
+
+    @JsonIgnore
+    private String uid;
 
 }

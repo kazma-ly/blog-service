@@ -30,7 +30,7 @@ create table blog_article_table
 drop table if exists blog_comment_table;
 create table blog_comment_table
 (
-    id              varchar(50)                        not null comment '评论ID'  primary key,
+    id              varchar(50)                        not null comment '评论ID' primary key,
     article_id      varchar(50)                        not null comment '评论的文章ID',
     refer_id        varchar(50)                        null comment '评论引用的哪个评论',
     content         text                               not null comment '评论内容',
@@ -57,22 +57,27 @@ create table blog_permission_table
     create_time            datetime     null comment '创建时间'
 );
 
-INSERT INTO `blog_permission_table` (`id`, `permission_name`, `permission_description`, `create_time`) VALUES ('1', 'admin', 'admin', now());
-INSERT INTO `blog_permission_table` (`id`, `permission_name`, `permission_description`, `create_time`) VALUES ('2', 'manage', 'manage', now());
-INSERT INTO `blog_permission_table` (`id`, `permission_name`, `permission_description`, `create_time`) VALUES ('3', 'normal', 'normal', now());
+INSERT INTO `blog_permission_table` (`id`, `permission_name`, `permission_description`, `create_time`)
+VALUES ('1', 'admin', 'admin', now());
+INSERT INTO `blog_permission_table` (`id`, `permission_name`, `permission_description`, `create_time`)
+VALUES ('2', 'manage', 'manage', now());
+INSERT INTO `blog_permission_table` (`id`, `permission_name`, `permission_description`, `create_time`)
+VALUES ('3', 'normal', 'normal', now());
 
 drop table if exists blog_role_table;
 create table blog_role_table
 (
-    id              varchar(50)  not null primary key,
-    role_name       varchar(64)  not null comment '角色名字',
-    permission_ids  varchar(240) not null comment '拥有的权限id，逗号分隔',
-    description     varchar(120) not null comment '角色描述',
-    create_time     datetime     null
+    id             varchar(50)  not null primary key,
+    role_name      varchar(64)  not null comment '角色名字',
+    permission_ids varchar(240) not null comment '拥有的权限id，逗号分隔',
+    description    varchar(120) not null comment '角色描述',
+    create_time    datetime     null
 ) comment '角色表';
 
-INSERT INTO `blog_role_table` (`id`, `role_name`, `permission_ids`, `description`, `create_time`) VALUES ('1000', 'admin', '1,2,3', '管理员', now());
-INSERT INTO `blog_role_table` (`id`, `role_name`, `permission_ids`, `description`, `create_time`) VALUES ('1001', 'normal', '3', '用户', now());
+INSERT INTO `blog_role_table` (`id`, `role_name`, `permission_ids`, `description`, `create_time`)
+VALUES ('1000', 'admin', '1,2,3', '管理员', now());
+INSERT INTO `blog_role_table` (`id`, `role_name`, `permission_ids`, `description`, `create_time`)
+VALUES ('1001', 'normal', '3', '用户', now());
 
 drop table if exists user_table;
 create table user_table
@@ -85,3 +90,23 @@ create table user_table
     create_time datetime     null,
     constraint username unique (username)
 ) comment '用户表';
+
+drop table if exists user_info;
+create table user_info
+(
+    id            varchar(50) not null,
+    uid           varchar(50) null,
+    notice_email  text        null comment '通知用的email',
+    nickname      text        null comment '昵称',
+    notice_status varchar(12) null comment '通知开关:ENABLE,DISABLE',
+    create_time   datetime    null,
+    update_time   datetime    null,
+    avatar        text        null comment '头像',
+    description   text        null comment '自我描述',
+    personal_link text        null comment '个人链接',
+    constraint user_info_pk primary key (id)
+) comment '用户信息和设置';
+
+alter table blog_article_category add uid varchar(50) null comment '用户id';
+alter table blog_article_table add uid varchar(50) null comment '用户id';
+alter table blog_comment_table add uid varchar(50) null comment '用户Id';

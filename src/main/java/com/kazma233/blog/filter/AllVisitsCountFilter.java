@@ -1,7 +1,7 @@
 package com.kazma233.blog.filter;
 
 import com.kazma233.blog.dao.mongo.MongoLogDao;
-import com.kazma233.blog.entity.mongo.MongoLog;
+import com.kazma233.blog.entity.log.MongoLog;
 import com.kazma233.common.ThreadPoolUtils;
 import com.kazma233.common.Utils;
 import org.apache.commons.lang3.StringUtils;
@@ -59,7 +59,7 @@ public class AllVisitsCountFilter implements HandlerInterceptor {
         mongoLog.setPath(requestURI);
         mongoLog.setVisitTime(new Date());
         try {
-            mongoLogDao.insert(mongoLog);
+            mongoLogDao.save(mongoLog);
         } catch (Exception e) {
             LOGGER.error("插入浏览量发生错误", e);
         }

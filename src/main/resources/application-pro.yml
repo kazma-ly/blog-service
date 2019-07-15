@@ -1,5 +1,5 @@
 my-setting:
-  cookie-host:
+  url-pre:
   elastic-host:
   redis-host:
   redis-password:

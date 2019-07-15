@@ -1,48 +1,46 @@
 package com.kazma233.blog.controller.article;
 
-import com.kazma233.blog.entity.dto.BaseResult;
-import com.kazma233.blog.enums.ResultEnums;
-import com.kazma233.blog.service.article.IArticleService;
-import com.kazma233.blog.vo.article.ArticleCategoryVO;
-import com.kazma233.blog.vo.article.ArticleFull;
-import com.kazma233.blog.vo.article.ArticleQueryVO;
-import com.kazma233.blog.vo.article.ArticleSimple;
 import com.github.pagehelper.PageInfo;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.kazma233.blog.entity.article.vo.ArticleCategoryVO;
+import com.kazma233.blog.entity.article.vo.ArticleFull;
+import com.kazma233.blog.entity.article.vo.ArticleQueryVO;
+import com.kazma233.blog.entity.article.vo.ArticleSimple;
+import com.kazma233.blog.entity.result.BaseResult;
+import com.kazma233.blog.service.article.IArticleService;
+import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-/**
- * 文章Controller
- *
- * @author zly
- * @date 2019/1/4
- **/
+@AllArgsConstructor
 @RestController
+@RequestMapping("/articles")
 public class ArticleController {
 
-    @Autowired
     private IArticleService articleService;
 
-    @GetMapping(value = "/articles")
+    @GetMapping("")
     public BaseResult articleList(ArticleQueryVO articleQueryVO) {
         articleQueryVO.init();
         PageInfo<ArticleCategoryVO> articlePageInfo = articleService.queryAllPublish(articleQueryVO);
 
-        return BaseResult.createSuccessResult(ResultEnums.SUCCESS, articlePageInfo);
+        return BaseResult.success(articlePageInfo);
     }
 
-    @GetMapping(value = "/articles/{id}")
+    @GetMapping("/{id}")
     public BaseResult articleInfo(@PathVariable("id") String id) {
         ArticleFull article = articleService.findFullById(id);
 
-        return BaseResult.createSuccessResult(ResultEnums.SUCCESS, article);
+        return BaseResult.success(article);
     }
 
-    @GetMapping("/articles/archive")
+    @GetMapping("/archive")
     public BaseResult archive() {
         List<ArticleSimple> articleSimples = articleService.queryAllSimple();
 
@@ -55,7 +53,7 @@ public class ArticleController {
             ass.add(articleSimple);
         });
 
-        return BaseResult.createSuccessResult(ResultEnums.SUCCESS, finallyResult);
+        return BaseResult.success(finallyResult);
     }
 
 }

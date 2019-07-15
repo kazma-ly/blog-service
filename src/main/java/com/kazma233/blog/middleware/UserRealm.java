@@ -3,16 +3,15 @@ package com.kazma233.blog.middleware;
 import com.kazma233.blog.entity.user.Permission;
 import com.kazma233.blog.entity.user.Role;
 import com.kazma233.blog.entity.user.User;
-import com.kazma233.blog.enums.user.UserStatus;
+import com.kazma233.blog.entity.user.enums.UserStatus;
 import com.kazma233.blog.service.user.IPermissionService;
 import com.kazma233.blog.service.user.IUserService;
+import com.kazma233.blog.utils.ShiroUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
-import org.apache.shiro.session.Session;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -47,8 +46,7 @@ public class UserRealm extends AuthorizingRealm {
         User dbUser = userService.login(user);
 
         if (dbUser != null && UserStatus.ENABLE.getCode().equals(dbUser.getEnable())) {
-            Session session = SecurityUtils.getSubject().getSession();
-            session.setAttribute("user", dbUser);
+            ShiroUtils.setUser(dbUser);
 
             // 身份信息已经确认，接下来进行凭证信息匹配 也就下面这个方法
             // 身份信息确认以后，凭证信息的确认由SimpleAuthenticationInfo 的父类AuthenticationInfo进行验证
@@ -76,10 +74,11 @@ public class UserRealm extends AuthorizingRealm {
             String permissionIds = role.getPermissionIds();
             String[] ids = permissionIds.split(",");
             List<Permission> permissions = permissionService.queryByIds(ids);
-            permissions.forEach(permission -> {
-                simpleAuthorizationInfo.addStringPermission(permission.getPermissionName());
-            });
+            permissions.forEach(
+                    permission -> simpleAuthorizationInfo.addStringPermission(permission.getPermissionName())
+            );
         }
+
         return simpleAuthorizationInfo;
     }
 }

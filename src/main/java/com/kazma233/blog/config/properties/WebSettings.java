@@ -10,5 +10,5 @@ import org.springframework.stereotype.Component;
 public class WebSettings {
 
     private String elasticHost;
-    private String cookieHost;
+    private String urlPre;
 }

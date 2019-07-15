@@ -2,10 +2,10 @@ package com.kazma233.blog.service.article;
 
 import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.entity.article.Article;
-import com.kazma233.blog.vo.article.ArticleCategoryVO;
-import com.kazma233.blog.vo.article.ArticleFull;
-import com.kazma233.blog.vo.article.ArticleQueryVO;
-import com.kazma233.blog.vo.article.ArticleSimple;
+import com.kazma233.blog.entity.article.vo.ArticleCategoryVO;
+import com.kazma233.blog.entity.article.vo.ArticleFull;
+import com.kazma233.blog.entity.article.vo.ArticleQueryVO;
+import com.kazma233.blog.entity.article.vo.ArticleSimple;
 
 import java.util.List;
 
@@ -19,13 +19,13 @@ public interface IArticleService {
 
     ArticleFull findFullById(String id);
 
-    int save(ArticleFull article);
+    void save(ArticleFull article);
 
-    int updateFull(ArticleFull article);
+    void updateFull(ArticleFull article);
 
-    int delete(String id);
+    void delete(String id);
 
-    int updateViewNum(String articleId, Integer num);
+    void updateViewNum(String articleId, Integer num);
 
     List<ArticleSimple> queryAllSimple();
 }

@@ -10,18 +10,18 @@ import requests
 import os
 import sys
 
-LOCAL_SSH_KEY_PATH = r''
+LOCAL_SSH_KEY_PATH = r'D:/aws-server.pem'
 LOCAL_FILE_PATH = r'build/libs/blog-service-4.0.0.jar'
-SERVER_PATH = r''
+SERVER_PATH = r'/home/ubuntu/nginx_root/server/'
 SERVER_FILE_PATH = SERVER_PATH + '/blog.jar'
 EXEC_SERVER_COMMAND = r'nohup java -jar ' + SERVER_FILE_PATH + r' --spring.profiles.active=pro >/dev/null 2>&1 &'
 
 
 def main():
     env = os.environ
-    host = env.get('SERVER_DOMAIN')
+    host = 'kazma233.me' #env.get('SERVER_DOMAIN')
     port = 22
-    username = env.get('SERVER_USERNAME')
+    username = 'ubuntu' #env.get('SERVER_USERNAME')
     password = None  # env.get('SERVER_PASSWORD')
 
     argv = sys.argv
@@ -45,9 +45,9 @@ def main():
     if 'SKIP_SHUT_DOWN' not in argv:
         tool.exec_command(ssh_client, 'ps aux|grep java')
         confirm = input("需要杀掉进程吗：")
-        if confirm is 'yes':
+        if confirm == 'yes':
             pid = input("请输入：")
-            tool.exec_command(ssh_client, 'kill -9 ' + pid)
+            tool.exec_command(ssh_client, 'kill -15 ' + pid)
 
     if 'SKIP_UPLOAD_JAR' not in argv:
         transport, sftp = tool.connect_file_server(host, port, username,

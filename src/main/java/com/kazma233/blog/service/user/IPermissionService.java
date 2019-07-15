@@ -3,23 +3,23 @@ package com.kazma233.blog.service.user;
 
 import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.entity.user.Permission;
-import com.kazma233.blog.vo.user.PermissionQueryVO;
+import com.kazma233.blog.entity.user.vo.PermissionQueryVO;
 
 import java.util.List;
 
 public interface IPermissionService {
 
-    public PageInfo queryAll(Integer page, Integer once);
+    PageInfo queryAll(Integer page, Integer once);
 
-    public PageInfo queryAllByCondition(PermissionQueryVO permissionQueryVO);
+    PageInfo queryAllByCondition(PermissionQueryVO permissionQueryVO);
 
-    public Integer save(Permission permission);
+    void save(Permission permission);
 
-    public Integer updateById(Permission permission);
+    void updateById(Permission permission);
 
-    public Integer deleteById(String id);
+    void deleteById(String id);
 
-    public Integer deleteByIds(List<String> ids);
+    void deleteByIds(List<String> ids);
 
-    public List<Permission> queryByIds(String[] ids);
+    List<Permission> queryByIds(String[] ids);
 }

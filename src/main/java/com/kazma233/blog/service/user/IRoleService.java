@@ -1,8 +1,8 @@
 package com.kazma233.blog.service.user;
 
 import com.kazma233.blog.entity.user.Role;
-import com.kazma233.blog.vo.user.RolePermissionsVO;
-import com.kazma233.blog.vo.user.RoleQueryVO;
+import com.kazma233.blog.entity.user.vo.RolePermissionsVO;
+import com.kazma233.blog.entity.user.vo.RoleQueryVO;
 import com.github.pagehelper.PageInfo;
 
 public interface IRoleService {
@@ -11,11 +11,11 @@ public interface IRoleService {
 
     Role queryByRoleId(String roleId);
 
-    Integer update(Role role);
+    void update(Role role);
 
-    Role save(Role role);
+    void save(Role role);
 
-    Integer delete(String roleId);
+    void delete(String roleId);
 
     RolePermissionsVO queryRoleAndPermissionByRoleId(String roleId);
 

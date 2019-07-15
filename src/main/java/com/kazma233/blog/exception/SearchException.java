@@ -1,21 +1,12 @@
 package com.kazma233.blog.exception;
 
-import com.kazma233.blog.enums.ResultEnums;
+import com.kazma233.blog.entity.result.enums.Status;
+import com.kazma233.blog.exception.parent.CustomizeException;
 
-public class SearchException extends MyException {
+public class SearchException extends CustomizeException {
 
-    public SearchException(String message) {
-        super(message);
+    public SearchException(Status status) {
+        super(status);
     }
 
-    public SearchException(String message, Integer status) {
-        super(message, status);
-    }
-
-    public SearchException(ResultEnums resultEnums) {
-        super(resultEnums);
-    }
-
-    public SearchException() {
-    }
 }

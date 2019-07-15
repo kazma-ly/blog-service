@@ -1,5 +1,6 @@
 package com.kazma233.blog.entity.article;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kazma233.blog.entity.group.AddGroup;
 import com.kazma233.blog.entity.group.UpdateGroup;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -19,4 +20,8 @@ public class ArticleCategory {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
+
+    @JsonIgnore
+    private String uid;
+
 }

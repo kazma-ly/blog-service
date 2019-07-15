@@ -3,10 +3,9 @@ package com.kazma233.blog.service.user.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.dao.user.PermissionDao;
-import com.kazma233.blog.dao.user.RoleDao;
 import com.kazma233.blog.entity.user.Permission;
+import com.kazma233.blog.entity.user.vo.PermissionQueryVO;
 import com.kazma233.blog.service.user.IPermissionService;
-import com.kazma233.blog.vo.user.PermissionQueryVO;
 import com.kazma233.common.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,6 @@ public class PermissionService implements IPermissionService {
 
     @Autowired
     private PermissionDao permissionDao;
-    @Autowired
-    private RoleDao roleDao;
 
     @Override
     public PageInfo queryAll(Integer page, Integer once) {
@@ -39,28 +36,28 @@ public class PermissionService implements IPermissionService {
 
     @Transactional
     @Override
-    public Integer save(Permission permission) {
+    public void save(Permission permission) {
         permission.setId(Utils.generateID());
         permission.setCreateTime(new Date());
-        return permissionDao.insert(permission);
+        permissionDao.insert(permission);
     }
 
     @Transactional
     @Override
-    public Integer updateById(Permission permission) {
-        return permissionDao.updateById(permission);
+    public void updateById(Permission permission) {
+        permissionDao.updateById(permission);
     }
 
     @Transactional
     @Override
-    public Integer deleteById(String id) {
-        return permissionDao.deleteById(id);
+    public void deleteById(String id) {
+        permissionDao.deleteById(id);
     }
 
     @Transactional
     @Override
-    public Integer deleteByIds(List<String> ids) {
-        return permissionDao.deleteByIds(ids);
+    public void deleteByIds(List<String> ids) {
+        permissionDao.deleteByIds(ids);
     }
 
     @Override

@@ -5,12 +5,13 @@ import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.cons.DefaultConstant;
 import com.kazma233.blog.dao.article.ArticleDao;
 import com.kazma233.blog.entity.article.Article;
-import com.kazma233.blog.enums.article.ArticleStatus;
+import com.kazma233.blog.entity.article.enums.ArticleStatus;
 import com.kazma233.blog.service.article.IArticleService;
-import com.kazma233.blog.vo.article.ArticleCategoryVO;
-import com.kazma233.blog.vo.article.ArticleFull;
-import com.kazma233.blog.vo.article.ArticleQueryVO;
-import com.kazma233.blog.vo.article.ArticleSimple;
+import com.kazma233.blog.utils.ShiroUtils;
+import com.kazma233.blog.entity.article.vo.ArticleCategoryVO;
+import com.kazma233.blog.entity.article.vo.ArticleFull;
+import com.kazma233.blog.entity.article.vo.ArticleQueryVO;
+import com.kazma233.blog.entity.article.vo.ArticleSimple;
 import com.kazma233.common.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -34,6 +35,7 @@ public class ArticleService implements IArticleService {
 
     @Override
     public PageInfo<ArticleCategoryVO> queryAll(ArticleQueryVO articleQueryVO) {
+        articleQueryVO.setUid(ShiroUtils.getUid());
         PageHelper.startPage(articleQueryVO.getPage(), articleQueryVO.getCount());
         List<ArticleCategoryVO> articles = articleDao.queryArticleByArgs(articleQueryVO);
 
@@ -65,7 +67,7 @@ public class ArticleService implements IArticleService {
 
     @CacheEvict(cacheNames = DefaultConstant.ARTICLE_LIST_CACHE_NAME, allEntries = true)
     @Override
-    public int save(ArticleFull article) {
+    public void save(ArticleFull article) {
         LocalDateTime now = LocalDateTime.now();
 
         article.setId(Utils.generateID());
@@ -73,33 +75,34 @@ public class ArticleService implements IArticleService {
         article.setReadNum(0);
         article.setCreateTime(now);
         article.setUpdateTime(now);
+        article.setUid(ShiroUtils.getUid());
 
-        return articleDao.insert(article);
+        articleDao.insert(article);
     }
 
     @CacheEvict(cacheNames = DefaultConstant.ARTICLE_CACHE_NAME, key = "#root.target.ARTICLE_PRE+#article.id")
     @Override
-    public int updateFull(ArticleFull article) {
+    public void updateFull(ArticleFull article) {
         article.setUpdateTime(LocalDateTime.now());
-        return articleDao.updateByIdSelective(article);
+
+        articleDao.updateByIdSelective(article);
     }
 
     @CacheEvict(cacheNames = DefaultConstant.ARTICLE_LIST_CACHE_NAME, allEntries = true)
     @Override
-    public int delete(String id) {
-        // 单个文章缓存就不清除了
-        return articleDao.deleteById(id);
+    public void delete(String id) {
+        articleDao.deleteById(id);
     }
 
     @Override
-    public int updateViewNum(String articleId, Integer num) {
+    public void updateViewNum(String articleId, Integer num) {
         Article exitArticle = articleDao.selectById(articleId);
 
         ArticleFull article = new ArticleFull();
         article.setReadNum(exitArticle.getReadNum() + num);
         article.setId(articleId);
 
-        return articleDao.updateByIdSelective(article);
+        articleDao.updateByIdSelective(article);
     }
 
     @Cacheable(key = "#root.target.SIMPLE_ARTICLE_LIST_CACHE", cacheNames = DefaultConstant.ARTICLE_LIST_CACHE_NAME)

@@ -22,8 +22,8 @@
         create_time
     </sql>
 
-    <select id="queryAllUserByArgs" parameterType="com.kazma233.blog.vo.user.UserQueryVO"
-            resultType="com.kazma233.blog.vo.user.UserRoleVO">
+    <select id="queryAllUserByArgs" parameterType="com.kazma233.blog.entity.user.vo.UserQueryVO"
+            resultType="com.kazma233.blog.entity.user.vo.UserRoleVO">
         select ut.*, brt.role_name, brt.description from user_table ut left join
         blog_role_table brt on ut.role_id = brt.id
         <where>

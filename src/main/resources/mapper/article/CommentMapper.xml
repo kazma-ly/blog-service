@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kazma233.blog.dao.article.CommentDao">
 
-    <select id="findByArgsHasTitle" resultType="com.kazma233.blog.vo.article.CommentAndArticleVO">
+    <select id="findByArgsHasTitle" resultType="com.kazma233.blog.entity.article.vo.CommentAndArticleVO">
         SELECT
         bct.*,
         bat.title as articleTitle
@@ -13,6 +13,9 @@
             </if>
             <if test="content != null">
                 AND bct.content LIKE "%"#{content}"%"
+            </if>
+            <if test="uid != null">
+                AND bct.uid = #{uid}
             </if>
         </where>
         order by create_time desc
@@ -35,6 +38,9 @@
             </if>
             <if test="content != null">
                 AND bct.content LIKE "%"#{content}"%"
+            </if>
+            <if test="uid != null">
+                AND bct.uid = #{uid}
             </if>
         </where>
         order by create_time desc

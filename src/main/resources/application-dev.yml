@@ -1,9 +1,9 @@
 my-setting:
-  cookie-host: 127.0.0.1
-  elastic-host: 192.168.23.119
-  redis-host: 192.168.23.119
+  url-pre: http://127.0.0.1:1331
+  elastic-host: 54.64.236.198
+  redis-host: 54.64.236.198
   redis-password: pw123456
-  mysql-url: jdbc:mysql://192.168.23.119:3306/blog?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+  mysql-url: jdbc:mysql://54.64.236.198:3306/blog?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
   mysql-username: root
   mysql-password: pw123456
   mail-username:
@@ -13,7 +13,7 @@ spring:
   data:
     mongodb:
       port: 27017
-      host: 192.168.23.119
+      host: 54.64.236.198
       database: blog
       authentication-database: admin
       username: admin

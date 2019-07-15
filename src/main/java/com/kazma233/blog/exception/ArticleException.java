@@ -1,23 +1,12 @@
 package com.kazma233.blog.exception;
 
-import com.kazma233.blog.enums.ResultEnums;
+import com.kazma233.blog.entity.result.enums.Status;
+import com.kazma233.blog.exception.parent.CustomizeException;
 
-/**
- * @author zly
- * @date 2019/1/9
- **/
-public class ArticleException extends MyException {
+public class ArticleException extends CustomizeException {
 
-    public ArticleException(String message) {
-        super(message);
-    }
-
-    public ArticleException(String message, Integer status) {
-        super(message, status);
-    }
-
-    public ArticleException(ResultEnums resultEnums) {
-        super(resultEnums);
+    public ArticleException(Status status) {
+        super(status);
     }
 
 }

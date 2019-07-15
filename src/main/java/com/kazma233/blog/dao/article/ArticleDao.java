@@ -1,10 +1,10 @@
 package com.kazma233.blog.dao.article;
 
 import com.kazma233.blog.entity.article.Article;
-import com.kazma233.blog.vo.article.ArticleCategoryVO;
-import com.kazma233.blog.vo.article.ArticleFull;
-import com.kazma233.blog.vo.article.ArticleQueryVO;
-import com.kazma233.blog.vo.article.ArticleSimple;
+import com.kazma233.blog.entity.article.vo.ArticleCategoryVO;
+import com.kazma233.blog.entity.article.vo.ArticleFull;
+import com.kazma233.blog.entity.article.vo.ArticleQueryVO;
+import com.kazma233.blog.entity.article.vo.ArticleSimple;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -14,18 +14,18 @@ import java.util.List;
 @Repository
 public interface ArticleDao {
 
-    int insert(ArticleFull record);
+    void insert(ArticleFull record);
 
     @Delete("delete from blog_article_table where id = #{id}")
-    int deleteById(String id);
+    void deleteById(String id);
 
     Article selectById(String id);
 
     ArticleFull selectFullById(String id);
 
-    int updateByIdSelective(ArticleFull record);
+    void updateByIdSelective(ArticleFull record);
 
-    int updateByPrimaryKey(ArticleFull record);
+    void updateByPrimaryKey(ArticleFull record);
 
     List<ArticleCategoryVO> queryArticleByArgs(ArticleQueryVO articleQueryVO);
 

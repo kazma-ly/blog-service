@@ -1,9 +1,9 @@
 FROM openjdk:11
 
-CMD mkdir /var/blog
+WORKDIR /blog
 
-COPY ./blog-service-4.0.0.jar /var/blog/blog.jar
+COPY ./build/libs/blog-service-4.0.0.jar /blog/blog.jar
 
 EXPOSE 1331
 
-ENTRYPOINT java -jar /var/blog/blog.jar --spring.profiles.active=pro
+ENTRYPOINT ["java", "-jar", "blog.jar", "--spring.profiles.active=pro"]

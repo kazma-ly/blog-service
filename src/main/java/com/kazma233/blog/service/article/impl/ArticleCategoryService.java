@@ -2,10 +2,12 @@ package com.kazma233.blog.service.article.impl;
 
 import com.kazma233.blog.dao.article.ArticleCategoryDao;
 import com.kazma233.blog.entity.article.ArticleCategory;
+import com.kazma233.blog.entity.result.enums.Status;
 import com.kazma233.blog.exception.ArticleException;
 import com.kazma233.blog.service.article.IArticleCategoryService;
+import com.kazma233.blog.utils.ShiroUtils;
 import com.kazma233.common.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -13,36 +15,38 @@ import java.util.List;
 
 
 @Service
+@AllArgsConstructor
 public class ArticleCategoryService implements IArticleCategoryService {
 
-    @Autowired
     private ArticleCategoryDao articleCategoryDao;
 
     @Override
     public List<ArticleCategory> queryAll() {
-        return articleCategoryDao.queryAll();
+        return articleCategoryDao.queryAll(ShiroUtils.getUid());
     }
 
     @Override
-    public int insertCategory(ArticleCategory category) {
+    public void insertCategory(ArticleCategory category) {
         category.setId(Utils.generateID());
         category.setCreateTime(new Date());
+        category.setUid(ShiroUtils.getUid());
 
-        return articleCategoryDao.insert(category);
+        articleCategoryDao.insert(category);
     }
 
     @Override
-    public int updateCategory(ArticleCategory category) {
-        return articleCategoryDao.updateById(category);
+    public void updateCategory(ArticleCategory category) {
+        articleCategoryDao.updateById(category);
     }
 
     @Override
-    public int deleteCategory(String id) {
-        int count = articleCategoryDao.countByArticleId(id);
-        if (count > 0) {
-            throw new ArticleException("该分类还在使用，不能删除");
+    public void deleteCategory(String id) {
+        Integer count = articleCategoryDao.countByArticleId(id);
+        if (count != null && count > 0) {
+            throw new ArticleException(Status.CATEGORY_ALREADY_IN_USE);
         }
-        return articleCategoryDao.deleteById(id);
+
+        articleCategoryDao.deleteById(id);
     }
 
 }

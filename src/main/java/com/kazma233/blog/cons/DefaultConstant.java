@@ -5,11 +5,6 @@ import java.time.format.DateTimeFormatter;
 public class DefaultConstant {
 
     /**
-     * 登录时用于存储`key`的cookie的键
-     */
-    public static final String LOGIN_KEY = "LOGIN_KEY";
-
-    /**
      * 文章缓存名字
      */
     public static final String ARTICLE_LIST_CACHE_NAME = "ARTICLE_LIST_CACHE";
@@ -17,5 +12,10 @@ public class DefaultConstant {
 
     // 日期格式化
     public static DateTimeFormatter DATE_FORMATTER_YM = DateTimeFormatter.ofPattern("yyyy-MM");
+
+    // 用户注册的默认信息
+    public static final String ADMIN_NAME = "admin";
+    public static final String ADMIN_ROLE = "1000";
+    public static final String NORMAL_ROLE = "1001";
 
 }

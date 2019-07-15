@@ -13,22 +13,22 @@ import java.util.List;
 @Repository
 public interface ArticleCategoryDao {
 
-    @Insert("insert into blog_article_category (id, category_name, create_time) " +
-            "values (#{id}, #{categoryName}, #{createTime})")
-    int insert(ArticleCategory record);
+    @Insert("insert into blog_article_category (id, category_name, create_time, uid) " +
+            "values (#{id}, #{categoryName}, #{createTime}, #{uid})")
+    void insert(ArticleCategory record);
 
     @Delete("delete from blog_article_category where id = #{id}")
-    int deleteById(String id);
+    void deleteById(String id);
 
     @Update("update blog_article_category set category_name = #{categoryName} where id = #{id}")
-    int updateById(ArticleCategory record);
+    void updateById(ArticleCategory record);
 
     @Select("select id, category_name, create_time from blog_article_category where id = #{id}")
     ArticleCategory selectById(String id);
 
-    @Select("select id, category_name, create_time from blog_article_category")
-    List<ArticleCategory> queryAll();
+    @Select("select id, category_name, create_time from blog_article_category where uid = #{uid}")
+    List<ArticleCategory> queryAll(String uid);
 
     @Select("select count(*) from blog_article_table where category_id = #{id}")
-    int countByArticleId(String id);
+    Integer countByArticleId(String id);
 }

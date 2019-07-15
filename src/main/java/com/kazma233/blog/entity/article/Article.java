@@ -1,6 +1,7 @@
 package com.kazma233.blog.entity.article;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.kazma233.blog.entity.group.AddGroup;
 import com.kazma233.blog.entity.group.UpdateGroup;
 import lombok.AllArgsConstructor;
@@ -43,5 +44,8 @@ public class Article implements Serializable {
     private String categoryId;
 
     private String tags;
+
+    @JsonIgnore
+    private String uid;
 
 }

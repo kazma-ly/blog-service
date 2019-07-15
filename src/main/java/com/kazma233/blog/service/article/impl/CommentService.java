@@ -6,10 +6,11 @@ import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.dao.article.CommentDao;
 import com.kazma233.blog.entity.article.Article;
 import com.kazma233.blog.entity.article.Comment;
+import com.kazma233.blog.entity.article.vo.CommentAndArticleVO;
+import com.kazma233.blog.entity.article.vo.CommentQueryVO;
 import com.kazma233.blog.service.article.IArticleService;
 import com.kazma233.blog.service.article.ICommentService;
-import com.kazma233.blog.vo.article.CommentAndArticleVO;
-import com.kazma233.blog.vo.article.CommentQueryVO;
+import com.kazma233.blog.utils.ShiroUtils;
 import com.kazma233.common.ThreadPoolUtils;
 import com.kazma233.common.Utils;
 import org.slf4j.Logger;
@@ -45,6 +46,7 @@ public class CommentService implements ICommentService {
     public void insert(Comment comment) {
         comment.setId(Utils.generateID());
         comment.setCreateTime(LocalDateTime.now());
+        comment.setUid(ShiroUtils.getUidNotMust());
 
         commentDao.insert(comment);
 
@@ -52,19 +54,21 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public Integer deleteById(String cid) {
-        return commentDao.deleteById(cid);
+    public void deleteById(String cid) {
+        commentDao.deleteById(cid);
     }
 
     @Override
     public PageInfo<CommentAndArticleVO> queryAllCommentAndArticleTitle(CommentQueryVO commentQueryVO) {
+        commentQueryVO.setUid(ShiroUtils.getUid());
         PageHelper.startPage(commentQueryVO.getPage(), commentQueryVO.getCount());
         List<CommentAndArticleVO> commentAndArticleVOS = commentDao.findByArgsHasTitle(commentQueryVO);
         return new PageInfo<>(commentAndArticleVOS);
     }
 
     @Override
-    public PageInfo<Comment> queryComment(CommentQueryVO commentQueryVO) {
+    public PageInfo<Comment> queryUserComment(CommentQueryVO commentQueryVO) {
+        commentQueryVO.setUid(ShiroUtils.getUidNotMust());
         PageHelper.startPage(commentQueryVO.getPage(), commentQueryVO.getCount());
         List<Comment> comments = commentDao.findByArgs(commentQueryVO);
         return new PageInfo<>(comments);
@@ -75,7 +79,15 @@ public class CommentService implements ICommentService {
         CommentQueryVO commentQueryVO = new CommentQueryVO();
         commentQueryVO.setLimit(num);
         commentQueryVO.setOffset(0);
+        commentQueryVO.setUid(ShiroUtils.getUid());
         return commentDao.findByArgsHasTitle(commentQueryVO);
+    }
+
+    @Override
+    public PageInfo queryArticleComment(CommentQueryVO commentQueryVO) {
+        PageHelper.startPage(commentQueryVO.getPage(), commentQueryVO.getCount());
+        List<Comment> comments = commentDao.findByArgs(commentQueryVO);
+        return new PageInfo<>(comments);
     }
 
     private void sendEmail(Comment comment) {

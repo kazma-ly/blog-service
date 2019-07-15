@@ -1,22 +1,12 @@
 package com.kazma233.blog.exception;
 
-import com.kazma233.blog.enums.ResultEnums;
+import com.kazma233.blog.entity.result.enums.Status;
+import com.kazma233.blog.exception.parent.CustomizeException;
 
-/**
- * 用户异常
- * Created by mac_zly on 2017/3/22.
- */
-public class UserException extends MyException {
+public class UserException extends CustomizeException {
 
-    public UserException(String message) {
-        super(message);
+    public UserException(Status status) {
+        super(status);
     }
 
-    public UserException(String message, Integer status) {
-        super(message);
-    }
-
-    public UserException(ResultEnums resultEnums) {
-        super(resultEnums);
-    }
 }

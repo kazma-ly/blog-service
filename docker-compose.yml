@@ -46,6 +46,7 @@ services:
     image: elasticsearch:7.0.1
     container_name: my-elasticsearch
     environment:
+      - "ES_JAVA_OPTS=-Xmx256m -Xms256m"
       - discovery.type=single-node
     ports:
       - 9200:9200
@@ -54,7 +55,9 @@ services:
       - blog-net
     restart: always
   blog:
-    build: .
+    build:
+      context: ./
+      dockerfile: Dockerfile
     container_name: blog-service
     ports:
       - 1331:1331
