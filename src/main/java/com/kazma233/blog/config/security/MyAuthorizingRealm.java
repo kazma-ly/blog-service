@@ -1,4 +1,4 @@
-package com.kazma233.blog.middleware;
+package com.kazma233.blog.config.security;
 
 import com.kazma233.blog.entity.user.Permission;
 import com.kazma233.blog.entity.user.Role;
@@ -14,16 +14,14 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-/**
- * Shiro 自定义Realm
- */
+@Component
 @AllArgsConstructor
 @Slf4j
-public class UserRealm extends AuthorizingRealm {
+public class MyAuthorizingRealm extends AuthorizingRealm {
 
     private IUserService userService;
     private IPermissionService permissionService;

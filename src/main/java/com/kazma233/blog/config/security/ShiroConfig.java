@@ -1,6 +1,5 @@
 package com.kazma233.blog.config.security;
 
-import com.kazma233.blog.middleware.UserRealm;
 import net.sf.ehcache.CacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;
 import org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor;
@@ -82,8 +81,8 @@ public class ShiroConfig {
 
     // securityManager安全管理器
     @Bean
-    DefaultWebSecurityManager defaultWebSecurityManager(UserRealm userRealm, DefaultWebSessionManager defaultWebSessionManager, CookieRememberMeManager cookieRememberMeManager) {
-        DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager(userRealm);
+    DefaultWebSecurityManager defaultWebSecurityManager(MyAuthorizingRealm myAuthorizingRealm, DefaultWebSessionManager defaultWebSessionManager, CookieRememberMeManager cookieRememberMeManager) {
+        DefaultWebSecurityManager defaultWebSecurityManager = new DefaultWebSecurityManager(myAuthorizingRealm);
         // 设置session 管理器
         defaultWebSecurityManager.setSessionManager(defaultWebSessionManager);
         defaultWebSecurityManager.setRememberMeManager(cookieRememberMeManager);
@@ -92,13 +91,12 @@ public class ShiroConfig {
 
     // 自定义Realm
     @Bean
-    UserRealm userRealm(EhCacheManager ehCacheManager) {
-        UserRealm userRealm = new UserRealm();
-        userRealm.setCacheManager(ehCacheManager);
-        userRealm.setCachingEnabled(true);
-        userRealm.setAuthenticationCachingEnabled(true);
-        userRealm.setAuthorizationCachingEnabled(true);
-        return userRealm;
+    MyAuthorizingRealm userRealm(EhCacheManager ehCacheManager, MyAuthorizingRealm myAuthorizingRealm) {
+        myAuthorizingRealm.setCacheManager(ehCacheManager);
+        myAuthorizingRealm.setCachingEnabled(true);
+        myAuthorizingRealm.setAuthenticationCachingEnabled(true);
+        myAuthorizingRealm.setAuthorizationCachingEnabled(true);
+        return myAuthorizingRealm;
     }
 
     // 缓存管理 会提供CacheManager
@@ -122,9 +120,9 @@ public class ShiroConfig {
     @Bean
     CookieRememberMeManager cookieRememberMeManager() {
         CookieRememberMeManager cookieRememberMeManager = new CookieRememberMeManager();
-        SimpleCookie shrioRem = new SimpleCookie(SHIRO_REM_NAME);
-        shrioRem.setMaxAge(DAY_SECOND);
-        cookieRememberMeManager.setCookie(shrioRem);
+        SimpleCookie shiro = new SimpleCookie(SHIRO_REM_NAME);
+        shiro.setMaxAge(DAY_SECOND);
+        cookieRememberMeManager.setCookie(shiro);
         return cookieRememberMeManager;
     }
 
