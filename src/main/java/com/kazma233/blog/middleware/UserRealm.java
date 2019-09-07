@@ -7,6 +7,7 @@ import com.kazma233.blog.entity.user.enums.UserStatus;
 import com.kazma233.blog.service.user.IPermissionService;
 import com.kazma233.blog.service.user.IUserService;
 import com.kazma233.blog.utils.ShiroUtils;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -20,12 +21,11 @@ import java.util.List;
 /**
  * Shiro 自定义Realm
  */
+@AllArgsConstructor
 @Slf4j
 public class UserRealm extends AuthorizingRealm {
 
-    @Autowired
     private IUserService userService;
-    @Autowired
     private IPermissionService permissionService;
 
     /**

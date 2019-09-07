@@ -7,6 +7,7 @@ import com.kazma233.blog.utils.ValidationUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.ShiroException;
+import org.apache.shiro.authc.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -52,9 +53,13 @@ public class ExceptionHandlerConfig {
         return BaseResult.failed(ve);
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(value = {ShiroException.class})
-    public BaseResult sihroExceptionHandle(ShiroException e) {
+    public BaseResult shiroExceptionHandle(ShiroException e) {
+        if (e instanceof AuthenticationException) {
+            return BaseResult.failed(Status.LOGIN_ERROR);
+        }
+
         log.error(request.getRequestURI() + ": shiro异常: ", e);
 
         return BaseResult.failed(Status.UN_AUTH_ERROR);

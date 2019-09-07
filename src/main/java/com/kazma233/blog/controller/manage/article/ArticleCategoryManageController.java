@@ -15,7 +15,7 @@ import java.util.List;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/manages/categorys")
+@RequestMapping("/manages/categories")
 @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
 public class ArticleCategoryManageController {
 
