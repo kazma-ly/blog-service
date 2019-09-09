@@ -1,8 +1,7 @@
 package com.kazma233.blog.config;
 
 import com.kazma233.blog.filter.AllVisitsCountFilter;
-import com.kazma233.blog.filter.AllowAccessFilter;
-import com.kazma233.blog.filter.ArticleVisitsCountFilter;
+import com.kazma233.blog.filter.CORSFilter;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -36,8 +35,7 @@ public class MyWebConfigurer implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
 
         registry.addInterceptor(allVisitsCountFilter).order(0).addPathPatterns("/**");
-        registry.addInterceptor(new AllowAccessFilter()).order(2).addPathPatterns("/**");
-        registry.addInterceptor(new ArticleVisitsCountFilter()).order(3).addPathPatterns("/", "/comments/**", "/search/**", "/articles/**");
+        registry.addInterceptor(new CORSFilter()).order(2).addPathPatterns("/**");
 
 //        registry.addInterceptor(localeChangeInterceptor);
     }

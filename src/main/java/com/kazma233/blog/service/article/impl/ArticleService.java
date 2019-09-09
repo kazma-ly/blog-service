@@ -6,12 +6,12 @@ import com.kazma233.blog.cons.DefaultConstant;
 import com.kazma233.blog.dao.article.ArticleDao;
 import com.kazma233.blog.entity.article.Article;
 import com.kazma233.blog.entity.article.enums.ArticleStatus;
-import com.kazma233.blog.service.article.IArticleService;
-import com.kazma233.blog.utils.ShiroUtils;
 import com.kazma233.blog.entity.article.vo.ArticleCategoryVO;
 import com.kazma233.blog.entity.article.vo.ArticleFull;
 import com.kazma233.blog.entity.article.vo.ArticleQueryVO;
 import com.kazma233.blog.entity.article.vo.ArticleSimple;
+import com.kazma233.blog.service.article.IArticleService;
+import com.kazma233.blog.utils.ShiroUtils;
 import com.kazma233.common.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -62,6 +62,8 @@ public class ArticleService implements IArticleService {
     @Cacheable(key = "#root.target.ARTICLE_PRE+#id", cacheNames = DefaultConstant.ARTICLE_CACHE_NAME)
     @Override
     public ArticleFull findFullById(String id) {
+        updateViewNum(id, 1);
+
         return articleDao.selectFullById(id);
     }
 
