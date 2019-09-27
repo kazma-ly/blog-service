@@ -6,7 +6,7 @@
         <!-- %d{yyyy-MM-dd HH:mm:ss z} %-5level %class{36}%L%M - %msg%xEx%n -->
         <property name="log_file_pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %class{36} %L:%M - %msg%xEx%n</property>
         <property name="log_pattern">%clr{%d{yyyy-MM-dd HH:mm:ss.SSS}}{faint} %clr{%5p} %clr{${sys:PID}}{magenta} %clr{---}{faint} %clr{[%t]}{faint} %clr{%-40.40c{1.}}{cyan} %clr{:}{faint} %m%n%wEx</property>
-        <property name="log-path">${sys:user.home}/logs</property><!-- ${web:rootDir}是项目根目录 ${sys:catalina.home} -->
+        <property name="log-path">${sys:user.home}/blog_logs</property><!-- ${web:rootDir}是项目根目录 ${sys:catalina.home} -->
         <property name="every_file_size">10M</property><!-- 日志切割的最小单位 -->
         <property name="output_log_level">debug</property><!-- 日志输出级别 old debug -->
     </Properties>

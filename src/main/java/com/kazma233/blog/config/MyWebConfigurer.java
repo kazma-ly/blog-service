@@ -3,8 +3,10 @@ package com.kazma233.blog.config;
 import com.kazma233.blog.filter.AllVisitsCountFilter;
 import com.kazma233.blog.filter.CORSFilter;
 import lombok.AllArgsConstructor;
+import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -16,6 +18,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.servlet.Filter;
 import javax.servlet.Servlet;
 import java.util.List;
+import java.util.TimeZone;
 
 @AllArgsConstructor
 @Configuration
@@ -89,6 +92,14 @@ public class MyWebConfigurer implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
 
+    }
+
+    @Bean
+    public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
+        return jacksonObjectMapperBuilder -> {
+            jacksonObjectMapperBuilder.timeZone(TimeZone.getTimeZone("Asia/Shanghai"));
+            jacksonObjectMapperBuilder.indentOutput(true);
+        };
     }
 
 //    // 跨域请求
