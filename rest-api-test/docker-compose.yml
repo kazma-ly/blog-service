@@ -54,6 +54,27 @@ services:
     networks:
       - blog-net
     restart: always
+  postgres:
+    image: postgres
+    container_name: my-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: pw123456
+    volumes:
+      - /var/docker-data/postgres:/var/lib/postgresql/data
+    networks:
+      - blog-net
+    ports:
+      - 5432:5432
+  adminer:
+    image: adminer
+    container_name: adminer
+    restart: always
+    ports:
+      - 5431:8080
+    networks:
+      - blog-net
 
 networks:
   blog-net:
