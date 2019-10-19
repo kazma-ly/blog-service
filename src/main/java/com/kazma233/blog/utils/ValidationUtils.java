@@ -1,7 +1,7 @@
 package com.kazma233.blog.utils;
 
 import com.kazma233.blog.entity.result.enums.Status;
-import com.kazma233.blog.exception.ValidatedException;
+import com.kazma233.blog.entity.common.exception.ValidatedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 
@@ -15,12 +15,17 @@ public class ValidationUtils {
             return;
         }
 
+        throw new ValidatedException(Status.ARGS_ERROR, getErrorMessage(bindingResult));
+    }
+
+    public static String getErrorMessage(BindingResult bindingResult) {
         List<FieldError> fieldErrors = bindingResult.getFieldErrors();
-        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder errorStringBuilder = new StringBuilder();
         fieldErrors.forEach(
-                fieldError -> stringBuilder.append("[").append(fieldError.getDefaultMessage()).append("] ")
+                fieldError -> errorStringBuilder.append("[").append(fieldError.getDefaultMessage()).append("] ")
         );
 
-        throw new ValidatedException(Status.ARG_ERROR, stringBuilder.toString());
+        return errorStringBuilder.toString();
     }
+
 }

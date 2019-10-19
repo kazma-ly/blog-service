@@ -4,16 +4,19 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.dao.user.PermissionDao;
 import com.kazma233.blog.dao.user.RoleDao;
-import com.kazma233.blog.entity.user.Permission;
-import com.kazma233.blog.entity.user.Role;
-import com.kazma233.blog.entity.user.vo.RolePermissionsVO;
-import com.kazma233.blog.entity.user.vo.RoleQueryVO;
+import com.kazma233.blog.entity.permission.Permission;
+import com.kazma233.blog.entity.role.Role;
+import com.kazma233.blog.entity.role.vo.RoleAdd;
+import com.kazma233.blog.entity.role.vo.RolePermissionsVO;
+import com.kazma233.blog.entity.role.vo.RoleQuery;
+import com.kazma233.blog.entity.role.vo.RoleUpdate;
 import com.kazma233.blog.service.user.IRoleService;
 import com.kazma233.common.Utils;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -24,8 +27,8 @@ public class RoleService implements IRoleService {
     private PermissionDao permissionDao;
 
     @Override
-    public PageInfo<RolePermissionsVO> queryAllArgs(RoleQueryVO roleQueryVO) {
-        PageHelper.startPage(roleQueryVO.getPage(), roleQueryVO.getCount());
+    public PageInfo<RolePermissionsVO> queryAllArgs(RoleQuery roleQueryVO) {
+        PageHelper.startPage(roleQueryVO.getPageNo(), roleQueryVO.getPageSize());
 
         List<Role> roles = roleDao.queryAll(roleQueryVO);
         List<RolePermissionsVO> rolePermissionsVOS = new ArrayList<>(roles.size());
@@ -48,14 +51,20 @@ public class RoleService implements IRoleService {
     }
 
     @Override
-    public void update(Role role) {
-        roleDao.update(role);
+    public void update(RoleUpdate roleUpdate) {
+        roleDao.update(roleUpdate);
     }
 
     @Override
-    public void save(Role role) {
-        role.setId(Utils.generateID());
-        roleDao.insert(role);
+    public void save(RoleAdd roleAdd) {
+        roleDao.insert(Role.builder().
+                id(Utils.generateID()).
+                createTime(new Date()).
+                description(roleAdd.getDescription()).
+                permissionIds(roleAdd.getPermissionIds()).
+                roleName(roleAdd.getRoleName()).
+                build()
+        );
     }
 
     @Override

@@ -1,17 +1,24 @@
 package com.kazma233.blog.entity.article.vo;
 
-import com.kazma233.blog.entity.article.Article;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
-/**
- * @author zly
- * @date 2019/1/8
- **/
-@EqualsAndHashCode(callSuper = true)
+import java.time.LocalDateTime;
+
 @Data
-public class ArticleCategoryVO extends Article {
+public class ArticleCategoryVO {
+
+    private String id;
+
+    private String title;
+
+    private String subtitle;
 
     private String categoryName;
+
+    private String tags;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updateTime;
 
 }

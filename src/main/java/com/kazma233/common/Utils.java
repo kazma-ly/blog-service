@@ -9,9 +9,10 @@ import java.util.UUID;
 public class Utils {
 
     private static final String UNKNOW = "unKnown";
+    private static final SnowflakeIdWorker SNOWFLAKE_ID_WORKER = new SnowflakeIdWorker(1, 1);
 
     public static String generateID() {
-        return UUID.randomUUID().toString().replace("-", "");
+        return String.valueOf(SNOWFLAKE_ID_WORKER.nextId());
     }
 
     public static String getClientIp(HttpServletRequest request) {

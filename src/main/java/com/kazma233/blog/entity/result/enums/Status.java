@@ -14,7 +14,7 @@ public enum Status {
 
 
     LOGIN_ERROR(1006, "登录失败，请检查用户名或密码"),
-    ARG_ERROR(1007, "参数不正确"),
+    ARGS_ERROR(1007, "参数不正确"),
     USER_NOT_FOUND_ERROR(1008, "未知用户"),
 
     SUCCESS(1100, "成功"),
@@ -25,6 +25,9 @@ public enum Status {
     SOME_SEARCH_ENGINE_INDEX_ERROR(1011, "搜索引擎处理索引发生异常"),
     SEARCH_ENGINE_ERROR(1012, "搜索时发生异常"),
     SEARCH_ENGINE_BEAN_TO_MAP_ERROR(1013, "Bean to map error"),
+
+    HTTP_ERROR(1014, "请求URL发生异常"),
+    ARTICLE_EMPTY(1015, "文章内容为空"),
     ;
 
     private Integer status;

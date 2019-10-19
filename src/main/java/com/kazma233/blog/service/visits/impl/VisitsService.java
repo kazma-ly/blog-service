@@ -2,7 +2,7 @@ package com.kazma233.blog.service.visits.impl;
 
 import com.kazma233.blog.dao.mongo.MongoLogDao;
 import com.kazma233.blog.entity.log.MongoLog;
-import com.kazma233.blog.entity.log.vo.MongoLogQueryVO;
+import com.kazma233.blog.entity.log.vo.MongoLogQuery;
 import com.kazma233.blog.entity.log.vo.MongoWebsiteInfo;
 import com.kazma233.blog.service.visits.IVisitsService;
 import lombok.AllArgsConstructor;
@@ -31,19 +31,19 @@ public class VisitsService implements IVisitsService {
     }
 
     @Override
-    public Page findLogs(MongoLogQueryVO mongoLogQueryVO) {
+    public Page findLogs(MongoLogQuery mongoLogQueryVO) {
 
         return mongoLogDao.findAllByVisitTimeBetweenAndPathLikeAndIpLikeOrderByVisitTimeDesc(
                 mongoLogQueryVO.getStart(),
                 mongoLogQueryVO.getEnd(),
                 mongoLogQueryVO.getPath(),
                 mongoLogQueryVO.getIp(),
-                buildPageRequest(mongoLogQueryVO.getPage(), mongoLogQueryVO.getCount())
+                buildPageRequest(mongoLogQueryVO.getPageNo(), mongoLogQueryVO.getPageSize())
         );
     }
 
     @Override
-    public MongoWebsiteInfo websiteInfo(MongoLogQueryVO mongoLogQueryVO) {
+    public MongoWebsiteInfo websiteInfo(MongoLogQuery mongoLogQueryVO) {
 
         Long allViewSize = mongoLogDao.countAllByVisitTimeBetween(mongoLogQueryVO.getStart(), mongoLogQueryVO.getEnd());
 

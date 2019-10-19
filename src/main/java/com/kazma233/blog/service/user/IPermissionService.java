@@ -2,8 +2,10 @@ package com.kazma233.blog.service.user;
 
 
 import com.github.pagehelper.PageInfo;
-import com.kazma233.blog.entity.user.Permission;
-import com.kazma233.blog.entity.user.vo.PermissionQueryVO;
+import com.kazma233.blog.entity.permission.Permission;
+import com.kazma233.blog.entity.permission.vo.PermissionAdd;
+import com.kazma233.blog.entity.permission.vo.PermissionQuery;
+import com.kazma233.blog.entity.permission.vo.PermissionUpdate;
 
 import java.util.List;
 
@@ -11,15 +13,13 @@ public interface IPermissionService {
 
     PageInfo queryAll(Integer page, Integer once);
 
-    PageInfo queryAllByCondition(PermissionQueryVO permissionQueryVO);
+    PageInfo queryAllByCondition(PermissionQuery permissionQueryVO);
 
-    void save(Permission permission);
+    void save(PermissionAdd permissionAdd);
 
-    void updateById(Permission permission);
+    void updateById(PermissionUpdate permissionUpdate);
 
     void deleteById(String id);
-
-    void deleteByIds(List<String> ids);
 
     List<Permission> queryByIds(String[] ids);
 }

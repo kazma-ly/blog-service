@@ -2,26 +2,23 @@ package com.kazma233.blog.service.article;
 
 import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.entity.article.Article;
-import com.kazma233.blog.entity.article.vo.ArticleCategoryVO;
-import com.kazma233.blog.entity.article.vo.ArticleFull;
-import com.kazma233.blog.entity.article.vo.ArticleQueryVO;
-import com.kazma233.blog.entity.article.vo.ArticleSimple;
+import com.kazma233.blog.entity.article.vo.*;
 
 import java.util.List;
 
 public interface IArticleService {
 
-    PageInfo<ArticleCategoryVO> queryAll(ArticleQueryVO articleQueryVO);
+    PageInfo all(ArticleBackendQuery articleBackendQuery);
 
-    PageInfo<ArticleCategoryVO> queryAllPublish(ArticleQueryVO articleQueryVO);
+    PageInfo allPublish(ArticleQuery articleQuery);
 
     Article findById(String id);
 
-    ArticleFull findFullById(String id);
+    Article findAndContentById(String id);
 
-    void save(ArticleFull article);
+    void saveArticleByURL(ArticleGitAdd articleGitAdd);
 
-    void updateFull(ArticleFull article);
+    void update(ArticleGitUpdate articleGitUpdate);
 
     void delete(String id);
 

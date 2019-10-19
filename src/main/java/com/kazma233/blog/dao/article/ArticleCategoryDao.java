@@ -1,7 +1,7 @@
 package com.kazma233.blog.dao.article;
 
 
-import com.kazma233.blog.entity.article.ArticleCategory;
+import com.kazma233.blog.entity.category.ArticleCategory;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Select;
@@ -27,7 +27,7 @@ public interface ArticleCategoryDao {
     ArticleCategory selectById(String id);
 
     @Select("select id, category_name, create_time from blog_article_category where uid = #{uid}")
-    List<ArticleCategory> queryAll(String uid);
+    List<ArticleCategory> findAll(String uid);
 
     @Select("select count(*) from blog_article_table where category_id = #{id}")
     Integer countByArticleId(String id);

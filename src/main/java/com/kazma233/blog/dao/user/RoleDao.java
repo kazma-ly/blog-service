@@ -1,7 +1,8 @@
 package com.kazma233.blog.dao.user;
 
-import com.kazma233.blog.entity.user.Role;
-import com.kazma233.blog.entity.user.vo.RoleQueryVO;
+import com.kazma233.blog.entity.role.Role;
+import com.kazma233.blog.entity.role.vo.RoleQuery;
+import com.kazma233.blog.entity.role.vo.RoleUpdate;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -11,7 +12,7 @@ import java.util.List;
 @Repository
 public interface RoleDao {
 
-    List<Role> queryAll(RoleQueryVO role);
+    List<Role> queryAll(RoleQuery role);
 
     @Select("select id, role_name, permission_ids, description, create_time " +
             "from blog_role_table where id = #{roleId}")
@@ -24,7 +25,7 @@ public interface RoleDao {
 
     void insert(Role role);
 
-    void update(Role role);
+    void update(RoleUpdate role);
 
     @Delete("DELETE FROM blog_role_table WHERE id = #{roleId}")
     void deleteByRoleId(String roleId);

@@ -1,18 +1,15 @@
 package com.kazma233.blog.controller.user;
 
 import com.google.common.io.ByteSource;
-import com.kazma233.blog.entity.group.AddGroup;
-import com.kazma233.blog.entity.group.LoginGroup;
-import com.kazma233.blog.entity.group.UpdateGroup;
 import com.kazma233.blog.entity.log.MongoFile;
 import com.kazma233.blog.entity.result.BaseResult;
 import com.kazma233.blog.entity.result.enums.Status;
-import com.kazma233.blog.entity.user.Role;
-import com.kazma233.blog.entity.user.User;
+import com.kazma233.blog.entity.role.Role;
 import com.kazma233.blog.entity.user.UserInfo;
-import com.kazma233.blog.entity.user.vo.UserChangePwVO;
-import com.kazma233.blog.entity.user.vo.UserLoginResposeVO;
-import com.kazma233.blog.entity.user.vo.UserLoginVO;
+import com.kazma233.blog.entity.user.vo.UserPasswordUpdate;
+import com.kazma233.blog.entity.user.vo.UserLoginResponse;
+import com.kazma233.blog.entity.user.vo.UserLogin;
+import com.kazma233.blog.entity.user.vo.UserRegister;
 import com.kazma233.blog.service.user.IRoleService;
 import com.kazma233.blog.service.user.IUserService;
 import com.kazma233.blog.utils.ShiroUtils;
@@ -38,7 +35,7 @@ public class UserController {
     private IRoleService roleService;
 
     @PostMapping(value = "/login")
-    public BaseResult doLogin(@RequestBody @Validated(LoginGroup.class) UserLoginVO user) {
+    public BaseResult doLogin(@RequestBody @Validated UserLogin user) {
         UsernamePasswordToken usernamePasswordToken = new UsernamePasswordToken(user.getUsername(), user.getPassword());
         usernamePasswordToken.setRememberMe(true);
         Subject subject = SecurityUtils.getSubject();
@@ -50,11 +47,11 @@ public class UserController {
         String uid = ShiroUtils.getUid();
         Role role = roleService.queryByRoleId(uid);
 
-        return BaseResult.success(UserLoginResposeVO.builder().role(role).uid(uid).build());
+        return BaseResult.success(UserLoginResponse.builder().role(role).uid(uid).build());
     }
 
     @PostMapping(value = "/register")
-    public BaseResult doRegister(@RequestBody @Validated(AddGroup.class) User user) {
+    public BaseResult doRegister(@RequestBody @Validated UserRegister user) {
         return BaseResult.success(userService.register(user));
     }
 
@@ -89,7 +86,7 @@ public class UserController {
     }
 
     @PutMapping(value = "/password")
-    public BaseResult changePassword(@RequestBody @Validated(UpdateGroup.class) UserChangePwVO user) {
+    public BaseResult changePassword(@RequestBody @Validated UserPasswordUpdate user) {
         userService.updatePassword(user);
 
         return BaseResult.success();

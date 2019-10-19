@@ -10,15 +10,13 @@ import com.kazma233.blog.dao.user.UserDao;
 import com.kazma233.blog.dao.user.UserInfoDao;
 import com.kazma233.blog.entity.log.MongoFile;
 import com.kazma233.blog.entity.result.enums.Status;
-import com.kazma233.blog.entity.user.Role;
+import com.kazma233.blog.entity.role.Role;
 import com.kazma233.blog.entity.user.User;
 import com.kazma233.blog.entity.user.UserInfo;
 import com.kazma233.blog.entity.user.enums.NoticeStatus;
 import com.kazma233.blog.entity.user.enums.UserStatus;
-import com.kazma233.blog.entity.user.vo.UserChangePwVO;
-import com.kazma233.blog.entity.user.vo.UserQueryVO;
-import com.kazma233.blog.entity.user.vo.UserRoleVO;
-import com.kazma233.blog.exception.UserException;
+import com.kazma233.blog.entity.user.exception.UserException;
+import com.kazma233.blog.entity.user.vo.*;
 import com.kazma233.blog.service.user.IUserService;
 import com.kazma233.blog.utils.ShiroUtils;
 import com.kazma233.common.Utils;
@@ -54,28 +52,31 @@ public class UserService implements IUserService {
     private WebSettings webSettings;
 
     @Override
-    public User login(User user) {
+    public User login(UserLogin userLogin) {
 
-        User dbUser = userDao.queryByUsername(user.getUsername());
+        User dbUser = userDao.queryByUsername(userLogin.getUsername());
         if (dbUser == null || StringUtils.isBlank(dbUser.getId())) {
             throw new UserException(Status.USER_NOT_FOUND_ERROR);
         }
 
-        String inputPw = user.getPassword();
+        String inputPw = userLogin.getPassword();
         checkUserPw(inputPw, dbUser.getPassword());
 
         dbUser.setPassword(inputPw);
         return dbUser;
     }
 
-    @Override
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
-    public String register(User user) {
+    @Override
+    public String register(UserRegister userRegister) {
         String uid = Utils.generateID();
 
-        user.setId(uid);
-        user.setPassword(encodePw(user.getPassword()));
-        user.setEnable(UserStatus.ENABLE.getCode());
+        User user = User.builder().
+                id(uid).
+                username(userRegister.getUsername()).
+                password(encodePw(userRegister.getPassword())).
+                enable(UserStatus.ENABLE.getCode()).
+                build();
 
         if (DefaultConstant.ADMIN_NAME.equals(user.getUsername())) {
             user.setRoleId(DefaultConstant.ADMIN_ROLE);
@@ -95,12 +96,8 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void updateRole(User user) {
-        User updateRoleUser = new User();
-        updateRoleUser.setId(user.getId());
-        updateRoleUser.setRoleId(user.getRoleId());
-
-        userDao.update(updateRoleUser);
+    public void updateRole(UserRoleUpdate userRoleUpdate) {
+        userDao.updateRole(userRoleUpdate);
     }
 
     @Override
@@ -110,27 +107,21 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void updatePassword(UserChangePwVO user) {
-        // 验证用户
-        User checkUser = new User();
-        checkUser.setUsername(user.getUsername());
-        checkUser.setPassword(encodePw(user.getPassword()));
-        User loginUser = userDao.findByUsernameAndPassword(checkUser);
-        if (loginUser == null || StringUtils.isBlank(loginUser.getId())) {
-            throw new UserException(Status.USER_NOT_FOUND_ERROR);
-        }
+    public void updatePassword(UserPasswordUpdate userPasswordUpdate) {
+        this.login(
+                UserLogin.builder().username(userPasswordUpdate.getUsername()).password(userPasswordUpdate.getPassword()).build()
+        );
 
         // 修改密码
-        User updateUser = new User();
-        updateUser.setId(loginUser.getId());
-        updateUser.setPassword(encodePw(user.getNewPasswrod()));
-        userDao.update(updateUser);
+        userPasswordUpdate.setPassword(encodePw(userPasswordUpdate.getNewPasswrod()));
+        userDao.updatePassword(userPasswordUpdate);
     }
 
     @Override
-    public PageInfo<UserRoleVO> queryUser(UserQueryVO userQueryVO) {
-        PageHelper.startPage(userQueryVO.getPage(), userQueryVO.getCount());
-        List<UserRoleVO> users = userDao.queryAllUserByArgs(userQueryVO);
+    public PageInfo<UserRoleVO> queryUser(UserQuery userQuery) {
+        PageHelper.startPage(userQuery.getPageNo(), userQuery.getPageSize());
+        List<UserRoleVO> users = userDao.queryAllUserByArgs(userQuery);
+
         return new PageInfo<>(users);
     }
 

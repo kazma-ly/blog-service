@@ -1,6 +1,6 @@
 package com.kazma233.blog.controller.statistics;
 
-import com.kazma233.blog.entity.log.vo.MongoLogQueryVO;
+import com.kazma233.blog.entity.log.vo.MongoLogQuery;
 import com.kazma233.blog.entity.result.BaseResult;
 import com.kazma233.blog.service.visits.IVisitsService;
 import lombok.AllArgsConstructor;
@@ -18,16 +18,12 @@ public class StatisticsManageController {
     private IVisitsService visitsService;
 
     @GetMapping("/")
-    public BaseResult article(MongoLogQueryVO mongoLogQueryVO) {
-        mongoLogQueryVO.init();
-
+    public BaseResult article(MongoLogQuery mongoLogQueryVO) {
         return BaseResult.success(visitsService.findLogs(mongoLogQueryVO));
     }
 
     @GetMapping("/website")
-    public BaseResult webSiteInfo(MongoLogQueryVO mongoLogQueryVO) {
-        mongoLogQueryVO.init();
-
+    public BaseResult webSiteInfo(MongoLogQuery mongoLogQueryVO) {
         return BaseResult.success(visitsService.websiteInfo(mongoLogQueryVO));
     }
 

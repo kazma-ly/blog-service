@@ -3,61 +3,60 @@ package com.kazma233.blog.service.user.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.dao.user.PermissionDao;
-import com.kazma233.blog.entity.user.Permission;
-import com.kazma233.blog.entity.user.vo.PermissionQueryVO;
+import com.kazma233.blog.entity.permission.Permission;
+import com.kazma233.blog.entity.permission.vo.PermissionAdd;
+import com.kazma233.blog.entity.permission.vo.PermissionQuery;
+import com.kazma233.blog.entity.permission.vo.PermissionUpdate;
 import com.kazma233.blog.service.user.IPermissionService;
 import com.kazma233.common.Utils;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 
+@AllArgsConstructor
 @Service
 public class PermissionService implements IPermissionService {
 
-    @Autowired
     private PermissionDao permissionDao;
 
     @Override
     public PageInfo queryAll(Integer page, Integer once) {
         PageHelper.startPage(page, once);
         List<Permission> permissionList = permissionDao.queryAll();
+
         return new PageInfo<>(permissionList);
     }
 
     @Override
-    public PageInfo queryAllByCondition(PermissionQueryVO permissionQueryVO) {
-        PageHelper.startPage(permissionQueryVO.getPage(), permissionQueryVO.getCount());
+    public PageInfo queryAllByCondition(PermissionQuery permissionQueryVO) {
+        PageHelper.startPage(permissionQueryVO.getPageNo(), permissionQueryVO.getPageSize());
         List<Permission> permissionList = permissionDao.queryPermissionByCondition(permissionQueryVO);
+
         return new PageInfo<>(permissionList);
     }
 
-    @Transactional
     @Override
-    public void save(Permission permission) {
-        permission.setId(Utils.generateID());
-        permission.setCreateTime(new Date());
-        permissionDao.insert(permission);
+    public void save(PermissionAdd permissionAdd) {
+        permissionDao.insert(
+                Permission.builder().
+                        id(Utils.generateID()).
+                        createTime(new Date()).
+                        permissionDescription(permissionAdd.getPermissionDescription()).
+                        permissionName(permissionAdd.getPermissionName()).
+                        build()
+        );
     }
 
-    @Transactional
     @Override
-    public void updateById(Permission permission) {
-        permissionDao.updateById(permission);
+    public void updateById(PermissionUpdate permissionUpdate) {
+        permissionDao.updateById(permissionUpdate);
     }
 
-    @Transactional
     @Override
     public void deleteById(String id) {
         permissionDao.deleteById(id);
-    }
-
-    @Transactional
-    @Override
-    public void deleteByIds(List<String> ids) {
-        permissionDao.deleteByIds(ids);
     }
 
     @Override

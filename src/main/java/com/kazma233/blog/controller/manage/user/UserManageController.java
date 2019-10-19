@@ -1,10 +1,10 @@
 package com.kazma233.blog.controller.manage.user;
 
 import com.github.pagehelper.PageInfo;
-import com.kazma233.blog.entity.group.SetRoleGroup;
 import com.kazma233.blog.entity.result.BaseResult;
 import com.kazma233.blog.entity.user.User;
-import com.kazma233.blog.entity.user.vo.UserQueryVO;
+import com.kazma233.blog.entity.user.vo.UserQuery;
+import com.kazma233.blog.entity.user.vo.UserRoleUpdate;
 import com.kazma233.blog.entity.user.vo.UserRoleVO;
 import com.kazma233.blog.service.user.IUserService;
 import lombok.AllArgsConstructor;
@@ -24,18 +24,17 @@ public class UserManageController {
     private IUserService userService;
 
     @GetMapping(value = "/users")
-    public BaseResult all(UserQueryVO userQueryVO) {
-        userQueryVO.init();
+    public BaseResult all(UserQuery userQueryVO) {
         PageInfo<UserRoleVO> pageInfo = userService.queryUser(userQueryVO);
 
         return BaseResult.success(pageInfo);
     }
 
-    @PutMapping(value = "/user")
-    public BaseResult serUserPermission(@Validated(SetRoleGroup.class) User user) {
-        userService.updateRole(user);
+    @PutMapping(value = "/user/role")
+    public BaseResult updateUserRole(@Validated UserRoleUpdate userRoleUpdate) {
+        userService.updateRole(userRoleUpdate);
 
-        return BaseResult.success(user);
+        return BaseResult.success();
     }
 
 }

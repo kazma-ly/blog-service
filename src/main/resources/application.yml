@@ -28,9 +28,9 @@ mybatis:
   # map位置
   mapper-locations: classpath:mapper/*/*.xml
   # 使用@MapperScan代替
-  # type-handlers-package: com.kazma233.blogsystem.dao
+  # type-handlers-package:
   # 类名映射，直接写全名称，不使用这种方法
-  # type-aliases-package: com.kazma233.blogsystem.entity.text,com.kazma233.blogsystem.entity.user
+  # type-aliases-package:
 
 pagehelper:
   helper-dialect: mysql

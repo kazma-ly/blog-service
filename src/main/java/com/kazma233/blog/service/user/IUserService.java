@@ -2,27 +2,25 @@ package com.kazma233.blog.service.user;
 
 import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.entity.log.MongoFile;
-import com.kazma233.blog.entity.user.Role;
+import com.kazma233.blog.entity.role.Role;
 import com.kazma233.blog.entity.user.User;
 import com.kazma233.blog.entity.user.UserInfo;
-import com.kazma233.blog.entity.user.vo.UserChangePwVO;
-import com.kazma233.blog.entity.user.vo.UserQueryVO;
-import com.kazma233.blog.entity.user.vo.UserRoleVO;
+import com.kazma233.blog.entity.user.vo.*;
 import org.springframework.web.multipart.MultipartFile;
 
 public interface IUserService {
 
-    User login(User user);
+    User login(UserLogin userLogin);
 
-    String register(User user);
+    String register(UserRegister userRegister);
 
-    void updateRole(User user);
+    void updateRole(UserRoleUpdate userRoleUpdate);
 
     void updateUserInfo(UserInfo userInfo);
 
-    void updatePassword(UserChangePwVO user);
+    void updatePassword(UserPasswordUpdate userPasswordUpdate);
 
-    PageInfo<UserRoleVO> queryUser(UserQueryVO userQueryVO);
+    PageInfo<UserRoleVO> queryUser(UserQuery userQuery);
 
     Role queryRoleByUid(String uid);
 

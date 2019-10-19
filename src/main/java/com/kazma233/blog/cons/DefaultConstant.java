@@ -4,11 +4,8 @@ import java.time.format.DateTimeFormatter;
 
 public class DefaultConstant {
 
-    /**
-     * 文章缓存名字
-     */
-    public static final String ARTICLE_LIST_CACHE_NAME = "ARTICLE_LIST_CACHE";
-    public static final String ARTICLE_CACHE_NAME = "ARTICLE_CACHE";
+    public static final String ARTICLE_LIST_CACHE_KEY_NAME = "ARTICLE_LIST_CACHE_KEY";
+    public static final String ARTICLE_CACHE_KEY_NAME = "ARTICLE_CACHE_KEY";
 
     // 日期格式化
     public static DateTimeFormatter DATE_FORMATTER_YM = DateTimeFormatter.ofPattern("yyyy-MM");

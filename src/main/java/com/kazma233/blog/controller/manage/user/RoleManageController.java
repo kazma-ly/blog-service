@@ -1,12 +1,11 @@
 package com.kazma233.blog.controller.manage.user;
 
 import com.github.pagehelper.PageInfo;
-import com.kazma233.blog.entity.group.AddGroup;
-import com.kazma233.blog.entity.group.UpdateGroup;
 import com.kazma233.blog.entity.result.BaseResult;
-import com.kazma233.blog.entity.user.Role;
-import com.kazma233.blog.entity.user.vo.RolePermissionsVO;
-import com.kazma233.blog.entity.user.vo.RoleQueryVO;
+import com.kazma233.blog.entity.role.vo.RoleAdd;
+import com.kazma233.blog.entity.role.vo.RolePermissionsVO;
+import com.kazma233.blog.entity.role.vo.RoleQuery;
+import com.kazma233.blog.entity.role.vo.RoleUpdate;
 import com.kazma233.blog.service.user.IRoleService;
 import lombok.AllArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
@@ -22,9 +21,8 @@ public class RoleManageController {
     private IRoleService roleService;
 
     @GetMapping("/roles")
-    public BaseResult all(RoleQueryVO roleQueryVO) {
-        roleQueryVO.init();
-        PageInfo<RolePermissionsVO> pageInfo = roleService.queryAllArgs(roleQueryVO);
+    public BaseResult all(RoleQuery roleQuery) {
+        PageInfo<RolePermissionsVO> pageInfo = roleService.queryAllArgs(roleQuery);
 
         return BaseResult.success(pageInfo);
     }
@@ -37,8 +35,8 @@ public class RoleManageController {
     }
 
     @PostMapping("/role")
-    public BaseResult add(@Validated(AddGroup.class) Role role) {
-        roleService.save(role);
+    public BaseResult add(@Validated RoleAdd roleAdd) {
+        roleService.save(roleAdd);
 
         return BaseResult.success();
     }
@@ -51,8 +49,8 @@ public class RoleManageController {
     }
 
     @PutMapping("/role")
-    public BaseResult update(@Validated(UpdateGroup.class) Role role) {
-        roleService.update(role);
+    public BaseResult update(@Validated RoleUpdate roleUpdate) {
+        roleService.update(roleUpdate);
 
         return BaseResult.success();
     }

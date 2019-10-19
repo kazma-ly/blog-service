@@ -1,9 +1,8 @@
 package com.kazma233.blog.controller.article;
 
 import com.github.pagehelper.PageInfo;
-import com.kazma233.blog.entity.article.vo.ArticleCategoryVO;
-import com.kazma233.blog.entity.article.vo.ArticleFull;
-import com.kazma233.blog.entity.article.vo.ArticleQueryVO;
+import com.kazma233.blog.entity.article.Article;
+import com.kazma233.blog.entity.article.vo.ArticleQuery;
 import com.kazma233.blog.entity.article.vo.ArticleSimple;
 import com.kazma233.blog.entity.result.BaseResult;
 import com.kazma233.blog.service.article.IArticleService;
@@ -25,17 +24,16 @@ public class ArticleController {
 
     private IArticleService articleService;
 
-    @GetMapping("")
-    public BaseResult articleList(ArticleQueryVO articleQueryVO) {
-        articleQueryVO.init();
-        PageInfo<ArticleCategoryVO> articlePageInfo = articleService.queryAllPublish(articleQueryVO);
+    @GetMapping
+    public BaseResult articleList(ArticleQuery articleQuery) {
+        PageInfo articlePageInfo = articleService.allPublish(articleQuery);
 
         return BaseResult.success(articlePageInfo);
     }
 
     @GetMapping("/{id}")
-    public BaseResult articleInfo(@PathVariable("id") String id) {
-        ArticleFull article = articleService.findFullById(id);
+    public BaseResult articleDetail(@PathVariable("id") String id) {
+        Article article = articleService.findAndContentById(id);
 
         return BaseResult.success(article);
     }

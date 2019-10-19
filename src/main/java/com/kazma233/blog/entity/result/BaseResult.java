@@ -1,7 +1,7 @@
 package com.kazma233.blog.entity.result;
 
 import com.kazma233.blog.entity.result.enums.Status;
-import com.kazma233.blog.exception.parent.CustomizeException;
+import com.kazma233.blog.entity.common.exception.parent.CustomizeException;
 import lombok.Data;
 
 @Data
@@ -34,6 +34,15 @@ public class BaseResult<T> {
         BaseResult<T> baseResult = new BaseResult<>();
         baseResult.setStatus(resultEnums.getStatus());
         baseResult.setMessage(resultEnums.getMessage());
+        baseResult.setSuccess(true);
+
+        return baseResult;
+    }
+
+    public static <T> BaseResult<T> failed(Status resultEnums, String message) {
+        BaseResult<T> baseResult = new BaseResult<>();
+        baseResult.setStatus(resultEnums.getStatus());
+        baseResult.setMessage(message);
         baseResult.setSuccess(true);
 
         return baseResult;

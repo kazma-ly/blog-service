@@ -1,9 +1,10 @@
 package com.kazma233.blog.config.security;
 
-import com.kazma233.blog.entity.user.Permission;
-import com.kazma233.blog.entity.user.Role;
+import com.kazma233.blog.entity.permission.Permission;
+import com.kazma233.blog.entity.role.Role;
 import com.kazma233.blog.entity.user.User;
 import com.kazma233.blog.entity.user.enums.UserStatus;
+import com.kazma233.blog.entity.user.vo.UserLogin;
 import com.kazma233.blog.service.user.IPermissionService;
 import com.kazma233.blog.service.user.IUserService;
 import com.kazma233.blog.utils.ShiroUtils;
@@ -35,13 +36,9 @@ public class MyAuthorizingRealm extends AuthorizingRealm {
         // 从传入的token (UsernamePasswordToken) 获取我们的身份信息(userName)
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
 
-        User user = User.builder().
-                username(token.getUsername()).
-                password(new String(token.getPassword())).
-                build();
-
-        // 数据库查询
-        User dbUser = userService.login(user);
+        User dbUser = userService.login(
+                UserLogin.builder().username(token.getUsername()).password(new String(token.getPassword())).build()
+        );
 
         if (dbUser != null && UserStatus.ENABLE.getCode().equals(dbUser.getEnable())) {
             ShiroUtils.setUser(dbUser);

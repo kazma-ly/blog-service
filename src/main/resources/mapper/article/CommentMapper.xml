@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kazma233.blog.dao.article.CommentDao">
 
-    <select id="findByArgsHasTitle" resultType="com.kazma233.blog.entity.article.vo.CommentAndArticleVO">
+    <select id="findByArgsHasTitle" resultType="com.kazma233.blog.entity.comment.vo.CommentArticleTitleVO">
         SELECT
         bct.*,
         bat.title as articleTitle
@@ -28,7 +28,7 @@
     </select>
 
     <!-- 查询评论 可用条件查询 -->
-    <select id="findByArgs" resultType="com.kazma233.blog.entity.article.Comment">
+    <select id="findByArgs" resultType="com.kazma233.blog.entity.comment.Comment">
         SELECT
         *
         FROM blog_comment_table bct

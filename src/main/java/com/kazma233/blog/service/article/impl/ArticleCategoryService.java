@@ -1,9 +1,9 @@
 package com.kazma233.blog.service.article.impl;
 
 import com.kazma233.blog.dao.article.ArticleCategoryDao;
-import com.kazma233.blog.entity.article.ArticleCategory;
+import com.kazma233.blog.entity.category.ArticleCategory;
 import com.kazma233.blog.entity.result.enums.Status;
-import com.kazma233.blog.exception.ArticleException;
+import com.kazma233.blog.entity.article.exception.ArticleException;
 import com.kazma233.blog.service.article.IArticleCategoryService;
 import com.kazma233.blog.utils.ShiroUtils;
 import com.kazma233.common.Utils;
@@ -21,8 +21,8 @@ public class ArticleCategoryService implements IArticleCategoryService {
     private ArticleCategoryDao articleCategoryDao;
 
     @Override
-    public List<ArticleCategory> queryAll() {
-        return articleCategoryDao.queryAll(ShiroUtils.getUid());
+    public List<ArticleCategory> all() {
+        return articleCategoryDao.findAll(ShiroUtils.getUid());
     }
 
     @Override

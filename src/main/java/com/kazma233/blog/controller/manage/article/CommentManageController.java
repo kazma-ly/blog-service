@@ -1,9 +1,9 @@
 package com.kazma233.blog.controller.manage.article;
 
 import com.github.pagehelper.PageInfo;
-import com.kazma233.blog.entity.article.vo.CommentAndArticleVO;
-import com.kazma233.blog.entity.article.vo.CommentQueryVO;
-import com.kazma233.blog.entity.article.vo.RecentCommentVO;
+import com.kazma233.blog.entity.comment.vo.CommentArticleTitleVO;
+import com.kazma233.blog.entity.comment.vo.CommentQuery;
+import com.kazma233.blog.entity.comment.vo.RecentCommentVO;
 import com.kazma233.blog.entity.result.BaseResult;
 import com.kazma233.blog.service.article.ICommentService;
 import lombok.AllArgsConstructor;
@@ -23,10 +23,9 @@ public class CommentManageController {
     private ICommentService commentService;
 
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
-    @GetMapping(value = "")
-    public BaseResult all(@Validated CommentQueryVO commentQueryVO) {
-        commentQueryVO.init();
-        PageInfo<CommentAndArticleVO> commentArticlePage = commentService.queryAllCommentAndArticleTitle(commentQueryVO);
+    @GetMapping
+    public BaseResult all(@Validated CommentQuery commentQuery) {
+        PageInfo<CommentArticleTitleVO> commentArticlePage = commentService.queryAllCommentAndArticleTitle(commentQuery);
 
         return BaseResult.success(commentArticlePage);
     }
@@ -41,7 +40,7 @@ public class CommentManageController {
 
     @GetMapping("/recent")
     public BaseResult recentComment() {
-        List<CommentAndArticleVO> recentComments = commentService.queryRecentlyComment(50);
+        List<CommentArticleTitleVO> recentComments = commentService.queryRecentlyComment(50);
 
         List<RecentCommentVO> recentCommentVOS = new LinkedList<>();
         recentComments.forEach(comment -> {

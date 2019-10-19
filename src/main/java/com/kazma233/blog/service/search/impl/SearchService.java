@@ -3,10 +3,10 @@ package com.kazma233.blog.service.search.impl;
 import com.kazma233.blog.config.properties.WebSettings;
 import com.kazma233.blog.dao.article.ArticleDao;
 import com.kazma233.blog.entity.article.vo.ArticleCategoryVO;
-import com.kazma233.blog.entity.article.vo.ArticleQueryVO;
+import com.kazma233.blog.entity.article.vo.ArticleQuery;
 import com.kazma233.blog.entity.result.enums.Status;
-import com.kazma233.blog.exception.SearchException;
-import com.kazma233.blog.exception.parent.CustomizeException;
+import com.kazma233.blog.entity.search.exception.SearchException;
+import com.kazma233.blog.entity.common.exception.parent.CustomizeException;
 import com.kazma233.blog.service.search.ISearchService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,7 +48,7 @@ public class SearchService implements ISearchService {
     public void syncArticleEngine() {
         client = getElasticSearchClient();
 
-        ArticleQueryVO articleQueryVO = new ArticleQueryVO();
+        ArticleQuery articleQueryVO = new ArticleQuery();
 
         int page = 1;
         Integer count = 100;
@@ -56,7 +56,7 @@ public class SearchService implements ISearchService {
         while (true) {
             articleQueryVO.setLimit(count);
             articleQueryVO.setOffset((page - 1) * count);
-            List<ArticleCategoryVO> articleCategoryVOS = articleDao.queryArticleByArgs(articleQueryVO);
+            List<ArticleCategoryVO> articleCategoryVOS = articleDao.queryPublishArticle(articleQueryVO);
 
             try {
                 for (ArticleCategoryVO articleCategoryVO : articleCategoryVOS) {

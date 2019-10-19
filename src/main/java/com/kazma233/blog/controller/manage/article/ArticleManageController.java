@@ -1,11 +1,11 @@
 package com.kazma233.blog.controller.manage.article;
 
 import com.github.pagehelper.PageInfo;
+import com.kazma233.blog.entity.article.Article;
+import com.kazma233.blog.entity.article.vo.ArticleBackendQuery;
 import com.kazma233.blog.entity.article.vo.ArticleCategoryVO;
-import com.kazma233.blog.entity.article.vo.ArticleFull;
-import com.kazma233.blog.entity.article.vo.ArticleQueryVO;
-import com.kazma233.blog.entity.group.AddGroup;
-import com.kazma233.blog.entity.group.UpdateGroup;
+import com.kazma233.blog.entity.article.vo.ArticleGitAdd;
+import com.kazma233.blog.entity.article.vo.ArticleGitUpdate;
 import com.kazma233.blog.entity.result.BaseResult;
 import com.kazma233.blog.service.article.IArticleService;
 import lombok.AllArgsConstructor;
@@ -22,33 +22,32 @@ public class ArticleManageController {
     private IArticleService articleService;
 
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
-    @GetMapping(value = "")
-    public BaseResult queryAllText(ArticleQueryVO articleQueryVO) {
-        articleQueryVO.init();
-        PageInfo<ArticleCategoryVO> articlePageInfo = articleService.queryAll(articleQueryVO);
+    @GetMapping
+    public BaseResult queryAllArticle(ArticleBackendQuery articleQueryVO) {
+        PageInfo articlePageInfo = articleService.all(articleQueryVO);
 
         return BaseResult.success(articlePageInfo);
     }
 
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
-    @PostMapping(value = "")
-    public BaseResult submitText(@Validated(value = AddGroup.class) @RequestBody ArticleFull article) {
-       articleService.save(article);
+    @PostMapping
+    public BaseResult addArticle(@Validated @RequestBody ArticleGitAdd articleGitAdd) {
+       articleService.saveArticleByURL(articleGitAdd);
 
         return BaseResult.success();
     }
 
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
-    @PutMapping(value = "")
-    public BaseResult changeText(@Validated(UpdateGroup.class) @RequestBody ArticleFull article) {
-        articleService.updateFull(article);
+    @PutMapping
+    public BaseResult updateArticle(@Validated @RequestBody ArticleGitUpdate articleGitUpdate) {
+        articleService.update(articleGitUpdate);
 
         return BaseResult.success();
     }
 
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
     @DeleteMapping(value = "/{id}")
-    public BaseResult deleteText(@PathVariable("id") String id) {
+    public BaseResult deleteArticle(@PathVariable("id") String id) {
         articleService.delete(id);
 
         return BaseResult.success();

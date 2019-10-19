@@ -16,7 +16,7 @@
         <result column="uid" jdbcType="VARCHAR" property="uid"/>
     </resultMap>
 
-    <resultMap id="FullResultMap" extends="BaseResultMap" type="com.kazma233.blog.entity.article.vo.ArticleFull">
+    <resultMap id="FullResultMap" extends="BaseResultMap" type="com.kazma233.blog.entity.article.Article">
         <id column="content" jdbcType="VARCHAR" property="content"/>
     </resultMap>
 
@@ -47,22 +47,50 @@
         content
     </sql>
 
-    <select id="selectById" parameterType="java.lang.String" resultMap="BaseResultMap">
+    <select id="findById" parameterType="java.lang.String" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from blog_article_table
         where id = #{id,jdbcType=VARCHAR}
     </select>
 
-    <select id="selectFullById" parameterType="java.lang.String" resultMap="FullResultMap">
+    <select id="selectAndContentById" parameterType="java.lang.String" resultType="com.kazma233.blog.entity.article.Article">
         select
         <include refid="Full_Column_List"/>
         from blog_article_table
         where id = #{id,jdbcType=VARCHAR}
     </select>
 
-    <select id="queryArticleByArgs" parameterType="com.kazma233.blog.entity.article.vo.ArticleQueryVO"
+    <select id="queryPublishArticle" parameterType="com.kazma233.blog.entity.article.vo.ArticleQuery"
             resultType="com.kazma233.blog.entity.article.vo.ArticleCategoryVO">
+        select
+        bat.id,
+        bat.title,
+        bat.subtitle,
+        bat.update_time,
+        bat.tags,
+        bac.category_name
+        from blog_article_table bat
+        left join blog_article_category bac on bat.category_id = bac.id
+        <where>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="uid != null">
+                and bat.uid = #{uid}
+            </if>
+            and state = 'ENABLE'
+        </where>
+        ORDER BY bat.create_time DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
+        <if test="offset != null">
+            OFFSET #{offset}
+        </if>
+    </select>
+
+    <select id="queryArticle" resultType="com.kazma233.blog.entity.article.vo.ArticleCategoryBackendVO">
         select
         bat.id,
         bat.title,
@@ -105,7 +133,7 @@
                 </when>
             </choose>
         </where>
-        ORDER BY create_time DESC
+        ORDER BY bat.create_time DESC
         <if test="limit != null">
             LIMIT #{limit}
         </if>
@@ -114,7 +142,7 @@
         </if>
     </select>
 
-    <insert id="insert" parameterType="com.kazma233.blog.entity.article.vo.ArticleFull">
+    <insert id="insert" parameterType="com.kazma233.blog.entity.article.Article">
         insert into blog_article_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -194,7 +222,7 @@
         </trim>
     </insert>
 
-    <update id="updateByIdSelective" parameterType="com.kazma233.blog.entity.article.vo.ArticleFull">
+    <update id="updateByIdSelective" parameterType="com.kazma233.blog.entity.article.Article">
         update blog_article_table
         <set>
             <if test="title != null">
@@ -231,18 +259,18 @@
         where id = #{id,jdbcType=VARCHAR}
     </update>
 
-    <update id="updateByPrimaryKey" parameterType="com.kazma233.blog.entity.article.vo.ArticleFull">
+    <update id="updateByPrimaryKey" parameterType="com.kazma233.blog.entity.article.Article">
         update blog_article_table
-        set title        = #{title,jdbcType=VARCHAR},
-            subtitle     = #{subtitle,jdbcType=VARCHAR},
-            create_time  = #{createTime,jdbcType=TIMESTAMP},
-            update_time  = #{updateTime,jdbcType=TIMESTAMP},
-            read_num     = #{readNum,jdbcType=INTEGER},
-            archive_date = #{archiveDate,jdbcType=VARCHAR},
-            state        = #{state,jdbcType=VARCHAR},
-            category_id  = #{categoryId,jdbcType=VARCHAR},
-            tags         = #{tags,jdbcType=VARCHAR},
-            content      = #{content,jdbcType=VARCHAR}
+        set title = #{title,jdbcType=VARCHAR},
+        subtitle = #{subtitle,jdbcType=VARCHAR},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        read_num = #{readNum,jdbcType=INTEGER},
+        archive_date = #{archiveDate,jdbcType=VARCHAR},
+        state = #{state,jdbcType=VARCHAR},
+        category_id = #{categoryId,jdbcType=VARCHAR},
+        tags = #{tags,jdbcType=VARCHAR},
+        content = #{content,jdbcType=VARCHAR}
         where id = #{id,jdbcType=VARCHAR}
     </update>
 

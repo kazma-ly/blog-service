@@ -1,6 +1,6 @@
 package com.kazma233.blog.controller.manage.article;
 
-import com.kazma233.blog.entity.article.ArticleCategory;
+import com.kazma233.blog.entity.category.ArticleCategory;
 import com.kazma233.blog.entity.group.AddGroup;
 import com.kazma233.blog.entity.group.UpdateGroup;
 import com.kazma233.blog.entity.result.BaseResult;
@@ -21,21 +21,21 @@ public class ArticleCategoryManageController {
 
     private IArticleCategoryService articleCategoryService;
 
-    @GetMapping("")
-    public BaseResult queryAllCategory() {
-        List<ArticleCategory> categories = articleCategoryService.queryAll();
+    @GetMapping
+    public BaseResult all() {
+        List<ArticleCategory> categories = articleCategoryService.all();
 
         return BaseResult.success(categories);
     }
 
-    @PostMapping("")
+    @PostMapping
     public BaseResult addCategory(@Validated(value = {AddGroup.class}) @RequestBody ArticleCategory category) {
         articleCategoryService.insertCategory(category);
 
         return BaseResult.success();
     }
 
-    @PutMapping("")
+    @PutMapping
     public BaseResult updateCategory(@Validated(value = {UpdateGroup.class}) @RequestBody ArticleCategory category) {
         articleCategoryService.updateCategory(category);
 

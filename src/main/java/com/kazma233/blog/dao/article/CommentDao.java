@@ -1,9 +1,9 @@
 package com.kazma233.blog.dao.article;
 
 
-import com.kazma233.blog.entity.article.Comment;
-import com.kazma233.blog.entity.article.vo.CommentAndArticleVO;
-import com.kazma233.blog.entity.article.vo.CommentQueryVO;
+import com.kazma233.blog.entity.comment.Comment;
+import com.kazma233.blog.entity.comment.vo.CommentArticleTitleVO;
+import com.kazma233.blog.entity.comment.vo.CommentQuery;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Insert;
 import org.springframework.stereotype.Repository;
@@ -20,7 +20,7 @@ public interface CommentDao {
     @Delete("DELETE FROM blog_comment_table WHERE id = #{id}")
     void deleteById(String id);
 
-    List<CommentAndArticleVO> findByArgsHasTitle(CommentQueryVO commentQueryVO);
+    List<CommentArticleTitleVO> findByArgsHasTitle(CommentQuery commentQuery);
 
-    List<Comment> findByArgs(CommentQueryVO commentQueryVO);
+    List<Comment> findByArgs(CommentQuery commentQuery);
 }

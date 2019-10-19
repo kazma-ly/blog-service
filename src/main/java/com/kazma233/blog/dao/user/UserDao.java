@@ -2,7 +2,9 @@ package com.kazma233.blog.dao.user;
 
 
 import com.kazma233.blog.entity.user.User;
-import com.kazma233.blog.entity.user.vo.UserQueryVO;
+import com.kazma233.blog.entity.user.vo.UserPasswordUpdate;
+import com.kazma233.blog.entity.user.vo.UserQuery;
+import com.kazma233.blog.entity.user.vo.UserRoleUpdate;
 import com.kazma233.blog.entity.user.vo.UserRoleVO;
 import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
@@ -23,7 +25,9 @@ public interface UserDao {
 
     void insert(User user);
 
-    void update(User user);
+    List<UserRoleVO> queryAllUserByArgs(UserQuery userQuery);
 
-    List<UserRoleVO> queryAllUserByArgs(UserQueryVO userQueryVO);
+    void updateRole(UserRoleUpdate userRoleUpdate);
+
+    void updatePassword(UserPasswordUpdate userRoleUpdate);
 }

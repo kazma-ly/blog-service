@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kazma233.blog.dao.user.RoleDao">
 
-    <resultMap id="BaseResultMap" type="com.kazma233.blog.entity.user.Role">
+    <resultMap id="BaseResultMap" type="com.kazma233.blog.entity.role.Role">
         <id column="id" jdbcType="VARCHAR" property="id"/>
         <result column="role_name" jdbcType="VARCHAR" property="roleName"/>
         <result column="permission_ids" jdbcType="VARCHAR" property="permissionIds"/>
@@ -32,7 +32,7 @@
         </where>
     </select>
 
-    <insert id="insert" parameterType="com.kazma233.blog.entity.user.Role">
+    <insert id="insert" parameterType="com.kazma233.blog.entity.role.Role">
         insert into blog_role_table
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">
@@ -67,7 +67,7 @@
         </trim>
     </insert>
 
-    <update id="update" parameterType="com.kazma233.blog.entity.user.Role">
+    <update id="update" parameterType="com.kazma233.blog.entity.role.Role">
         update blog_role_table
         <set>
             <if test="roleName != null">

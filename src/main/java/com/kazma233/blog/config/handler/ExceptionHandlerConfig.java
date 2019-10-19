@@ -2,7 +2,7 @@ package com.kazma233.blog.config.handler;
 
 import com.kazma233.blog.entity.result.BaseResult;
 import com.kazma233.blog.entity.result.enums.Status;
-import com.kazma233.blog.exception.parent.CustomizeException;
+import com.kazma233.blog.entity.common.exception.parent.CustomizeException;
 import com.kazma233.blog.utils.ValidationUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +37,7 @@ public class ExceptionHandlerConfig {
 
         if (e instanceof MethodArgumentNotValidException) {
             MethodArgumentNotValidException manve = (MethodArgumentNotValidException) e;
-            ValidationUtils.checkFieldErrors(manve.getBindingResult());
+            return BaseResult.failed(Status.ARGS_ERROR, ValidationUtils.getErrorMessage(manve.getBindingResult()));
         }
 
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
