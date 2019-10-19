@@ -2,7 +2,6 @@ package com.kazma233.blog.service.article.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.kazma233.blog.cons.CacheNameConstants;
 import com.kazma233.blog.cons.DefaultConstant;
 import com.kazma233.blog.dao.article.ArticleDao;
 import com.kazma233.blog.entity.article.Article;
@@ -122,7 +121,7 @@ public class ArticleService implements IArticleService {
         articleDao.updateByIdSelective(article);
     }
 
-    @Cacheable(cacheNames = DefaultConstant.ARTICLE_LIST_CACHE_KEY_NAME, key = CacheNameConstants.SIMPLE_ARTICLE_LIST_CACHE)
+    @Cacheable(cacheNames = DefaultConstant.ARTICLE_LIST_CACHE_KEY_NAME, key = "'SIMPLE_ARTICLE_LIST_CACHE'")
     @Override
     public List<ArticleSimple> queryAllSimple() {
         return articleDao.queryArticleSimpleByStatus(ArticleStatus.ENABLE.getCode());
