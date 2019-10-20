@@ -2,7 +2,7 @@ FROM openjdk:11
 
 WORKDIR /blog
 
-COPY ./build/libs/blog-service-4.0.0.jar /blog/blog.jar
+COPY ./blog-service-4.0.0.jar /blog/blog.jar
 
 EXPOSE 1331
 
