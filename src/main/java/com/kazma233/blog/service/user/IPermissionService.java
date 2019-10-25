@@ -11,8 +11,6 @@ import java.util.List;
 
 public interface IPermissionService {
 
-    PageInfo queryAll(Integer page, Integer once);
-
     PageInfo queryAllByCondition(PermissionQuery permissionQueryVO);
 
     void save(PermissionAdd permissionAdd);

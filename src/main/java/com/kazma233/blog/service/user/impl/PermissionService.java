@@ -22,14 +22,6 @@ public class PermissionService implements IPermissionService {
     private PermissionDao permissionDao;
 
     @Override
-    public PageInfo queryAll(Integer page, Integer once) {
-        PageHelper.startPage(page, once);
-        List<Permission> permissionList = permissionDao.queryAll();
-
-        return new PageInfo<>(permissionList);
-    }
-
-    @Override
     public PageInfo queryAllByCondition(PermissionQuery permissionQueryVO) {
         PageHelper.startPage(permissionQueryVO.getPageNo(), permissionQueryVO.getPageSize());
         List<Permission> permissionList = permissionDao.queryPermissionByCondition(permissionQueryVO);

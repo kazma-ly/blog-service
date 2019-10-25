@@ -110,3 +110,4 @@ create table user_info
 alter table blog_article_category add uid varchar(50) null comment '用户id';
 alter table blog_article_table add uid varchar(50) null comment '用户id';
 alter table blog_comment_table add uid varchar(50) null comment '用户Id';
+ALTER TABLE blog_comment_table ADD status varchar(6) NULL COMMENT 'SHOW,HIDDEN';

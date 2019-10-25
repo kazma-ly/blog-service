@@ -2,7 +2,7 @@ package com.kazma233.blog.service.user.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.kazma233.blog.config.properties.WebSettings;
+import com.kazma233.blog.config.properties.MyConfig;
 import com.kazma233.blog.cons.DefaultConstant;
 import com.kazma233.blog.dao.mongo.MongoFileDao;
 import com.kazma233.blog.dao.user.RoleDao;
@@ -49,7 +49,7 @@ public class UserService implements IUserService {
     private MongoFileDao mongoFileDao;
     private RoleDao roleDao;
     private UserInfoDao userInfoDao;
-    private WebSettings webSettings;
+    private MyConfig myConfig;
 
     @Override
     public User login(UserLogin userLogin) {
@@ -112,7 +112,6 @@ public class UserService implements IUserService {
                 UserLogin.builder().username(userPasswordUpdate.getUsername()).password(userPasswordUpdate.getPassword()).build()
         );
 
-        // 修改密码
         userPasswordUpdate.setPassword(encodePw(userPasswordUpdate.getNewPasswrod()));
         userDao.updatePassword(userPasswordUpdate);
     }
@@ -151,7 +150,7 @@ public class UserService implements IUserService {
             if (avatarMongoFile.isPresent()) {
                 mongoFileDao.deleteMongoFileByUid(uid);
             } else {
-                userInfoDao.update(UserInfo.builder().uid(uid).avatar(webSettings.getUrlPre() + "/user/avatar/" + uid).build());
+                userInfoDao.update(UserInfo.builder().uid(uid).avatar(myConfig.getUrlPre() + "/user/avatar/" + uid).build());
             }
 
             mongoFileDao.save(newAvatarMongoFile);

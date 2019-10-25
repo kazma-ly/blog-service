@@ -14,15 +14,9 @@ public interface IUserService {
 
     String register(UserRegister userRegister);
 
-    void updateRole(UserRoleUpdate userRoleUpdate);
-
     void updateUserInfo(UserInfo userInfo);
 
     void updatePassword(UserPasswordUpdate userPasswordUpdate);
-
-    PageInfo<UserRoleVO> queryUser(UserQuery userQuery);
-
-    Role queryRoleByUid(String uid);
 
     UserInfo getUserInfo();
 
@@ -30,4 +24,9 @@ public interface IUserService {
 
     MongoFile getAvatarMongoFile(String uid);
 
+    Role queryRoleByUid(String uid);
+
+    PageInfo<UserRoleVO> queryUser(UserQuery userQuery);
+
+    void updateRole(UserRoleUpdate userRoleUpdate);
 }

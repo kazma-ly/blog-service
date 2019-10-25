@@ -2,7 +2,7 @@ package com.kazma233.blog.controller.article;
 
 import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.entity.comment.vo.CommentAdd;
-import com.kazma233.blog.entity.comment.vo.CommentQuery;
+import com.kazma233.blog.entity.comment.vo.CommentArticleQuery;
 import com.kazma233.blog.entity.result.BaseResult;
 import com.kazma233.blog.service.article.ICommentService;
 import lombok.AllArgsConstructor;
@@ -18,14 +18,14 @@ public class CommentController {
 
     @PostMapping
     public BaseResult commit(@RequestBody @Validated CommentAdd comment) {
-        commentService.insert(comment);
+        commentService.commit(comment);
 
         return BaseResult.success();
     }
 
     @GetMapping
-    public BaseResult<PageInfo> articleComment(CommentQuery commentQueryVO) {
-        PageInfo pageInfo = commentService.queryArticleComment(commentQueryVO);
+    public BaseResult<PageInfo> articleComment(CommentArticleQuery commentArticleQuery) {
+        PageInfo pageInfo = commentService.queryArticleComment(commentArticleQuery);
 
         return BaseResult.success(pageInfo);
     }

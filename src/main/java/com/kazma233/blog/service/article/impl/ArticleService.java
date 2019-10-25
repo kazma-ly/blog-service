@@ -6,12 +6,9 @@ import com.kazma233.blog.cons.DefaultConstant;
 import com.kazma233.blog.dao.article.ArticleDao;
 import com.kazma233.blog.entity.article.Article;
 import com.kazma233.blog.entity.article.enums.ArticleStatus;
-import com.kazma233.blog.entity.article.exception.ArticleException;
 import com.kazma233.blog.entity.article.vo.*;
-import com.kazma233.blog.entity.result.enums.Status;
 import com.kazma233.blog.service.article.IArticleService;
 import com.kazma233.blog.utils.ShiroUtils;
-import com.kazma233.common.HttpUtils;
 import com.kazma233.common.Utils;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
@@ -30,6 +27,8 @@ public class ArticleService implements IArticleService {
 
     @Override
     public PageInfo all(ArticleBackendQuery articleBackendQuery) {
+        articleBackendQuery.setUid(ShiroUtils.getUidNotMust());
+
         PageHelper.startPage(articleBackendQuery.getPageNo(), articleBackendQuery.getPageSize());
         List<ArticleCategoryBackendVO> articles = articleDao.queryArticle(articleBackendQuery);
 
@@ -75,7 +74,7 @@ public class ArticleService implements IArticleService {
                 state(articleGitAdd.getState()).
                 categoryId(articleGitAdd.getCategoryId()).
                 tags(articleGitAdd.getTags()).
-                content(getContentByURL(articleGitAdd.getUrl())).
+                content(articleGitAdd.getContent()).
                 uid(ShiroUtils.getUid()).
                 build();
 
@@ -88,15 +87,14 @@ public class ArticleService implements IArticleService {
     public void update(ArticleGitUpdate articleGitUpdate) {
 
         Article article = Article.builder().
-                id(Utils.generateID()).
+                id(articleGitUpdate.getId()).
                 title(articleGitUpdate.getTitle()).
                 subtitle(articleGitUpdate.getSubtitle()).
                 updateTime(LocalDateTime.now()).
-                readNum(0).
                 state(articleGitUpdate.getState()).
                 categoryId(articleGitUpdate.getCategoryId()).
                 tags(articleGitUpdate.getTags()).
-                content(getContentByURL(articleGitUpdate.getUrl())).
+                content(articleGitUpdate.getContent()).
                 uid(ShiroUtils.getUid()).
                 build();
 
@@ -125,15 +123,6 @@ public class ArticleService implements IArticleService {
     @Override
     public List<ArticleSimple> queryAllSimple() {
         return articleDao.queryArticleSimpleByStatus(ArticleStatus.ENABLE.getCode());
-    }
-
-    private static String getContentByURL(String url) {
-        String content = HttpUtils.getContentByURL(url);
-        if (content.isEmpty()) {
-            throw new ArticleException(Status.ARTICLE_EMPTY);
-        }
-
-        return content;
     }
 
 }

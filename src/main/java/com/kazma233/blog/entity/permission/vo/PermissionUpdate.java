@@ -10,10 +10,8 @@ public class PermissionUpdate {
     @NotBlank(message = "id不能为空")
     private String id;
 
-    @NotBlank(message = "权限名字不能为空")
     private String permissionName;
 
-    @NotBlank(message = "权限描述不能为空")
     private String permissionDescription;
 
 }

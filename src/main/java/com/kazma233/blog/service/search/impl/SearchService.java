@@ -1,6 +1,6 @@
 package com.kazma233.blog.service.search.impl;
 
-import com.kazma233.blog.config.properties.WebSettings;
+import com.kazma233.blog.config.properties.MyConfig;
 import com.kazma233.blog.dao.article.ArticleDao;
 import com.kazma233.blog.entity.article.vo.ArticleCategoryVO;
 import com.kazma233.blog.entity.article.vo.ArticleQuery;
@@ -37,7 +37,7 @@ import java.util.Map;
 public class SearchService implements ISearchService {
 
     private ArticleDao articleDao;
-    private WebSettings webSettings;
+    private MyConfig myConfig;
 
     private static final String ARTICLE_INDEX = "article_index";
     private static final String TYPE = "base";
@@ -127,7 +127,7 @@ public class SearchService implements ISearchService {
     }
 
     private RestHighLevelClient createRestClient() {
-        return new RestHighLevelClient(RestClient.builder(new HttpHost(webSettings.getElasticHost(), 9200, "http")));
+        return new RestHighLevelClient(RestClient.builder(new HttpHost(myConfig.getElasticHost(), 9200, "http")));
     }
 
     /**

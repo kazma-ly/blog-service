@@ -2,21 +2,19 @@ package com.kazma233.blog.service.article.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.kazma233.blog.config.properties.MyConfig;
 import com.kazma233.blog.dao.article.CommentDao;
 import com.kazma233.blog.entity.article.Article;
 import com.kazma233.blog.entity.comment.Comment;
-import com.kazma233.blog.entity.comment.vo.CommentAdd;
-import com.kazma233.blog.entity.comment.vo.CommentArticleTitleVO;
-import com.kazma233.blog.entity.comment.vo.CommentQuery;
+import com.kazma233.blog.entity.comment.enums.CommentStatus;
+import com.kazma233.blog.entity.comment.vo.*;
 import com.kazma233.blog.service.article.IArticleService;
 import com.kazma233.blog.service.article.ICommentService;
 import com.kazma233.blog.utils.ShiroUtils;
 import com.kazma233.common.ThreadPoolUtils;
 import com.kazma233.common.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
@@ -25,24 +23,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Slf4j
+@AllArgsConstructor
 @Service
 public class CommentService implements ICommentService {
 
-    @Autowired
     private CommentDao commentDao;
-    @Autowired
     private IArticleService articleService;
-    @Autowired
     private JavaMailSender mailSender;
-
-    @Value("${my-setting.mail-username}")
-    private String mailUsername;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(CommentService.class);
+    private MyConfig myConfig;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
-    public void insert(CommentAdd commentAdd) {
+    public void commit(CommentAdd commentAdd) {
 
         Comment comment = Comment.builder().
                 id(Utils.generateID()).
@@ -54,6 +47,7 @@ public class CommentService implements ICommentService {
                 referId(commentAdd.getReferId()).
                 regerOriginId(commentAdd.getRegerOriginId()).
                 createTime(LocalDateTime.now()).
+                status(CommentStatus.SHOW.getCode()).
                 uid(ShiroUtils.getUid()).
                 build();
 
@@ -63,32 +57,25 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public void deleteById(String cid) {
-        commentDao.deleteById(cid);
-    }
-
-    @Override
     public PageInfo<CommentArticleTitleVO> queryAllCommentAndArticleTitle(CommentQuery commentQuery) {
         commentQuery.setUid(ShiroUtils.getUid());
         PageHelper.startPage(commentQuery.getPageNo(), commentQuery.getPageSize());
-        List<CommentArticleTitleVO> commentArticleTitleVOS = commentDao.findByArgsHasTitle(commentQuery);
-        return new PageInfo<>(commentArticleTitleVOS);
+        List<CommentArticleTitleVO> commentArticleTitleList = commentDao.queryAllAndArticleTitleByArgs(commentQuery);
+
+        return new PageInfo<>(commentArticleTitleList);
     }
 
     @Override
-    public List<CommentArticleTitleVO> queryRecentlyComment(int num) {
-        CommentQuery commentQueryVO = new CommentQuery();
-        commentQueryVO.setLimit(num);
-        commentQueryVO.setOffset(0);
-        commentQueryVO.setUid(ShiroUtils.getUid());
-        return commentDao.findByArgsHasTitle(commentQueryVO);
-    }
+    public PageInfo queryArticleComment(CommentArticleQuery commentArticleQuery) {
+        PageHelper.startPage(commentArticleQuery.getPageNo(), commentArticleQuery.getPageSize());
+        List<Comment> comments = commentDao.queryAllShowByArticleId(commentArticleQuery);
 
-    @Override
-    public PageInfo queryArticleComment(CommentQuery commentQuery) {
-        PageHelper.startPage(commentQuery.getPageNo(), commentQuery.getPageSize());
-        List<Comment> comments = commentDao.findByArgs(commentQuery);
         return new PageInfo<>(comments);
+    }
+
+    @Override
+    public void updateStatues(CommentUpdate commentUpdate) {
+        commentDao.updateStatus(commentUpdate);
     }
 
     private void sendEmail(Comment comment) {
@@ -97,13 +84,13 @@ public class CommentService implements ICommentService {
 
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setFrom(mailUsername);
+            simpleMailMessage.setFrom(myConfig.getMailUsername());
             simpleMailMessage.setTo("a781683161@qq.com");
             simpleMailMessage.setSubject("有新的评论");
             simpleMailMessage.setText(content);
             mailSender.send(simpleMailMessage);
         } catch (Exception e) {
-            LOGGER.error("发送邮件失败: ", e);
+            log.error("发送邮件失败: ", e);
         }
 
     }

@@ -1,14 +1,12 @@
 package com.kazma233.blog.entity.article.vo;
 
 import com.kazma233.blog.entity.common.vo.Query;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -17,16 +15,12 @@ public class ArticleBackendQuery extends Query {
 
     private String title;
 
-    private String textState;
-
-    private String archiveDate;
+    private String articleState;
 
     private String categoryId;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private Date startTime;
+    private String year;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-    private Date endTime;
+    private String uid;
 
 }

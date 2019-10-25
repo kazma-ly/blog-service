@@ -1,4 +1,4 @@
-my-setting:
+my-config:
   url-pre:
   elastic-host:
   redis-host:

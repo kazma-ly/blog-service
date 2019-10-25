@@ -14,45 +14,45 @@ import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/manages")
+@RequestMapping("/manages/roles")
 @RequiresPermissions(value = {"admin"})
 public class RoleManageController {
 
     private IRoleService roleService;
 
-    @GetMapping("/roles")
+    @GetMapping
     public BaseResult all(RoleQuery roleQuery) {
         PageInfo<RolePermissionsVO> pageInfo = roleService.queryAllArgs(roleQuery);
 
         return BaseResult.success(pageInfo);
     }
 
-    @GetMapping("/role/{roleId}")
-    public BaseResult all(@PathVariable(value = "roleId") String roleId) {
-        RolePermissionsVO rolePermissionsVO = roleService.queryRoleAndPermissionByRoleId(roleId);
-
-        return BaseResult.success(rolePermissionsVO);
-    }
-
-    @PostMapping("/role")
+    @PostMapping
     public BaseResult add(@Validated RoleAdd roleAdd) {
         roleService.save(roleAdd);
 
         return BaseResult.success();
     }
 
-    @DeleteMapping("/role/{roleId}")
+    @DeleteMapping("/{roleId}")
     public BaseResult delete(@PathVariable("roleId") String roleId) {
         roleService.delete(roleId);
 
         return BaseResult.success();
     }
 
-    @PutMapping("/role")
+    @PutMapping
     public BaseResult update(@Validated RoleUpdate roleUpdate) {
         roleService.update(roleUpdate);
 
         return BaseResult.success();
+    }
+
+    @GetMapping("/permission")
+    public BaseResult all(@RequestParam String roleId) {
+        RolePermissionsVO rolePermissionsVO = roleService.queryRoleAndPermissionByRoleId(roleId);
+
+        return BaseResult.success(rolePermissionsVO);
     }
 
 }

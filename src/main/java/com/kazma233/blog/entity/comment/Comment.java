@@ -37,4 +37,6 @@ public class Comment {
     @JsonIgnore
     private String uid;
 
+    private String status;
+
 }

@@ -46,9 +46,9 @@ pagehelper:
 
 spring:
   redis:
-    host: ${my-setting.redis-host}
+    host: ${my-config.redis-host}
     port: 6379
-    password: ${my-setting.redis-password}
+    password: ${my-config.redis-password}
     timeout: 1m
     lettuce:
       pool:
@@ -60,9 +60,9 @@ spring:
         max-active: 8
   # 数据源配置
   datasource:
-    url: ${my-setting.mysql-url}
-    username: ${my-setting.mysql-username}
-    password: ${my-setting.mysql-password}
+    url: ${my-config.mysql-url}
+    username: ${my-config.mysql-username}
+    password: ${my-config.mysql-password}
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
@@ -91,8 +91,8 @@ spring:
     host: smtp.163.com
     port: 25
     protocol: smtp
-    username: ${my-setting.mail-username}
-    password: ${my-setting.mail-password}
+    username: ${my-config.mail-username}
+    password: ${my-config.mail-password}
     properties:
       mail:
         smtp:

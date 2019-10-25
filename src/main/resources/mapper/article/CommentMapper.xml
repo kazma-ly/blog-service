@@ -2,48 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.kazma233.blog.dao.article.CommentDao">
 
-    <select id="findByArgsHasTitle" resultType="com.kazma233.blog.entity.comment.vo.CommentArticleTitleVO">
-        SELECT
-        bct.*,
-        bat.title as articleTitle
+    <select id="queryAllAndArticleTitleByArgs" resultType="com.kazma233.blog.entity.comment.vo.CommentArticleTitleVO">
+        SELECT bct.*, bat.title as articleTitle
         FROM blog_comment_table bct JOIN blog_article_table bat ON bct.article_id = bat.id
         <where>
-            <if test="articleId != null">
-                bct.article_id = #{articleId}
+            <if test="articleTitle != null">
+                bat.article_title LIKE "%"#{articleTitle}"%"
             </if>
             <if test="content != null">
                 AND bct.content LIKE "%"#{content}"%"
             </if>
-            <if test="uid != null">
-                AND bct.uid = #{uid}
+            <if test="nickname != null">
+                AND bct.nickname LIKE "%"#{nickname}"%"
             </if>
         </where>
-        order by create_time desc
-        <if test="limit != null">
-            LIMIT #{limit}
-        </if>
-        <if test="offset != null">
-            OFFSET #{offset}
-        </if>
-    </select>
-
-    <!-- 查询评论 可用条件查询 -->
-    <select id="findByArgs" resultType="com.kazma233.blog.entity.comment.Comment">
-        SELECT
-        *
-        FROM blog_comment_table bct
-        <where>
-            <if test="articleId != null">
-                bct.article_id = #{articleId}
-            </if>
-            <if test="content != null">
-                AND bct.content LIKE "%"#{content}"%"
-            </if>
-            <if test="uid != null">
-                AND bct.uid = #{uid}
-            </if>
-        </where>
-        order by create_time desc
+        ORDER BY create_time DESC
         <if test="limit != null">
             LIMIT #{limit}
         </if>

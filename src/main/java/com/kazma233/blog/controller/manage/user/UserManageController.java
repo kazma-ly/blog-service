@@ -17,20 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/manages")
+@RequestMapping("/manages/users")
 @RequiresPermissions({"admin"})
 public class UserManageController {
 
     private IUserService userService;
 
-    @GetMapping(value = "/users")
+    @GetMapping
     public BaseResult all(UserQuery userQueryVO) {
         PageInfo<UserRoleVO> pageInfo = userService.queryUser(userQueryVO);
 
         return BaseResult.success(pageInfo);
     }
 
-    @PutMapping(value = "/user/role")
+    @PutMapping(value = "/role")
     public BaseResult updateUserRole(@Validated UserRoleUpdate userRoleUpdate) {
         userService.updateRole(userRoleUpdate);
 

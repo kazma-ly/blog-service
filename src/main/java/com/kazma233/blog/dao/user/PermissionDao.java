@@ -17,9 +17,6 @@ public interface PermissionDao {
 
     List<Permission> queryPermissionByCondition(PermissionQuery permissionQuery);
 
-    @Select("select id, permission_name, permission_description, create_time from blog_permission_table")
-    List<Permission> queryAll();
-
     void insert(Permission permission);
 
     void updateById(PermissionUpdate permissionUpdate);

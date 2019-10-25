@@ -112,21 +112,12 @@
             <if test="categoryId != null">
                 and category_id = #{categoryId}
             </if>
-            <if test="archiveDate != null">
-                and archive_date = #{archiveDate}
-            </if>
-            <if test="textState != null">
-                and state = #{textState}
+            <if test="articleState != null">
+                and state = #{articleState}
             </if>
             <choose>
-                <when test="startTime != null and endTime == null">
-                    AND bat.create_time &gt; #{startTime}
-                </when>
-                <when test="startTime == null and endTime != null">
-                    AND bat.create_time &lt; #{startTime}
-                </when>
-                <when test="startTime != null and endTime != null">
-                    AND bat.create_time between #{startTime} and #{endTime}
+                <when test="year != null">
+                    AND DATE_FORMAT(bat.update_time, '%Y') = #{year}
                 </when>
                 <when test="uid != null">
                     AND bat.uid = #{uid}

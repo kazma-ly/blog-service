@@ -16,8 +16,8 @@ public class ArticleGitUpdate {
     @NotBlank(message = "文章id不能为空")
     private String id;
 
-    @NotBlank(message = "文章地址不能为空")
-    private String url;
+    @NotBlank(message = "文章内容不能为空")
+    private String content;
 
     @NotBlank(message = "标题不能为空")
     private String title;

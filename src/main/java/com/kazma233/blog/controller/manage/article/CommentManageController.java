@@ -3,6 +3,7 @@ package com.kazma233.blog.controller.manage.article;
 import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.entity.comment.vo.CommentArticleTitleVO;
 import com.kazma233.blog.entity.comment.vo.CommentQuery;
+import com.kazma233.blog.entity.comment.vo.CommentUpdate;
 import com.kazma233.blog.entity.comment.vo.RecentCommentVO;
 import com.kazma233.blog.entity.result.BaseResult;
 import com.kazma233.blog.service.article.ICommentService;
@@ -24,43 +25,18 @@ public class CommentManageController {
 
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
     @GetMapping
-    public BaseResult all(@Validated CommentQuery commentQuery) {
+    public BaseResult all(CommentQuery commentQuery) {
         PageInfo<CommentArticleTitleVO> commentArticlePage = commentService.queryAllCommentAndArticleTitle(commentQuery);
 
         return BaseResult.success(commentArticlePage);
     }
 
     @RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
-    @DeleteMapping(value = "/{id}")
-    public BaseResult deleteComment(@PathVariable("id") String id) {
-        commentService.deleteById(id);
+    @PatchMapping
+    public BaseResult commentStatusUpdate(@RequestBody @Validated CommentUpdate commentUpdate) {
+        commentService.updateStatues(commentUpdate);
 
         return BaseResult.success();
-    }
-
-    @GetMapping("/recent")
-    public BaseResult recentComment() {
-        List<CommentArticleTitleVO> recentComments = commentService.queryRecentlyComment(50);
-
-        List<RecentCommentVO> recentCommentVOS = new LinkedList<>();
-        recentComments.forEach(comment -> {
-
-            RecentCommentVO recentComment = recentCommentVOS.stream().
-                    filter(rc -> rc.getTitle().equals(comment.getArticleTitle())).
-                    findFirst().
-                    orElseGet(() -> {
-                        RecentCommentVO rcVO = RecentCommentVO.builder().
-                                title(comment.getArticleTitle()).
-                                comments(new LinkedList<>()).
-                                build();
-                        recentCommentVOS.add(rcVO);
-                        return rcVO;
-                    });
-
-            recentComment.getComments().add(comment);
-        });
-
-        return BaseResult.success(recentCommentVOS);
     }
 
 }

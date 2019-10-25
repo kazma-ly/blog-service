@@ -2,22 +2,17 @@ package com.kazma233.blog.service.article;
 
 
 import com.github.pagehelper.PageInfo;
-import com.kazma233.blog.entity.comment.Comment;
-import com.kazma233.blog.entity.comment.vo.CommentAdd;
-import com.kazma233.blog.entity.comment.vo.CommentArticleTitleVO;
-import com.kazma233.blog.entity.comment.vo.CommentQuery;
+import com.kazma233.blog.entity.comment.vo.*;
 
 import java.util.List;
 
 public interface ICommentService {
 
-    void insert(CommentAdd commentAdd);
-
-    void deleteById(String cid);
+    void commit(CommentAdd commentAdd);
 
     PageInfo<CommentArticleTitleVO> queryAllCommentAndArticleTitle(CommentQuery commentQuery);
 
-    List<CommentArticleTitleVO> queryRecentlyComment(int num);
+    PageInfo queryArticleComment(CommentArticleQuery commentQuery);
 
-    PageInfo queryArticleComment(CommentQuery commentQuery);
+    void updateStatues(CommentUpdate commentUpdate);
 }

@@ -13,34 +13,34 @@ import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/manages")
+@RequestMapping("/manages/permissions")
 @RequiresPermissions(value = {"admin"})
 public class PermissionManageController {
 
     private IPermissionService permissionService;
 
-    @GetMapping("/permissions")
+    @GetMapping
     public BaseResult all(PermissionQuery permissionQuery) {
         PageInfo pageInfo = permissionService.queryAllByCondition(permissionQuery);
 
         return BaseResult.success(pageInfo);
     }
 
-    @PostMapping("/permission")
+    @PostMapping
     public BaseResult add(@Validated @RequestBody PermissionAdd permissionAdd) {
         permissionService.save(permissionAdd);
 
         return BaseResult.success();
     }
 
-    @DeleteMapping("/permission/{pid}")
+    @DeleteMapping("/{pid}")
     public BaseResult delete(@PathVariable("pid") String pid) {
         permissionService.deleteById(pid);
 
         return BaseResult.success();
     }
 
-    @PutMapping("/permission")
+    @PutMapping
     public BaseResult update(@RequestBody @Validated PermissionUpdate permissionUpdate) {
         permissionService.updateById(permissionUpdate);
 
