@@ -1,4 +1,4 @@
-package com.kazma233.blog.config.security;
+package com.kazma233.blog.config.shiro;
 
 import net.sf.ehcache.CacheManager;
 import org.apache.shiro.cache.ehcache.EhCacheManager;

@@ -26,7 +26,7 @@ public class Article {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime updateTime;
 
-    private Integer readNum;
+    private Long readNum;
 
     private String archiveDate;
 

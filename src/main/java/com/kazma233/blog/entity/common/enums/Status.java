@@ -1,4 +1,4 @@
-package com.kazma233.blog.entity.result.enums;
+package com.kazma233.blog.entity.common.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

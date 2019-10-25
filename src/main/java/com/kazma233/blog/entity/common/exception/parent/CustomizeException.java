@@ -1,6 +1,6 @@
 package com.kazma233.blog.entity.common.exception.parent;
 
-import com.kazma233.blog.entity.result.enums.Status;
+import com.kazma233.blog.entity.common.enums.Status;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

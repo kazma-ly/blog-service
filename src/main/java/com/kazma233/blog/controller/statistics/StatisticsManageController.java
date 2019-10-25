@@ -1,8 +1,6 @@
 package com.kazma233.blog.controller.statistics;
 
-import com.kazma233.blog.entity.log.vo.MongoLogQuery;
-import com.kazma233.blog.entity.result.BaseResult;
-import com.kazma233.blog.service.visits.IVisitsService;
+import com.kazma233.blog.entity.common.BaseResult;
 import lombok.AllArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,16 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiresPermissions(value = {"admin"})
 public class StatisticsManageController {
 
-    private IVisitsService visitsService;
+    @GetMapping("/error/analysis")
+    public BaseResult analysis() {
 
-    @GetMapping("/")
-    public BaseResult article(MongoLogQuery mongoLogQueryVO) {
-        return BaseResult.success(visitsService.findLogs(mongoLogQueryVO));
-    }
-
-    @GetMapping("/website")
-    public BaseResult webSiteInfo(MongoLogQuery mongoLogQueryVO) {
-        return BaseResult.success(visitsService.websiteInfo(mongoLogQueryVO));
+        return BaseResult.success();
     }
 
 }

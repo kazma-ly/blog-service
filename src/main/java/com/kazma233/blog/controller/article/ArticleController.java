@@ -2,9 +2,11 @@ package com.kazma233.blog.controller.article;
 
 import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.entity.article.Article;
+import com.kazma233.blog.entity.article.exception.ArticleException;
 import com.kazma233.blog.entity.article.vo.ArticleQuery;
 import com.kazma233.blog.entity.article.vo.ArticleSimple;
-import com.kazma233.blog.entity.result.BaseResult;
+import com.kazma233.blog.entity.common.BaseResult;
+import com.kazma233.blog.entity.common.enums.Status;
 import com.kazma233.blog.service.article.IArticleService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

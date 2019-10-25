@@ -22,7 +22,7 @@ public interface IArticleService {
 
     void delete(String id);
 
-    void updateViewNum(String articleId, Integer num);
+    void updateViewNum(String articleId, Long num);
 
     List<ArticleSimple> queryAllSimple();
 }

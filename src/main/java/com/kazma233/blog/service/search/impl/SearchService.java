@@ -4,9 +4,8 @@ import com.kazma233.blog.config.properties.MyConfig;
 import com.kazma233.blog.dao.article.ArticleDao;
 import com.kazma233.blog.entity.article.vo.ArticleCategoryVO;
 import com.kazma233.blog.entity.article.vo.ArticleQuery;
-import com.kazma233.blog.entity.result.enums.Status;
+import com.kazma233.blog.entity.common.enums.Status;
 import com.kazma233.blog.entity.search.exception.SearchException;
-import com.kazma233.blog.entity.common.exception.parent.CustomizeException;
 import com.kazma233.blog.service.search.ISearchService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,10 +64,10 @@ public class SearchService implements ISearchService {
                     indexRequest.source(source);
 
                     IndexResponse res = client.index(indexRequest, RequestOptions.DEFAULT);
-                    log.info("添加索引数据结果: " + res.status());
+                    log.info("add index status: " + res.status());
                 }
             } catch (IOException e) {
-                log.error("处理索引时，部分发生错误: ", e);
+                log.error("process index has error: ", e);
 
                 throw new SearchException(Status.SOME_SEARCH_ENGINE_INDEX_ERROR);
             }
@@ -105,7 +104,7 @@ public class SearchService implements ISearchService {
                 articleSearchEntities.add(sourceAsMap);
             }
         } catch (IOException e) {
-            log.error("搜索发生异常: ", e);
+            log.error("search error: ", e);
 
             throw new SearchException(Status.SEARCH_ENGINE_ERROR);
         }
@@ -130,14 +129,6 @@ public class SearchService implements ISearchService {
         return new RestHighLevelClient(RestClient.builder(new HttpHost(myConfig.getElasticHost(), 9200, "http")));
     }
 
-    /**
-     * 把实体类转换成map
-     *
-     * @param obj 实体类
-     * @param <T> 实体类类型
-     * @return 返回map
-     * @throws CustomizeException 获取数据失败
-     */
     private static <T> Map<String, Object> bean2Map(T obj) {
         Map<String, Object> entityMap = new HashMap<>();
         if (obj == null) {

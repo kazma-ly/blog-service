@@ -1,9 +1,9 @@
 package com.kazma233.blog.controller.user;
 
 import com.google.common.io.ByteSource;
-import com.kazma233.blog.entity.log.MongoFile;
-import com.kazma233.blog.entity.result.BaseResult;
-import com.kazma233.blog.entity.result.enums.Status;
+import com.kazma233.blog.entity.user.MongoFile;
+import com.kazma233.blog.entity.common.BaseResult;
+import com.kazma233.blog.entity.common.enums.Status;
 import com.kazma233.blog.entity.role.Role;
 import com.kazma233.blog.entity.user.UserInfo;
 import com.kazma233.blog.entity.user.vo.UserPasswordUpdate;

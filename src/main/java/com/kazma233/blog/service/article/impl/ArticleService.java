@@ -2,6 +2,7 @@ package com.kazma233.blog.service.article.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.kazma233.blog.config.scheduling.ArticleReadNumberUpdateTask;
 import com.kazma233.blog.cons.DefaultConstant;
 import com.kazma233.blog.dao.article.ArticleDao;
 import com.kazma233.blog.entity.article.Article;
@@ -53,7 +54,7 @@ public class ArticleService implements IArticleService {
     @Cacheable(cacheNames = DefaultConstant.ARTICLE_CACHE_KEY_NAME, key = "#root.args[0]")
     @Override
     public Article findAndContentById(String id) {
-        this.updateViewNum(id, 1);
+        ArticleReadNumberUpdateTask.ReadNumberHelper.addOnce(id);
 
         return articleDao.selectAndContentById(id);
     }
@@ -69,7 +70,7 @@ public class ArticleService implements IArticleService {
                 subtitle(articleGitAdd.getSubtitle()).
                 createTime(now).
                 updateTime(now).
-                readNum(0).
+                readNum(0L).
                 archiveDate(now.format(DefaultConstant.DATE_FORMATTER_YM)).
                 state(articleGitAdd.getState()).
                 categoryId(articleGitAdd.getCategoryId()).
@@ -108,7 +109,7 @@ public class ArticleService implements IArticleService {
     }
 
     @Override
-    public void updateViewNum(String articleId, Integer num) {
+    public void updateViewNum(String articleId, Long num) {
         Article exitArticle = articleDao.findById(articleId);
 
         Article article = Article.builder().

@@ -1,4 +1,4 @@
-package com.kazma233.blog.config.security;
+package com.kazma233.blog.config.shiro;
 
 import com.kazma233.blog.entity.permission.Permission;
 import com.kazma233.blog.entity.role.Role;

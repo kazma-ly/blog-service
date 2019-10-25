@@ -1,8 +1,7 @@
 package com.kazma233.blog.controller.manage.user;
 
 import com.github.pagehelper.PageInfo;
-import com.kazma233.blog.entity.result.BaseResult;
-import com.kazma233.blog.entity.user.User;
+import com.kazma233.blog.entity.common.BaseResult;
 import com.kazma233.blog.entity.user.vo.UserQuery;
 import com.kazma233.blog.entity.user.vo.UserRoleUpdate;
 import com.kazma233.blog.entity.user.vo.UserRoleVO;

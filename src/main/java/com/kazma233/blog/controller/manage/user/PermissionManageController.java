@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.entity.permission.vo.PermissionAdd;
 import com.kazma233.blog.entity.permission.vo.PermissionQuery;
 import com.kazma233.blog.entity.permission.vo.PermissionUpdate;
-import com.kazma233.blog.entity.result.BaseResult;
+import com.kazma233.blog.entity.common.BaseResult;
 import com.kazma233.blog.service.user.IPermissionService;
 import lombok.AllArgsConstructor;
 import org.apache.shiro.authz.annotation.RequiresPermissions;

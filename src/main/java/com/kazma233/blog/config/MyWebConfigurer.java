@@ -1,16 +1,15 @@
 package com.kazma233.blog.config;
 
-import com.kazma233.blog.filter.AllVisitsCountFilter;
-import com.kazma233.blog.filter.CORSFilter;
-import lombok.AllArgsConstructor;
+import com.kazma233.blog.config.filter.CORSFilter;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -20,37 +19,27 @@ import javax.servlet.Servlet;
 import java.util.List;
 import java.util.TimeZone;
 
-@AllArgsConstructor
 @Configuration
 public class MyWebConfigurer implements WebMvcConfigurer {
 
-//    private LocaleChangeInterceptor localeChangeInterceptor;
-    private AllVisitsCountFilter allVisitsCountFilter;
-
-    // 资源处理
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
 
     }
 
-    // 拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
 
-        registry.addInterceptor(allVisitsCountFilter).order(0).addPathPatterns("/**");
         registry.addInterceptor(new CORSFilter()).order(2).addPathPatterns("/**");
 
-//        registry.addInterceptor(localeChangeInterceptor);
     }
 
-    // 格式化
     @Override
     public void addFormatters(FormatterRegistry registry) {
     }
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-
     }
 
     // @Bean
@@ -89,12 +78,8 @@ public class MyWebConfigurer implements WebMvcConfigurer {
         return servletServletRegistrationBean;
     }
 
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-
-    }
-
     @Bean
+    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
     public Jackson2ObjectMapperBuilderCustomizer jackson2ObjectMapperBuilderCustomizer() {
         return jacksonObjectMapperBuilder -> {
             jacksonObjectMapperBuilder.timeZone(TimeZone.getTimeZone("Asia/Shanghai"));
@@ -126,18 +111,4 @@ public class MyWebConfigurer implements WebMvcConfigurer {
 //        return new CorsFilter(source);
 //    }
 
-//    @Bean
-//    public LocaleResolver localeResolver() {
-//        SessionLocaleResolver sessionLocaleResolver = new SessionLocaleResolver();
-//        sessionLocaleResolver.setDefaultLocale(Locale.SIMPLIFIED_CHINESE);
-//        return sessionLocaleResolver;
-//    }
-//
-//    @Bean
-//    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-//    public LocaleChangeInterceptor localeChangeInterceptor() {
-//        LocaleChangeInterceptor localeChangeInterceptor = new LocaleChangeInterceptor();
-//        localeChangeInterceptor.setParamName("locale");
-//        return localeChangeInterceptor;
-//    }
 }

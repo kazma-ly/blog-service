@@ -1,6 +1,6 @@
-package com.kazma233.blog.entity.result;
+package com.kazma233.blog.entity.common;
 
-import com.kazma233.blog.entity.result.enums.Status;
+import com.kazma233.blog.entity.common.enums.Status;
 import com.kazma233.blog.entity.common.exception.parent.CustomizeException;
 import lombok.Data;
 

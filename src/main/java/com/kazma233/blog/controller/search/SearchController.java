@@ -1,6 +1,6 @@
 package com.kazma233.blog.controller.search;
 
-import com.kazma233.blog.entity.result.BaseResult;
+import com.kazma233.blog.entity.common.BaseResult;
 import com.kazma233.blog.service.search.ISearchService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;

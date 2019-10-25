@@ -1,4 +1,4 @@
-package com.kazma233.blog.filter;
+package com.kazma233.blog.config.filter;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;

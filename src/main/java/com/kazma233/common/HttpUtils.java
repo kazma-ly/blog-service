@@ -1,7 +1,7 @@
 package com.kazma233.common;
 
 import com.kazma233.blog.entity.common.exception.HttpException;
-import com.kazma233.blog.entity.result.enums.Status;
+import com.kazma233.blog.entity.common.enums.Status;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;

@@ -1,6 +1,6 @@
 package com.kazma233.blog.utils;
 
-import com.kazma233.blog.entity.result.enums.Status;
+import com.kazma233.blog.entity.common.enums.Status;
 import com.kazma233.blog.entity.common.exception.ValidatedException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;

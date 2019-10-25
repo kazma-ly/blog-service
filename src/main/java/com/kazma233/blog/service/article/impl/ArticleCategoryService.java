@@ -2,7 +2,7 @@ package com.kazma233.blog.service.article.impl;
 
 import com.kazma233.blog.dao.article.ArticleCategoryDao;
 import com.kazma233.blog.entity.category.ArticleCategory;
-import com.kazma233.blog.entity.result.enums.Status;
+import com.kazma233.blog.entity.common.enums.Status;
 import com.kazma233.blog.entity.article.exception.ArticleException;
 import com.kazma233.blog.service.article.IArticleCategoryService;
 import com.kazma233.blog.utils.ShiroUtils;

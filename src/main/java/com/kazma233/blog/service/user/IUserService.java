@@ -1,7 +1,7 @@
 package com.kazma233.blog.service.user;
 
 import com.github.pagehelper.PageInfo;
-import com.kazma233.blog.entity.log.MongoFile;
+import com.kazma233.blog.entity.user.MongoFile;
 import com.kazma233.blog.entity.role.Role;
 import com.kazma233.blog.entity.user.User;
 import com.kazma233.blog.entity.user.UserInfo;

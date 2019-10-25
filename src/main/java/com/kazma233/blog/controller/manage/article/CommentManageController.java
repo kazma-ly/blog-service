@@ -4,17 +4,13 @@ import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.entity.comment.vo.CommentArticleTitleVO;
 import com.kazma233.blog.entity.comment.vo.CommentQuery;
 import com.kazma233.blog.entity.comment.vo.CommentUpdate;
-import com.kazma233.blog.entity.comment.vo.RecentCommentVO;
-import com.kazma233.blog.entity.result.BaseResult;
+import com.kazma233.blog.entity.common.BaseResult;
 import com.kazma233.blog.service.article.ICommentService;
 import lombok.AllArgsConstructor;
 import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.LinkedList;
-import java.util.List;
 
 @AllArgsConstructor
 @RestController

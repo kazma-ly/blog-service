@@ -3,7 +3,7 @@ package com.kazma233.blog.controller.manage.article;
 import com.kazma233.blog.entity.category.ArticleCategory;
 import com.kazma233.blog.entity.group.AddGroup;
 import com.kazma233.blog.entity.group.UpdateGroup;
-import com.kazma233.blog.entity.result.BaseResult;
+import com.kazma233.blog.entity.common.BaseResult;
 import com.kazma233.blog.service.article.IArticleCategoryService;
 import lombok.AllArgsConstructor;
 import org.apache.shiro.authz.annotation.Logical;

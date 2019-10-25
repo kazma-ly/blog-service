@@ -1,4 +1,4 @@
-package com.kazma233.blog.entity.log;
+package com.kazma233.blog.entity.user;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -9,18 +9,26 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Date;
 
+/**
+ * @date 2017/10/18
+ */
 @Data
-@AllArgsConstructor
+@Document(collection = "BlogData")
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-@Document(collection = "BlogLog")
-public class MongoLog {
+public class MongoFile {
 
-    private String id;
-    private String path;
-    private String ip;
+    private String uid;
+
+    private String name;
+
+    private String contentType;
+    private long size;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    private Date visitTime;
+    private Date uploadDate;
+    private String md5;
 
+    private byte[] content;
 }

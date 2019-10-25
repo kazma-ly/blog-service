@@ -1,8 +1,10 @@
 package com.kazma233.blog.config.handler;
 
-import com.kazma233.blog.entity.result.BaseResult;
-import com.kazma233.blog.entity.result.enums.Status;
+import com.kazma233.blog.entity.common.BaseResult;
+import com.kazma233.blog.entity.common.enums.Status;
 import com.kazma233.blog.entity.common.exception.parent.CustomizeException;
+import com.kazma233.blog.entity.statistics.vo.MongoErrorAdd;
+import com.kazma233.blog.service.statistics.IErrorService;
 import com.kazma233.blog.utils.ValidationUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,10 +29,12 @@ public class ExceptionHandlerConfig {
 
     private HttpServletRequest request;
     private HttpServletResponse response;
+    private IErrorService errorService;
 
     @ExceptionHandler(Exception.class)
     public BaseResult exception(Exception e) {
         response.setStatus(HttpStatus.BAD_REQUEST.value());
+
         if (e instanceof HttpRequestMethodNotSupportedException) {
             return BaseResult.failed(Status.UN_SUPPORT_METHOD);
         }
@@ -42,13 +46,22 @@ public class ExceptionHandlerConfig {
 
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         log.error(request.getRequestURI() + " has an error: ", e);
+
+        errorService.save(
+                MongoErrorAdd.builder().code(500).message(e.getMessage()).path(request.getRequestURI()).build()
+        );
+
         return BaseResult.failed(Status.UN_KNOW_ERROR);
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(value = CustomizeException.class)
     public BaseResult myException(CustomizeException ve) {
-        log.error(request.getRequestURI() + ": 自定义异常: ", ve);
+        log.error(request.getRequestURI() + " -> custom exception: ", ve);
+
+        errorService.save(
+                MongoErrorAdd.builder().code(ve.getStatus()).message(ve.getMessage()).path(request.getRequestURI()).build()
+        );
 
         return BaseResult.failed(ve);
     }
@@ -56,11 +69,16 @@ public class ExceptionHandlerConfig {
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     @ExceptionHandler(value = {ShiroException.class})
     public BaseResult shiroExceptionHandle(ShiroException e) {
+
+        errorService.save(
+                MongoErrorAdd.builder().code(401).message(e.getMessage()).path(request.getRequestURI()).build()
+        );
+
         if (e instanceof AuthenticationException) {
             return BaseResult.failed(Status.LOGIN_ERROR);
         }
 
-        log.error(request.getRequestURI() + ": shiro异常: ", e);
+        log.error(request.getRequestURI() + ": shiro error: ", e);
 
         return BaseResult.failed(Status.UN_AUTH_ERROR);
     }
