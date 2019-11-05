@@ -1,4 +1,4 @@
-version: '3.1'
+version: '3.5'
 
 services:
   blog:
@@ -11,7 +11,7 @@ services:
     ports:
       - 1331:1331
     networks:
-      - kazma_network
+      - kazma_net
     restart: always
 
 networks:
