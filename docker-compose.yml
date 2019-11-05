@@ -6,11 +6,14 @@ services:
       context: ./
       dockerfile: Dockerfile
     container_name: blog-service
+    volumes:
+      - ~/docker_data/blog/blog_logs:/blog_logs
     ports:
       - 1331:1331
     networks:
-      - blog-net
+      - kazma_net
     restart: always
 
 networks:
-  blog-net:
+  kazma_net:
+    name: kazma_network
