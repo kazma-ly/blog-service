@@ -13,7 +13,7 @@ services:
     volumes:
       - /var/docker-data/mongodb/:/data/db/
     networks:
-      - kazma_net
+      - kazma_network
   redis:
     image: redis
     container_name: blog-redis
@@ -28,7 +28,7 @@ services:
     logging:
       driver: syslog
     networks:
-      - kazma_net
+      - kazma_network
   mysql:
     image: mysql
     container_name: blog-mysql
@@ -40,7 +40,7 @@ services:
       - /var/docker-data/mysql:/var/lib/mysql
     restart: always
     networks:
-      - kazma_net
+      - kazma_network
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
   elasticsearch:
     image: elasticsearch:7.0.1
@@ -52,7 +52,7 @@ services:
       - 9200:9200
       - 9300:9300
     networks:
-      - kazma_net
+      - kazma_network
     restart: always
   postgres:
     image: postgres
@@ -64,7 +64,7 @@ services:
     volumes:
       - /var/docker-data/postgres:/var/lib/postgresql/data
     networks:
-      - kazma_net
+      - kazma_network
     ports:
       - 5432:5432
   adminer:
@@ -74,7 +74,7 @@ services:
     ports:
       - 5431:8080
     networks:
-      - kazma_net
+      - kazma_network
 
 networks:
   kazma_net:
