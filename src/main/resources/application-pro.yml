@@ -30,16 +30,16 @@ spring:
         max-idle: 8
         max-wait: 10s
         max-active: 8
-    datasource:
-      url:
-      username:
-      password:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      type: com.zaxxer.hikari.HikariDataSource
-      hikari:
-        minimum-idle: 5
-        maximum-pool-size: 20
-        auto-commit: true
-        connection-timeout: 10000
-        idle-timeout: 10000
-        connection-init-sql: SELECT 1
+  datasource:
+    url:
+    username:
+    password:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 20
+      auto-commit: true
+      connection-timeout: 10000
+      idle-timeout: 10000
+      connection-init-sql: SELECT 1
