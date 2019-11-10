@@ -6,8 +6,6 @@ import com.kazma233.blog.entity.group.UpdateGroup;
 import com.kazma233.blog.entity.common.BaseResult;
 import com.kazma233.blog.service.article.IArticleCategoryService;
 import lombok.AllArgsConstructor;
-import org.apache.shiro.authz.annotation.Logical;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +14,6 @@ import java.util.List;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/manages/categories")
-@RequiresPermissions(value = {"manage", "admin"}, logical = Logical.OR)
 public class ArticleCategoryManageController {
 
     private IArticleCategoryService articleCategoryService;

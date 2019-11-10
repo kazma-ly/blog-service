@@ -7,7 +7,6 @@ import com.kazma233.blog.entity.user.vo.UserRoleUpdate;
 import com.kazma233.blog.entity.user.vo.UserRoleVO;
 import com.kazma233.blog.service.user.IUserService;
 import lombok.AllArgsConstructor;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/manages/users")
-@RequiresPermissions({"admin"})
 public class UserManageController {
 
     private IUserService userService;

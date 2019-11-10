@@ -1,12 +1,12 @@
 package com.kazma233.blog.service.search.impl;
 
-import com.kazma233.blog.config.properties.MyConfig;
 import com.kazma233.blog.dao.article.ArticleDao;
 import com.kazma233.blog.entity.article.vo.ArticleCategoryVO;
 import com.kazma233.blog.entity.article.vo.ArticleQuery;
 import com.kazma233.blog.entity.common.enums.Status;
 import com.kazma233.blog.entity.search.exception.SearchException;
 import com.kazma233.blog.service.search.ISearchService;
+import com.kazma233.blog.utils.BeanUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpHost;
@@ -24,9 +24,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,9 +34,9 @@ import java.util.Map;
 public class SearchService implements ISearchService {
 
     private ArticleDao articleDao;
-    private MyConfig myConfig;
 
     private static final String ARTICLE_INDEX = "article_index";
+    private static final String SEARCH_ENGINE_HOST = "TODO";
     private static final String TYPE = "base";
 
     private RestHighLevelClient client = null;
@@ -59,7 +57,7 @@ public class SearchService implements ISearchService {
 
             try {
                 for (ArticleCategoryVO articleCategoryVO : articleCategoryVOS) {
-                    Map<String, Object> source = bean2Map(articleCategoryVO);
+                    Map<String, Object> source = BeanUtils.bean2Map(articleCategoryVO);
                     IndexRequest indexRequest = new IndexRequest(ARTICLE_INDEX, TYPE, articleCategoryVO.getId());
                     indexRequest.source(source);
 
@@ -126,36 +124,7 @@ public class SearchService implements ISearchService {
     }
 
     private RestHighLevelClient createRestClient() {
-        return new RestHighLevelClient(RestClient.builder(new HttpHost(myConfig.getElasticHost(), 9200, "http")));
-    }
-
-    private static <T> Map<String, Object> bean2Map(T obj) {
-        Map<String, Object> entityMap = new HashMap<>();
-        if (obj == null) {
-            return entityMap;
-        }
-
-        Class base = obj.getClass();
-        do {
-            Field[] declaredFields = base.getDeclaredFields();
-            for (Field declaredField : declaredFields) {
-                if (!declaredField.canAccess(obj)) {
-                    declaredField.trySetAccessible();
-                }
-
-                String name = declaredField.getName();
-                try {
-                    Object val = declaredField.get(obj);
-                    entityMap.put(name, val);
-                } catch (IllegalAccessException e) {
-                    log.error("Bean to map erro: ", e);
-                    throw new SearchException(Status.SEARCH_ENGINE_BEAN_TO_MAP_ERROR);
-                }
-            }
-            base = base.getSuperclass();
-        } while (base != null);
-
-        return entityMap;
+        return new RestHighLevelClient(RestClient.builder(new HttpHost(SEARCH_ENGINE_HOST, 9200, "http")));
     }
 
 }

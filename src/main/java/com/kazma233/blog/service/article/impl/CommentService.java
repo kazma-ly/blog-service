@@ -2,7 +2,7 @@ package com.kazma233.blog.service.article.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.kazma233.blog.config.properties.MyConfig;
+import com.kazma233.blog.config.properties.EmailConfig;
 import com.kazma233.blog.dao.article.CommentDao;
 import com.kazma233.blog.entity.article.Article;
 import com.kazma233.blog.entity.comment.Comment;
@@ -10,9 +10,9 @@ import com.kazma233.blog.entity.comment.enums.CommentStatus;
 import com.kazma233.blog.entity.comment.vo.*;
 import com.kazma233.blog.service.article.IArticleService;
 import com.kazma233.blog.service.article.ICommentService;
-import com.kazma233.blog.utils.ShiroUtils;
-import com.kazma233.common.ThreadPoolUtils;
-import com.kazma233.common.Utils;
+import com.kazma233.blog.utils.ThreadPoolUtils;
+import com.kazma233.blog.utils.UserUtils;
+import com.kazma233.blog.utils.id.IDGenerater;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -31,14 +31,14 @@ public class CommentService implements ICommentService {
     private CommentDao commentDao;
     private IArticleService articleService;
     private JavaMailSender mailSender;
-    private MyConfig myConfig;
+    private EmailConfig emailConfig;
 
     @Override
     @Transactional(rollbackFor = RuntimeException.class)
     public void commit(CommentAdd commentAdd) {
 
         Comment comment = Comment.builder().
-                id(Utils.generateID()).
+                id(IDGenerater.generateID()).
                 articleId(commentAdd.getArticleId()).
                 content(commentAdd.getContent()).
                 email(commentAdd.getEmail()).
@@ -48,7 +48,7 @@ public class CommentService implements ICommentService {
                 regerOriginId(commentAdd.getRegerOriginId()).
                 createTime(LocalDateTime.now()).
                 status(CommentStatus.SHOW.getCode()).
-                uid(ShiroUtils.getUid()).
+                uid(UserUtils.getUserId()).
                 build();
 
         commentDao.insert(comment);
@@ -58,7 +58,7 @@ public class CommentService implements ICommentService {
 
     @Override
     public PageInfo<CommentArticleTitleVO> queryAllCommentAndArticleTitle(CommentQuery commentQuery) {
-        commentQuery.setUid(ShiroUtils.getUid());
+        commentQuery.setUid(UserUtils.getUserId());
         PageHelper.startPage(commentQuery.getPageNo(), commentQuery.getPageSize());
         List<CommentArticleTitleVO> commentArticleTitleList = commentDao.queryAllAndArticleTitleByArgs(commentQuery);
 
@@ -80,13 +80,13 @@ public class CommentService implements ICommentService {
 
     private void sendEmail(Comment comment) {
         Article article = articleService.findById(comment.getArticleId());
-        String content = article.getTitle() + ": \n" + comment.getNickname() + ": " + comment.getContent();
+        String content = comment.getNickname() + "说: \n" + comment.getContent();
 
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setFrom(myConfig.getMailUsername());
-            simpleMailMessage.setTo("a781683161@qq.com");
-            simpleMailMessage.setSubject("有新的评论");
+            simpleMailMessage.setFrom(emailConfig.getFrom());
+            simpleMailMessage.setTo(emailConfig.getTo());
+            simpleMailMessage.setSubject("文章: \"" + article.getTitle() + "\"有新的评论");
             simpleMailMessage.setText(content);
             mailSender.send(simpleMailMessage);
         } catch (Exception e) {

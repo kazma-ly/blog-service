@@ -1,4 +1,4 @@
-package com.kazma233.common;
+package com.kazma233.blog.utils;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.Executor;

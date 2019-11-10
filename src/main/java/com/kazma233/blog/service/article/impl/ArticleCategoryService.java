@@ -1,12 +1,12 @@
 package com.kazma233.blog.service.article.impl;
 
 import com.kazma233.blog.dao.article.ArticleCategoryDao;
+import com.kazma233.blog.entity.article.exception.ArticleException;
 import com.kazma233.blog.entity.category.ArticleCategory;
 import com.kazma233.blog.entity.common.enums.Status;
-import com.kazma233.blog.entity.article.exception.ArticleException;
 import com.kazma233.blog.service.article.IArticleCategoryService;
-import com.kazma233.blog.utils.ShiroUtils;
-import com.kazma233.common.Utils;
+import com.kazma233.blog.utils.UserUtils;
+import com.kazma233.blog.utils.id.IDGenerater;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +22,14 @@ public class ArticleCategoryService implements IArticleCategoryService {
 
     @Override
     public List<ArticleCategory> all() {
-        return articleCategoryDao.findAll(ShiroUtils.getUid());
+        return articleCategoryDao.findAll(UserUtils.getUserId());
     }
 
     @Override
     public void insertCategory(ArticleCategory category) {
-        category.setId(Utils.generateID());
+        category.setId(IDGenerater.generateID());
         category.setCreateTime(new Date());
-        category.setUid(ShiroUtils.getUid());
+        category.setUid(UserUtils.getUserId());
 
         articleCategoryDao.insert(category);
     }

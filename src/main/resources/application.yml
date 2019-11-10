@@ -1,3 +1,13 @@
+# dev env
+blog:
+  jwt:
+    key: mqKjpKWmp6ipqrKztLW2t7i5usLDxM2A
+  email:
+    username:
+    password:
+    from:
+    to:
+
 mybatis:
   configuration:
     cache-enabled: false
@@ -42,48 +52,47 @@ pagehelper:
   # 启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页
   # 禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据
   reasonable: false
-  #params:
 
 spring:
+  data:
+    mongodb:
+      host: 3.113.196.219
+      port: 27017
+      database: blog
+      authentication-database: admin
+      username: admin
+      password: pw123456
   redis:
-    host: ${my-config.redis-host}
+    host: 3.113.196.219
     port: 6379
-    password: ${my-config.redis-password}
+    password: pw123456
     timeout: 1m
     lettuce:
       pool:
-        # 连接池中的最大空闲连接
+        # 最大空闲连接
         max-idle: 8
-        # 连接池最大阻塞等待时间（使用负值表示没有限制）
-        max-wait: 60s
-        # 连接池最大连接数
+        max-wait: 30s
         max-active: 8
-  # 数据源配置
   datasource:
-    url: ${my-config.mysql-url}
-    username: ${my-config.mysql-username}
-    password: ${my-config.mysql-password}
+    url: jdbc:mysql://3.113.196.219:3306/blog?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    username: root
+    password: pw123456
     driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       minimum-idle: 5
       maximum-pool-size: 20
       auto-commit: true
-      connection-timeout: 60000
-      idle-timeout: 60000
+      connection-timeout: 30000
+      idle-timeout: 30000
       connection-init-sql: SELECT 1
-  # i18n资源文件位置
   messages:
     basename: i18n/i18n
     encoding: UTF-8
-  output:
-    # 多彩输出
-    ansi:
-      enabled: always
   servlet:
-    # 文件上传大小限制
     multipart:
       max-file-size: 3MB
+      max-request-size: 3MB
   cache:
     type: redis
   mail:
@@ -91,24 +100,29 @@ spring:
     host: smtp.163.com
     port: 25
     protocol: smtp
-    username: ${my-config.mail-username}
-    password: ${my-config.mail-password}
+    username: ${blog.email.username}
+    password: ${blog.email.password}
     properties:
       mail:
         smtp:
-          auth: true  # 需要验证登录名和密码
+          auth: true
         starttls:
-          enable: true  # 需要TLS认证 保证发送邮件安全验证
+          enable: true
           required: true
         ssl:
           enable: true
-  jackson:
-    date-format: yyyy-MM-dd HH:mm:ss
-    locale: zh_CN
-    time-zone: GMT+8
 
 server:
   port: 1331
-  # jetty的问题
   connection-timeout: 60S
 
+management:
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: '*'

@@ -1,6 +1,5 @@
 package com.kazma233.blog.entity.user.vo;
 
-import com.kazma233.blog.entity.role.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserLoginResponse {
+public class UserJwtVO {
 
-    private Role role;
-    private String uid;
+    private String id;
+    private String username;
 
 }

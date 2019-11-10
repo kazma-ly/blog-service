@@ -4,7 +4,7 @@ import com.kazma233.blog.dao.statistics.ErrorDao;
 import com.kazma233.blog.entity.statistics.MongoError;
 import com.kazma233.blog.entity.statistics.vo.MongoErrorAdd;
 import com.kazma233.blog.service.statistics.IErrorService;
-import com.kazma233.common.Utils;
+import com.kazma233.blog.utils.id.IDGenerater;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class ErrorService implements IErrorService {
     public void save(MongoErrorAdd mongoErrorAdd) {
         try {
             MongoError mongoError = MongoError.builder().
-                    id(Utils.generateID()).
+                    id(IDGenerater.generateID()).
                     code(mongoErrorAdd.getCode()).
                     message(mongoErrorAdd.getMessage()).
                     path(mongoErrorAdd.getPath()).

@@ -16,6 +16,7 @@ public enum Status {
     LOGIN_ERROR(1006, "登录失败，请检查用户名或密码"),
     ARGS_ERROR(1007, "参数不正确"),
     USER_NOT_FOUND_ERROR(1008, "未知用户"),
+    USER_DISABLED(1009, "用户被封禁"),
 
     SUCCESS(1100, "成功"),
     FAIL(1101, "失败"),

@@ -8,7 +8,7 @@ import com.kazma233.blog.entity.permission.vo.PermissionAdd;
 import com.kazma233.blog.entity.permission.vo.PermissionQuery;
 import com.kazma233.blog.entity.permission.vo.PermissionUpdate;
 import com.kazma233.blog.service.user.IPermissionService;
-import com.kazma233.common.Utils;
+import com.kazma233.blog.utils.id.IDGenerater;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +33,7 @@ public class PermissionService implements IPermissionService {
     public void save(PermissionAdd permissionAdd) {
         permissionDao.insert(
                 Permission.builder().
-                        id(Utils.generateID()).
+                        id(IDGenerater.generateID()).
                         createTime(new Date()).
                         permissionDescription(permissionAdd.getPermissionDescription()).
                         permissionName(permissionAdd.getPermissionName()).

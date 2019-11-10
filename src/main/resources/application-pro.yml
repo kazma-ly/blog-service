@@ -1,19 +1,45 @@
-my-config:
-  url-pre:
-  elastic-host:
-  redis-host:
-  redis-password:
-  mysql-url:
-  mysql-username:
-  mysql-password:
-  mail-username:
-  mail-password:
+# release
+blog:
+  jwt:
+    key:
+  email:
+    username:
+    password:
+    from:
+    to:
+
+mybatis:
+  configuration:
+    cache-enabled: true
 spring:
   data:
     mongodb:
-      port:
       host:
+      port:
       database:
       authentication-database:
       username:
       password:
+  redis:
+    host:
+    port:
+    password:
+    timeout: 10s
+    lettuce:
+      pool:
+        max-idle: 8
+        max-wait: 10s
+        max-active: 8
+    datasource:
+      url:
+      username:
+      password:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      type: com.zaxxer.hikari.HikariDataSource
+      hikari:
+        minimum-idle: 5
+        maximum-pool-size: 20
+        auto-commit: true
+        connection-timeout: 10000
+        idle-timeout: 10000
+        connection-init-sql: SELECT 1

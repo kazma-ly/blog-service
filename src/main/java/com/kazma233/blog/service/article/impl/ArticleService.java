@@ -9,8 +9,8 @@ import com.kazma233.blog.entity.article.Article;
 import com.kazma233.blog.entity.article.enums.ArticleStatus;
 import com.kazma233.blog.entity.article.vo.*;
 import com.kazma233.blog.service.article.IArticleService;
-import com.kazma233.blog.utils.ShiroUtils;
-import com.kazma233.common.Utils;
+import com.kazma233.blog.utils.UserUtils;
+import com.kazma233.blog.utils.id.IDGenerater;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -28,7 +28,7 @@ public class ArticleService implements IArticleService {
 
     @Override
     public PageInfo all(ArticleBackendQuery articleBackendQuery) {
-        articleBackendQuery.setUid(ShiroUtils.getUidNotMust());
+        articleBackendQuery.setUid(UserUtils.getUserId());
 
         PageHelper.startPage(articleBackendQuery.getPageNo(), articleBackendQuery.getPageSize());
         List<ArticleCategoryBackendVO> articles = articleDao.queryArticle(articleBackendQuery);
@@ -65,7 +65,7 @@ public class ArticleService implements IArticleService {
         LocalDateTime now = LocalDateTime.now();
 
         Article article = Article.builder().
-                id(Utils.generateID()).
+                id(IDGenerater.generateID()).
                 title(articleGitAdd.getTitle()).
                 subtitle(articleGitAdd.getSubtitle()).
                 createTime(now).
@@ -76,7 +76,7 @@ public class ArticleService implements IArticleService {
                 categoryId(articleGitAdd.getCategoryId()).
                 tags(articleGitAdd.getTags()).
                 content(articleGitAdd.getContent()).
-                uid(ShiroUtils.getUid()).
+                uid(UserUtils.getUserId()).
                 build();
 
         articleDao.insert(article);
@@ -96,7 +96,7 @@ public class ArticleService implements IArticleService {
                 categoryId(articleGitUpdate.getCategoryId()).
                 tags(articleGitUpdate.getTags()).
                 content(articleGitUpdate.getContent()).
-                uid(ShiroUtils.getUid()).
+                uid(UserUtils.getUserId()).
                 build();
 
         articleDao.updateByIdSelective(article);

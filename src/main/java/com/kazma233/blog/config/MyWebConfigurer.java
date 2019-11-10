@@ -1,5 +1,6 @@
 package com.kazma233.blog.config;
 
+import com.kazma233.blog.config.filter.AuthFilter;
 import com.kazma233.blog.config.filter.CORSFilter;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
@@ -29,9 +30,21 @@ public class MyWebConfigurer implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
+        registry.
+                addInterceptor(new CORSFilter()).
+                order(0).
+                addPathPatterns("/**");
 
-        registry.addInterceptor(new CORSFilter()).order(2).addPathPatterns("/**");
-
+        registry.
+                addInterceptor(new AuthFilter()).
+                order(Integer.MAX_VALUE).
+                addPathPatterns("/**").
+                excludePathPatterns(
+                        "/users/login",
+                        "/users/register",
+                        "/comments/**",
+                        "/articles/**"
+                );
     }
 
     @Override

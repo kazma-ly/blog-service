@@ -1,16 +1,17 @@
 package com.kazma233.blog.service.user;
 
 import com.github.pagehelper.PageInfo;
-import com.kazma233.blog.entity.user.MongoFile;
 import com.kazma233.blog.entity.role.Role;
-import com.kazma233.blog.entity.user.User;
 import com.kazma233.blog.entity.user.UserInfo;
 import com.kazma233.blog.entity.user.vo.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
 public interface IUserService {
 
-    User login(UserLogin userLogin);
+    String login(UserLogin userLogin);
 
     String register(UserRegister userRegister);
 
@@ -20,9 +21,9 @@ public interface IUserService {
 
     UserInfo getUserInfo();
 
-    void saveAvatar(MultipartFile avatarFile);
+    void saveAvatar(MultipartFile avatarFile) throws IOException;
 
-    MongoFile getAvatarMongoFile(String uid);
+    void getAvatar(String id, HttpServletResponse response) throws IOException;
 
     Role queryRoleByUid(String uid);
 

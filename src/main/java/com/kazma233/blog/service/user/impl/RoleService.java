@@ -11,7 +11,7 @@ import com.kazma233.blog.entity.role.vo.RolePermissionsVO;
 import com.kazma233.blog.entity.role.vo.RoleQuery;
 import com.kazma233.blog.entity.role.vo.RoleUpdate;
 import com.kazma233.blog.service.user.IRoleService;
-import com.kazma233.common.Utils;
+import com.kazma233.blog.utils.id.IDGenerater;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -58,7 +58,7 @@ public class RoleService implements IRoleService {
     @Override
     public void save(RoleAdd roleAdd) {
         roleDao.insert(Role.builder().
-                id(Utils.generateID()).
+                id(IDGenerater.generateID()).
                 createTime(new Date()).
                 description(roleAdd.getDescription()).
                 permissionIds(roleAdd.getPermissionIds()).

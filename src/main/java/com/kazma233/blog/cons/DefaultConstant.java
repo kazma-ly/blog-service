@@ -15,4 +15,8 @@ public class DefaultConstant {
     public static final String ADMIN_ROLE = "1000";
     public static final String NORMAL_ROLE = "1001";
 
+    public static final String MONGO_MATADATA_UID = "uid";
+    public static final String MONGO_MATADATA_TYPE = "type";
+    public static final String MONGO_MATADATA_TYPE_AVATAR = "avatar";
+
 }

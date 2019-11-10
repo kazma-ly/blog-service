@@ -17,11 +17,11 @@ public class CORSFilter implements HandlerInterceptor {
 
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Origin", origin);
-        response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH");
-        response.setHeader("Access-Control-Allow-Headers", "Content-Type, X-Requested-With, Connection, Host, Accept, Accept-Encoding, Accept-Language, Cache-Control");
+        response.setHeader("Access-Control-Allow-Methods", "GET, HEAD, POST, PUT, DELETE, PATCH");
+        response.setHeader("Access-Control-Allow-Headers", "Content-Type, Cache-Control, auth");
         response.setHeader("Access-Control-Max-Age", "36000");
 
-        return true;
+        return !"OPTIONS".equals(request.getMethod());
     }
 
     @Override

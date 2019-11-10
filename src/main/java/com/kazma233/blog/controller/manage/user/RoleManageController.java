@@ -8,14 +8,12 @@ import com.kazma233.blog.entity.role.vo.RoleQuery;
 import com.kazma233.blog.entity.role.vo.RoleUpdate;
 import com.kazma233.blog.service.user.IRoleService;
 import lombok.AllArgsConstructor;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/manages/roles")
-@RequiresPermissions(value = {"admin"})
 public class RoleManageController {
 
     private IRoleService roleService;

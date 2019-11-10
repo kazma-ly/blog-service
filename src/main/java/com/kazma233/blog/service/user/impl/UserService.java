@@ -2,13 +2,12 @@ package com.kazma233.blog.service.user.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.kazma233.blog.config.properties.MyConfig;
+import com.google.common.base.Strings;
+import com.google.common.io.ByteStreams;
 import com.kazma233.blog.cons.DefaultConstant;
-import com.kazma233.blog.dao.user.MongoFileDao;
 import com.kazma233.blog.dao.user.RoleDao;
 import com.kazma233.blog.dao.user.UserDao;
 import com.kazma233.blog.dao.user.UserInfoDao;
-import com.kazma233.blog.entity.user.MongoFile;
 import com.kazma233.blog.entity.common.enums.Status;
 import com.kazma233.blog.entity.role.Role;
 import com.kazma233.blog.entity.user.User;
@@ -18,27 +17,26 @@ import com.kazma233.blog.entity.user.enums.UserStatus;
 import com.kazma233.blog.entity.user.exception.UserException;
 import com.kazma233.blog.entity.user.vo.*;
 import com.kazma233.blog.service.user.IUserService;
-import com.kazma233.blog.utils.ShiroUtils;
-import com.kazma233.common.Utils;
+import com.kazma233.blog.utils.UserUtils;
+import com.kazma233.blog.utils.id.IDGenerater;
+import com.kazma233.blog.utils.jwt.JwtUtils;
+import com.mongodb.client.gridfs.model.GridFSFile;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.coobird.thumbnailator.Thumbnails;
-import net.coobird.thumbnailator.geometry.Positions;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.lang3.StringUtils;
+import org.bson.types.ObjectId;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.gridfs.GridFsResource;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 
 @Slf4j
 @AllArgsConstructor
@@ -46,35 +44,37 @@ import java.util.Optional;
 public class UserService implements IUserService {
 
     private UserDao userDao;
-    private MongoFileDao mongoFileDao;
     private RoleDao roleDao;
     private UserInfoDao userInfoDao;
-    private MyConfig myConfig;
+    private GridFsTemplate gridFsTemplate;
 
     @Override
-    public User login(UserLogin userLogin) {
+    public String login(UserLogin userLogin) {
 
         User dbUser = userDao.queryByUsername(userLogin.getUsername());
-        if (dbUser == null || StringUtils.isBlank(dbUser.getId())) {
+        if (dbUser == null || Strings.isNullOrEmpty(dbUser.getId())) {
             throw new UserException(Status.USER_NOT_FOUND_ERROR);
         }
 
-        String inputPw = userLogin.getPassword();
-        checkUserPw(inputPw, dbUser.getPassword());
+        if (!UserStatus.ENABLE.getCode().equals(dbUser.getEnable())) {
+            throw new UserException(Status.USER_DISABLED);
+        }
 
-        dbUser.setPassword(inputPw);
-        return dbUser;
+        String inputPw = userLogin.getPassword();
+        UserUtils.checkUserPw(inputPw, dbUser.getPassword());
+
+        return JwtUtils.getLoginToken(UserJwtVO.builder().id(dbUser.getId()).username(dbUser.getUsername()).build());
     }
 
     @Transactional(rollbackFor = Exception.class, propagation = Propagation.REQUIRED)
     @Override
     public String register(UserRegister userRegister) {
-        String uid = Utils.generateID();
+        String uid = IDGenerater.generateID();
 
         User user = User.builder().
                 id(uid).
                 username(userRegister.getUsername()).
-                password(encodePw(userRegister.getPassword())).
+                password(UserUtils.encodePw(userRegister.getPassword())).
                 enable(UserStatus.ENABLE.getCode()).
                 build();
 
@@ -87,7 +87,7 @@ public class UserService implements IUserService {
         userDao.insert(user);
         userInfoDao.save(UserInfo.builder().
                 uid(uid).
-                id(Utils.generateID()).
+                id(IDGenerater.generateID()).
                 noticeStatus(NoticeStatus.DISABLE.getCode()).
                 nickname(user.getUsername()).
                 build());
@@ -102,7 +102,7 @@ public class UserService implements IUserService {
 
     @Override
     public void updateUserInfo(UserInfo userInfo) {
-        userInfo.setUid(ShiroUtils.getUid());
+        userInfo.setUid(UserUtils.getUserId());
         userInfoDao.update(userInfo);
     }
 
@@ -112,7 +112,7 @@ public class UserService implements IUserService {
                 UserLogin.builder().username(userPasswordUpdate.getUsername()).password(userPasswordUpdate.getPassword()).build()
         );
 
-        userPasswordUpdate.setPassword(encodePw(userPasswordUpdate.getNewPasswrod()));
+        userPasswordUpdate.setPassword(UserUtils.encodePw(userPasswordUpdate.getNewPasswrod()));
         userDao.updatePassword(userPasswordUpdate);
     }
 
@@ -131,57 +131,34 @@ public class UserService implements IUserService {
 
     @Override
     public UserInfo getUserInfo() {
-        return userInfoDao.findOne(ShiroUtils.getUid());
+        return userInfoDao.findOne(UserUtils.getUserId());
     }
 
     @Override
-    public void saveAvatar(MultipartFile avatarFile) {
-        String uid = ShiroUtils.getUid();
-        Optional<MongoFile> avatarMongoFile = mongoFileDao.findMongoFileByUid(uid);
-        try (ByteArrayOutputStream avatarOutputStream = new ByteArrayOutputStream()) {
-            clipAvatarFile(avatarFile, avatarOutputStream);
+    public void saveAvatar(MultipartFile avatarFile) throws IOException {
+        String uid = UserUtils.getUserId();
 
-            MongoFile newAvatarMongoFile = MongoFile.builder().
-                    uid(uid).
-                    name(avatarFile.getOriginalFilename()).
-                    contentType(avatarFile.getContentType()).
-                    content(avatarOutputStream.toByteArray()).
-                    build();
-            if (avatarMongoFile.isPresent()) {
-                mongoFileDao.deleteMongoFileByUid(uid);
-            } else {
-                userInfoDao.update(UserInfo.builder().uid(uid).avatar(myConfig.getUrlPre() + "/user/avatar/" + uid).build());
-            }
+        ObjectId storeId = gridFsTemplate.store(
+                avatarFile.getInputStream(),
+                avatarFile.getOriginalFilename(),
+                avatarFile.getContentType(),
+                Map.of(DefaultConstant.MONGO_MATADATA_UID, uid, DefaultConstant.MONGO_MATADATA_TYPE, DefaultConstant.MONGO_MATADATA_TYPE_AVATAR)
+        );
 
-            mongoFileDao.save(newAvatarMongoFile);
-        } catch (IOException e) {
-            log.error("保存头像失败", e);
-            throw new UserException(Status.FAIL);
-        }
+        userInfoDao.update(
+                UserInfo.builder().uid(uid).avatar(storeId.toString()).build()
+        );
     }
 
     @Override
-    public MongoFile getAvatarMongoFile(String uid) {
-        return mongoFileDao.findMongoFileByUid(uid).orElse(new MongoFile());
-    }
-
-    private void clipAvatarFile(MultipartFile multipartFile, OutputStream outputStream) throws IOException {
-        BufferedImage bufferedImage = ImageIO.read(multipartFile.getInputStream());
-        int size = Math.min(bufferedImage.getWidth(), bufferedImage.getHeight());
-        Thumbnails.of(multipartFile.getInputStream()).
-                sourceRegion(Positions.CENTER, size, size).
-                scale(1).
-                toOutputStream(outputStream);
-    }
-
-    private static String encodePw(String originPw) {
-        byte[] newPwByte = originPw.getBytes(StandardCharsets.UTF_8);
-        return DigestUtils.sha256Hex(newPwByte);
-    }
-
-    private static void checkUserPw(String inputPw, String dbPw) {
-        if (!encodePw(inputPw).equals(dbPw)) {
-            throw new UserException(Status.LOGIN_ERROR);
+    public void getAvatar(String id, HttpServletResponse response) throws IOException {
+        GridFSFile gridFile = gridFsTemplate.findOne(new Query(Criteria.where("_id").is(id)));
+        if (gridFile == null) {
+            return;
         }
+        GridFsResource gridResponse = gridFsTemplate.getResource(gridFile);
+
+        ByteStreams.copy(gridResponse.getInputStream(), response.getOutputStream());
     }
+
 }

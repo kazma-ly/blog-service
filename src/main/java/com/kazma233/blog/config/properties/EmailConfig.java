@@ -6,11 +6,10 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-@ConfigurationProperties(prefix = "my-config")
-public class MyConfig {
+@ConfigurationProperties(prefix = "blog.email")
+public class EmailConfig {
 
-    private String elasticHost;
-    private String urlPre;
-    private String mailUsername;
+    private String from;
+    private String to;
 
 }

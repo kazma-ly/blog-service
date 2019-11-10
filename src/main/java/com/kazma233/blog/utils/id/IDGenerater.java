@@ -1,7 +1,6 @@
-package com.kazma233.common;
+package com.kazma233.blog.utils.id;
 
-
-public class Utils {
+public class IDGenerater {
 
     private static final SnowflakeIdWorker SNOWFLAKE_ID_WORKER = new SnowflakeIdWorker(1, 1);
 

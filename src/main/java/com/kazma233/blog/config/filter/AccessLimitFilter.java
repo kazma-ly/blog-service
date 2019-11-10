@@ -9,7 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 //@Order(2)
 //@WebFilter(filterName = "securityFilter", urlPatterns = "/**")
-public class SecurityFilter implements HandlerInterceptor {
+public class AccessLimitFilter implements HandlerInterceptor {
 
     private static final AtomicInteger CURRENT_CONNECT = new AtomicInteger(200);
 

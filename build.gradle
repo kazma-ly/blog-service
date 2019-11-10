@@ -26,11 +26,10 @@ repositories {
     mavenCentral()
 }
 
-// 使用log4j2做日志记录
 configurations {
     compile.exclude group: 'ch.qos.logback'
     compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-    compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
+    // compile.exclude group: 'org.springframework.boot', module: 'spring-boot-starter-tomcat'
 }
 
 dependencies {
@@ -43,8 +42,8 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-cache'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
 
-    implementation 'org.springframework.boot:spring-boot-starter-jetty'
-    
+    // implementation 'org.springframework.boot:spring-boot-starter-jetty'
+
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
@@ -57,23 +56,17 @@ dependencies {
     runtime 'mysql:mysql-connector-java:8.0.15'
     implementation 'org.apache.commons:commons-pool2:2.5.0'
 
-    // shiro
-    implementation 'org.apache.shiro:shiro-core:1.4.0'
-    implementation 'org.apache.shiro:shiro-spring:1.4.0'
-    implementation 'org.apache.shiro:shiro-ehcache:1.4.0'
-
     // jwt
-    implementation 'io.jsonwebtoken:jjwt:0.9.1'
+    implementation 'io.jsonwebtoken:jjwt-api:0.10.7'
+    runtime 'io.jsonwebtoken:jjwt-impl:0.10.7',
+            'io.jsonwebtoken:jjwt-jackson:0.10.7'
 
-    // 搜索
+    // elasticsearch
     implementation 'org.elasticsearch.client:elasticsearch-rest-high-level-client:6.5.4'
 
     // Tool
-    implementation 'net.coobird:thumbnailator:0.4.8'
-    implementation 'commons-io:commons-io:2.5'
-    implementation 'org.apache.commons:commons-lang3:3.6'
-    implementation 'commons-codec:commons-codec:1.10'
     implementation 'com.google.guava:guava:23.0'
+    implementation 'com.google.code.gson:gson:2.8.6'
 
     // Other
     annotationProcessor 'org.projectlombok:lombok:1.18.4'
@@ -81,8 +74,7 @@ dependencies {
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.4'
     testCompileOnly 'org.projectlombok:lombok:1.18.4'
 
-    // 热部署
     runtime 'org.springframework.boot:spring-boot-devtools'
-    // 测试
+
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
