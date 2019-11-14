@@ -15,7 +15,7 @@ jobs:
     - uses: actions/setup-java@v1
       with:
         java-version: 11
-    - uses: MrRamych/gradle-actions/openjdk-11@3.0
+    - uses: eskatos/gradle-command-action@v1
       with:
-        args: build 
+        args: build
 
