@@ -138,6 +138,8 @@ public class UserService implements IUserService {
     public void saveAvatar(MultipartFile avatarFile) throws IOException {
         String uid = UserUtils.getUserId();
 
+        gridFsTemplate.delete(new Query(Criteria.where("metadata.uid").is(uid)));
+
         ObjectId storeId = gridFsTemplate.store(
                 avatarFile.getInputStream(),
                 avatarFile.getOriginalFilename(),

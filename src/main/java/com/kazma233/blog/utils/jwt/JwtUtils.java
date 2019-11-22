@@ -22,7 +22,7 @@ public class JwtUtils {
     public static String getLoginToken(Object subject) {
         return Jwts.builder().
                 setSubject(GSON.toJson(subject)).
-                setExpiration(DateUtils.dateTimeToDateZH(LocalDateTime.now().plusHours(12))).
+                setExpiration(DateUtils.dateTimeToDateZH(LocalDateTime.now().plusDays(1))).
                 signWith(SECRET_KEY).
                 compact();
     }
