@@ -1,0 +1,81 @@
+version: '3.5'
+
+services:
+  mongo:
+    image: mongo
+    container_name: blog-mongo
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: admin
+      MONGO_INITDB_ROOT_PASSWORD: ${PASS}
+    volumes:
+      - ~/docker-data/mongodb/:/data/db/
+    networks:
+      - kazma_net
+  redis:
+    image: redis
+    container_name: blog-redis
+    environment:
+      REDIS_PASSWORD: ${PASS}
+    ports:
+      - 6379:6379
+    volumes:
+      - ~/docker-data/redis:/data
+    restart: always
+    command: redis-server --requirepass ${PASS}
+    logging:
+      driver: syslog
+    networks:
+      - kazma_net
+  mysql:
+    image: mysql:5.7
+    container_name: blog-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${PASS}
+    ports:
+      - 3306:3306
+    volumes:
+      - ~/docker-data/mysql:/var/lib/mysql
+    restart: always
+    networks:
+      - kazma_net
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+#  elasticsearch:
+#    image: elasticsearch:7.0.1
+#    container_name: my-elasticsearch
+#    environment:
+#      - "ES_JAVA_OPTS=-Xmx256m -Xms256m"
+#      - discovery.type=single-node
+#    ports:
+#      - 9200:9200
+#      - 9300:9300
+#    networks:
+#      - kazma_net
+#    restart: always
+#  postgres:
+#    image: postgres
+#    container_name: my-postgres
+#    restart: always
+#    environment:
+#      POSTGRES_USER: root
+#      POSTGRES_PASSWORD: ${PASS}
+#    volumes:
+#      - /var/docker-data/postgres:/var/lib/postgresql/data
+#    networks:
+#      - kazma_net
+#    ports:
+#      - 5432:5432
+#  adminer:
+#    image: adminer
+#    container_name: adminer
+#    restart: always
+#    ports:
+#      - 5431:8080
+#    networks:
+#      - kazma_net
+
+networks:
+  kazma_net:
+    name: kazma_network
