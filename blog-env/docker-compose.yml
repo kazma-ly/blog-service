@@ -11,9 +11,12 @@ services:
       MONGO_INITDB_ROOT_USERNAME: admin
       MONGO_INITDB_ROOT_PASSWORD: ${PASS}
     volumes:
-      - ~/docker-data/mongodb/:/data/db/
+      - ~/docker-data/mongodb:/var/lib/mongodb
+      - ~/docker-data/mongodb-conf:/etc/mongodb-conf
     networks:
       - kazma_net
+    # init not enable auth
+    command: mongod # -f /etc/mongodb-conf/mongo.conf
   redis:
     image: redis
     container_name: blog-redis
