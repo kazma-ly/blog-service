@@ -10,6 +10,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @AllArgsConstructor
@@ -17,9 +21,18 @@ import java.time.LocalDateTime;
 public class ErrorService implements IErrorService {
 
     private ErrorDao errorDao;
+    private static Executor EXECUTOR =
+            new ThreadPoolExecutor(4, 8, 1, TimeUnit.HOURS, new ArrayBlockingQueue<>(8));
 
     @Override
     public void save(MongoErrorAdd mongoErrorAdd) {
+
+        EXECUTOR.execute(() -> {
+            saveSync(mongoErrorAdd);
+        });
+    }
+
+    private void saveSync(MongoErrorAdd mongoErrorAdd) {
         try {
             MongoError mongoError = MongoError.builder().
                     id(IDGenerater.generateID()).
