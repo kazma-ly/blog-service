@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class ThreadPoolUtils {
 
-    private static Executor cachedThreadPool = new ThreadPoolExecutor(
+    private static Executor commonThreadPool = new ThreadPoolExecutor(
             100,
             200,
             60,
@@ -49,8 +49,8 @@ public class ThreadPoolUtils {
     }
 
     // 线程池
-    public static Executor getCachedThreadPool() {
-        return cachedThreadPool;
+    public static Executor getCommonThreadPool() {
+        return commonThreadPool;
     }
 
 }

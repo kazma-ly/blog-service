@@ -3,9 +3,7 @@ package com.kazma233.blog.config.handler;
 import com.kazma233.blog.entity.common.BaseResult;
 import com.kazma233.blog.entity.common.enums.Status;
 import com.kazma233.blog.entity.common.exception.parent.CustomizeException;
-import com.kazma233.blog.entity.statistics.vo.MongoErrorAdd;
 import com.kazma233.blog.entity.user.exception.UserException;
-import com.kazma233.blog.service.statistics.IErrorService;
 import com.kazma233.blog.utils.ValidationUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +25,6 @@ public class ExceptionHandlerConfig {
 
     private HttpServletRequest request;
     private HttpServletResponse response;
-    private IErrorService errorService;
 
     @ExceptionHandler(Exception.class)
     public BaseResult exception(Exception e) {
@@ -45,10 +42,6 @@ public class ExceptionHandlerConfig {
         response.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
         log.error(request.getRequestURI() + " has an error: ", e);
 
-        errorService.save(
-                MongoErrorAdd.builder().code(500).message(e.getMessage()).path(request.getRequestURI()).build()
-        );
-
         return BaseResult.failed(Status.UN_KNOW_ERROR);
     }
 
@@ -63,10 +56,6 @@ public class ExceptionHandlerConfig {
         response.setStatus(HttpStatus.BAD_REQUEST.value());
 
         log.error(request.getRequestURI() + " -> custom exception: ", ve);
-
-        errorService.save(
-                MongoErrorAdd.builder().code(ve.getStatus()).message(ve.getMessage()).path(request.getRequestURI()).build()
-        );
 
         return BaseResult.failed(ve);
     }

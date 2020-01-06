@@ -53,7 +53,7 @@ public class CommentService implements ICommentService {
 
         commentDao.insert(comment);
 
-        ThreadPoolUtils.getCachedThreadPool().execute(() -> sendEmail(comment));
+        ThreadPoolUtils.getCommonThreadPool().execute(() -> sendEmail(comment));
     }
 
     @Override

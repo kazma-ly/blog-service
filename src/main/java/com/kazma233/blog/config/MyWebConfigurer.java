@@ -2,6 +2,7 @@ package com.kazma233.blog.config;
 
 import com.kazma233.blog.config.filter.AuthFilter;
 import com.kazma233.blog.config.filter.CORSFilter;
+import com.kazma233.blog.config.filter.VisitFilter;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -46,6 +47,8 @@ public class MyWebConfigurer implements WebMvcConfigurer {
                         "/comments/**",
                         "/articles/**"
                 );
+
+        registry.addInterceptor(new VisitFilter()).addPathPatterns("/articles/**", "/comments/**").order(1);
     }
 
     @Override
