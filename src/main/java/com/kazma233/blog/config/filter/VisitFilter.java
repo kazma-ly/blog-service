@@ -3,6 +3,7 @@ package com.kazma233.blog.config.filter;
 import com.kazma233.blog.entity.statistics.Visit;
 import com.kazma233.blog.service.statistics.IVisitService;
 import com.kazma233.blog.utils.ThreadPoolUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.LocalDateTime;
 
+@AllArgsConstructor
 @Component
 public class VisitFilter implements HandlerInterceptor {
 

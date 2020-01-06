@@ -3,6 +3,7 @@ package com.kazma233.blog.config;
 import com.kazma233.blog.config.filter.AuthFilter;
 import com.kazma233.blog.config.filter.CORSFilter;
 import com.kazma233.blog.config.filter.VisitFilter;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
@@ -21,8 +22,11 @@ import javax.servlet.Servlet;
 import java.util.List;
 import java.util.TimeZone;
 
+@AllArgsConstructor
 @Configuration
 public class MyWebConfigurer implements WebMvcConfigurer {
+
+    private VisitFilter visitFilter;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -48,7 +52,7 @@ public class MyWebConfigurer implements WebMvcConfigurer {
                         "/articles/**"
                 );
 
-        registry.addInterceptor(new VisitFilter()).addPathPatterns("/articles/**", "/comments/**").order(1);
+        registry.addInterceptor(visitFilter).addPathPatterns("/articles/**", "/comments/**").order(1);
     }
 
     @Override
