@@ -49,7 +49,8 @@ public class MyWebConfigurer implements WebMvcConfigurer {
                         "/users/register",
                         "/users/avatar/*",
                         "/comments/**",
-                        "/articles/**"
+                        "/articles/**",
+                        "/statistics/**"
                 );
 
         registry.addInterceptor(visitFilter).addPathPatterns("/articles/**", "/comments/**").order(1);

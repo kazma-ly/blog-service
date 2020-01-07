@@ -17,6 +17,7 @@ public class Visit {
 
     private String ip;
     private String uri;
+    private String date;
     private LocalDateTime createTime;
 
 }
