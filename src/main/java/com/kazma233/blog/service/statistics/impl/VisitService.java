@@ -37,7 +37,7 @@ public class VisitService implements IVisitService {
         List<VisitGroupDay> mappedResults = mongoTemplate.aggregate(
                 Aggregation.newAggregation(
                         Aggregation.match(Criteria.where("createTime").gte(lastMonth).lte(today)),
-                        Aggregation.group("createTime").count().as("visitCount")
+                        Aggregation.group("date").count().as("visitCount")
                 ),
                 "visit",
                 VisitGroupDay.class
