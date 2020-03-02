@@ -12,6 +12,10 @@ services:
       - 1331:1331
     networks:
       - kazma_net
+    logging:
+      driver: json-file
+      options:
+        max-size: 5G
     restart: always
 
 networks:
