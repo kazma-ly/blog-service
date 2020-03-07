@@ -15,7 +15,7 @@ services:
     logging:
       driver: json-file
       options:
-        max-size: 5G
+        max-size: 500M
     restart: always
 
 networks:
