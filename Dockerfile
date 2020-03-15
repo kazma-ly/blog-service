@@ -1,6 +1,6 @@
 FROM openjdk:11
 
-COPY ./build/libs/blog-service-release.jar blog.jar
+COPY ./blog-service-release.jar blog.jar
 
 EXPOSE 1331
 
