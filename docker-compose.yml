@@ -1,13 +1,30 @@
 version: '3.5'
 
 services:
+  blog_mysql:
+    image: mysql:8.0
+    container_name: blog_mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: ${PASS}
+    ports:
+      - 3306:3306
+    volumes:
+      - ${VOLUME_PATH}/blog_mysql/mysql:/var/lib/mysql
+    restart: always
+    networks:
+      - kazma_net
+    logging:
+      driver: json-file
+      options:
+        max-size: 500M
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
   blog:
     build:
       context: ./
       dockerfile: Dockerfile
     container_name: blog-service
     volumes:
-      - ~/docker_data/blog/blog_logs:/blog_logs
+      - ${VOLUME_PATH}/blog-service/blog_logs:/blog_logs
     ports:
       - 1331:1331
     networks:
