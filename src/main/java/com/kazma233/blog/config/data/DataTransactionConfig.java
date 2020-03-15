@@ -8,25 +8,12 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
-// TransactionManagementConfigurer -> 相当于
-// <tx:annotation-driven transaction-manager="dataSourceTransactionManager"/>
-
 @Configuration
 @EnableTransactionManagement
 public class DataTransactionConfig implements TransactionManagementConfigurer {
 
-//    @Autowired
-//    private DruidDataSource dataSource;
-
     @Autowired
     private HikariDataSource dataSource;
-
-    // 事务管理
-    /*@Bean(name = "transactionManager")
-    public DataSourceTransactionManager transactionManager() {
-        return new DataSourceTransactionManager(dataSource);
-    }*/
-
 
     @Override
     public PlatformTransactionManager annotationDrivenTransactionManager() {
@@ -35,4 +22,5 @@ public class DataTransactionConfig implements TransactionManagementConfigurer {
         dataSourceTransactionManager.afterPropertiesSet();
         return dataSourceTransactionManager;
     }
+
 }

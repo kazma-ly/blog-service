@@ -1,7 +1,6 @@
 package com.kazma233.blog.config.scheduling;
 
 import com.kazma233.blog.service.article.IArticleService;
-import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -12,10 +11,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@EnableScheduling
-@AllArgsConstructor
-@Component
 @Slf4j
+@Component
+@EnableScheduling
 public class ArticleReadNumberUpdateTask {
 
     private static Map<String, Long> ARTICLE_READ_NUMBER_COUNTER_MAP = new ConcurrentHashMap<>();

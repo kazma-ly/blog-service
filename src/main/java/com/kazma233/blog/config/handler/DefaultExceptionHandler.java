@@ -17,11 +17,11 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@AllArgsConstructor
-@Controller
-@RestControllerAdvice
 @Slf4j
-public class ExceptionHandlerConfig {
+@Controller
+@AllArgsConstructor
+@RestControllerAdvice
+public class DefaultExceptionHandler {
 
     private HttpServletRequest request;
     private HttpServletResponse response;

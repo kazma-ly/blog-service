@@ -1,12 +1,12 @@
 package com.kazma233.blog.utils;
 
+import com.google.common.hash.Hashing;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kazma233.blog.entity.common.enums.Status;
 import com.kazma233.blog.entity.user.exception.UserException;
 import com.kazma233.blog.entity.user.vo.UserJwtVO;
 import com.kazma233.blog.utils.jwt.JwtUtils;
-import org.apache.commons.codec.digest.DigestUtils;
 
 import java.nio.charset.StandardCharsets;
 
@@ -28,7 +28,8 @@ public class UserUtils {
 
     public static String encodePw(String originPw) {
         byte[] newPwByte = originPw.getBytes(StandardCharsets.UTF_8);
-        return DigestUtils.sha256Hex(newPwByte);
+
+        return Hashing.sha256().hashBytes(newPwByte).toString();
     }
 
     public static void checkUserPw(String inputPw, String dbPw) {

@@ -1,8 +1,8 @@
 package com.kazma233.blog.service.article;
 
-import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.entity.article.Article;
 import com.kazma233.blog.entity.article.vo.*;
+import com.kazma233.blog.entity.common.PageInfo;
 
 import java.util.List;
 
@@ -16,9 +16,9 @@ public interface IArticleService {
 
     Article findAndContentById(String id);
 
-    void saveArticleByURL(ArticleGitAdd articleGitAdd);
+    void saveArticleByURL(ArticleAdd articleAdd);
 
-    void update(ArticleGitUpdate articleGitUpdate);
+    void update(ArticleUpdate articleUpdate);
 
     void delete(String id);
 

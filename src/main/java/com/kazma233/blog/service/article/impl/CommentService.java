@@ -1,18 +1,18 @@
 package com.kazma233.blog.service.article.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.config.properties.EmailConfig;
 import com.kazma233.blog.dao.article.CommentDao;
 import com.kazma233.blog.entity.article.Article;
 import com.kazma233.blog.entity.comment.Comment;
 import com.kazma233.blog.entity.comment.enums.CommentStatus;
 import com.kazma233.blog.entity.comment.vo.*;
+import com.kazma233.blog.entity.common.PageInfo;
 import com.kazma233.blog.service.article.IArticleService;
 import com.kazma233.blog.service.article.ICommentService;
 import com.kazma233.blog.utils.ThreadPoolUtils;
 import com.kazma233.blog.utils.UserUtils;
 import com.kazma233.blog.utils.id.IDGenerater;
+import com.kazma233.blog.utils.pageable.PageableUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mail.SimpleMailMessage;
@@ -57,20 +57,21 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public PageInfo<CommentArticleTitleVO> queryAllCommentAndArticleTitle(CommentQuery commentQuery) {
+    public PageInfo queryAllCommentAndArticleTitle(CommentQuery commentQuery) {
         commentQuery.setUid(UserUtils.getUserId());
-        PageHelper.startPage(commentQuery.getPageNo(), commentQuery.getPageSize());
-        List<CommentArticleTitleVO> commentArticleTitleList = commentDao.queryAllAndArticleTitleByArgs(commentQuery);
 
-        return new PageInfo<>(commentArticleTitleList);
+        List<CommentArticleTitleVO> commentArticleTitleList = commentDao.queryAllAndArticleTitleByArgs(commentQuery);
+        Long total = commentDao.queryAllAndArticleTitleByArgsSize(commentQuery);
+
+        return PageableUtils.pageInfo(total, commentQuery, commentArticleTitleList);
     }
 
     @Override
     public PageInfo queryArticleComment(CommentArticleQuery commentArticleQuery) {
-        PageHelper.startPage(commentArticleQuery.getPageNo(), commentArticleQuery.getPageSize());
         List<Comment> comments = commentDao.queryAllShowByArticleId(commentArticleQuery);
+        Long total = commentDao.queryAllShowByArticleIdSize(commentArticleQuery);
 
-        return new PageInfo<>(comments);
+        return PageableUtils.pageInfo(total, commentArticleQuery, comments);
     }
 
     @Override

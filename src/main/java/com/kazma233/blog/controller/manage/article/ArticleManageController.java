@@ -1,9 +1,8 @@
 package com.kazma233.blog.controller.manage.article;
 
-import com.github.pagehelper.PageInfo;
+import com.kazma233.blog.entity.article.vo.ArticleAdd;
 import com.kazma233.blog.entity.article.vo.ArticleBackendQuery;
-import com.kazma233.blog.entity.article.vo.ArticleGitAdd;
-import com.kazma233.blog.entity.article.vo.ArticleGitUpdate;
+import com.kazma233.blog.entity.article.vo.ArticleUpdate;
 import com.kazma233.blog.entity.common.BaseResult;
 import com.kazma233.blog.service.article.IArticleService;
 import lombok.AllArgsConstructor;
@@ -19,21 +18,19 @@ public class ArticleManageController {
 
     @GetMapping
     public BaseResult queryAllArticle(ArticleBackendQuery articleQueryVO) {
-        PageInfo articlePageInfo = articleService.all(articleQueryVO);
-
-        return BaseResult.success(articlePageInfo);
+        return BaseResult.success(articleService.all(articleQueryVO));
     }
 
     @PostMapping
-    public BaseResult addArticle(@Validated @RequestBody ArticleGitAdd articleGitAdd) {
-       articleService.saveArticleByURL(articleGitAdd);
+    public BaseResult addArticle(@Validated @RequestBody ArticleAdd articleAdd) {
+        articleService.saveArticleByURL(articleAdd);
 
         return BaseResult.success();
     }
 
     @PutMapping
-    public BaseResult updateArticle(@Validated @RequestBody ArticleGitUpdate articleGitUpdate) {
-        articleService.update(articleGitUpdate);
+    public BaseResult updateArticle(@Validated @RequestBody ArticleUpdate articleUpdate) {
+        articleService.update(articleUpdate);
 
         return BaseResult.success();
     }

@@ -1,16 +1,16 @@
 package com.kazma233.blog.service.article.impl;
 
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.config.scheduling.ArticleReadNumberUpdateTask;
 import com.kazma233.blog.cons.DefaultConstant;
 import com.kazma233.blog.dao.article.ArticleDao;
 import com.kazma233.blog.entity.article.Article;
 import com.kazma233.blog.entity.article.enums.ArticleStatus;
 import com.kazma233.blog.entity.article.vo.*;
+import com.kazma233.blog.entity.common.PageInfo;
 import com.kazma233.blog.service.article.IArticleService;
 import com.kazma233.blog.utils.UserUtils;
 import com.kazma233.blog.utils.id.IDGenerater;
+import com.kazma233.blog.utils.pageable.PageableUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -30,20 +30,20 @@ public class ArticleService implements IArticleService {
     public PageInfo all(ArticleBackendQuery articleBackendQuery) {
         articleBackendQuery.setUid(UserUtils.getUserId());
 
-        PageHelper.startPage(articleBackendQuery.getPageNo(), articleBackendQuery.getPageSize());
         List<ArticleCategoryBackendVO> articles = articleDao.queryArticle(articleBackendQuery);
+        Long total = articleDao.queryArticleTotal(articleBackendQuery);
 
-        return new PageInfo<>(articles);
+        return PageableUtils.pageInfo(total, articleBackendQuery, articles);
     }
 
     @Cacheable(cacheNames = DefaultConstant.ARTICLE_LIST_CACHE_KEY_NAME,
             key = "#root.args[0].toString()")
     @Override
     public PageInfo allPublish(ArticleQuery articleQuery) {
-        PageHelper.startPage(articleQuery.getPageNo(), articleQuery.getPageSize());
         List<ArticleCategoryVO> articles = articleDao.queryPublishArticle(articleQuery);
+        Long total = articleDao.queryPublishArticleSize(articleQuery);
 
-        return new PageInfo<>(articles);
+        return PageableUtils.pageInfo(total, articleQuery, articles);
     }
 
     @Override
@@ -61,21 +61,21 @@ public class ArticleService implements IArticleService {
 
     @CacheEvict(cacheNames = DefaultConstant.ARTICLE_LIST_CACHE_KEY_NAME, allEntries = true)
     @Override
-    public void saveArticleByURL(ArticleGitAdd articleGitAdd) {
+    public void saveArticleByURL(ArticleAdd articleAdd) {
         LocalDateTime now = LocalDateTime.now();
 
         Article article = Article.builder().
                 id(IDGenerater.generateID()).
-                title(articleGitAdd.getTitle()).
-                subtitle(articleGitAdd.getSubtitle()).
+                title(articleAdd.getTitle()).
+                subtitle(articleAdd.getSubtitle()).
                 createTime(now).
                 updateTime(now).
                 readNum(0L).
                 archiveDate(now.format(DefaultConstant.DATE_FORMATTER_YM)).
-                state(articleGitAdd.getState()).
-                categoryId(articleGitAdd.getCategoryId()).
-                tags(articleGitAdd.getTags()).
-                content(articleGitAdd.getContent()).
+                state(articleAdd.getState()).
+                categoryId(articleAdd.getCategoryId()).
+                tags(articleAdd.getTags()).
+                content(articleAdd.getContent()).
                 uid(UserUtils.getUserId()).
                 build();
 
@@ -85,17 +85,17 @@ public class ArticleService implements IArticleService {
     @CacheEvict(cacheNames = DefaultConstant.ARTICLE_CACHE_KEY_NAME,
             key = "#root.args[0].id")
     @Override
-    public void update(ArticleGitUpdate articleGitUpdate) {
+    public void update(ArticleUpdate articleUpdate) {
 
         Article article = Article.builder().
-                id(articleGitUpdate.getId()).
-                title(articleGitUpdate.getTitle()).
-                subtitle(articleGitUpdate.getSubtitle()).
+                id(articleUpdate.getId()).
+                title(articleUpdate.getTitle()).
+                subtitle(articleUpdate.getSubtitle()).
                 updateTime(LocalDateTime.now()).
-                state(articleGitUpdate.getState()).
-                categoryId(articleGitUpdate.getCategoryId()).
-                tags(articleGitUpdate.getTags()).
-                content(articleGitUpdate.getContent()).
+                state(articleUpdate.getState()).
+                categoryId(articleUpdate.getCategoryId()).
+                tags(articleUpdate.getTags()).
+                content(articleUpdate.getContent()).
                 uid(UserUtils.getUserId()).
                 build();
 

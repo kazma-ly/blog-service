@@ -25,4 +25,20 @@
         </if>
     </select>
 
+    <select id="queryAllAndArticleTitleByArgsSize" resultType="java.lang.Long">
+        SELECT count(*)
+        FROM blog_comment_table bct JOIN blog_article_table bat ON bct.article_id = bat.id
+        <where>
+            <if test="articleTitle != null">
+                bat.article_title LIKE "%"#{articleTitle}"%"
+            </if>
+            <if test="content != null">
+                AND bct.content LIKE "%"#{content}"%"
+            </if>
+            <if test="nickname != null">
+                AND bct.nickname LIKE "%"#{nickname}"%"
+            </if>
+        </where>
+    </select>
+
 </mapper>

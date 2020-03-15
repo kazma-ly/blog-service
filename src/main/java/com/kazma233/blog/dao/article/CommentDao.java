@@ -22,8 +22,13 @@ public interface CommentDao {
 
     List<CommentArticleTitleVO> queryAllAndArticleTitleByArgs(CommentQuery commentQuery);
 
-    @Select("SELECT * FROM blog_comment_table WHERE article_id = #{articleId} AND status = 'SHOW' ORDER BY create_time DESC")
+    Long queryAllAndArticleTitleByArgsSize(CommentQuery commentQuery);
+
+    @Select("SELECT * FROM blog_comment_table WHERE article_id = #{articleId} AND status = 'SHOW' ORDER BY create_time DESC limit #{limit} offset #{offset}")
     List<Comment> queryAllShowByArticleId(CommentArticleQuery commentArticleQuery);
+
+    @Select("SELECT count(*) FROM blog_comment_table WHERE article_id = #{articleId} AND status = 'SHOW'")
+    Long queryAllShowByArticleIdSize(CommentArticleQuery commentArticleQuery);
 
     @Update("UPDATE blog_comment_table SET status = #{status} WHERE id = #{id}")
     void updateStatus(CommentUpdate commentUpdate);

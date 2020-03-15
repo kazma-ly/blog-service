@@ -12,7 +12,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ArticleGitAdd {
+public class ArticleAdd {
 
     @NotBlank(message = "文章内容不能为空")
     private String content;

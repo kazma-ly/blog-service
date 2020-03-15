@@ -11,7 +11,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class ArticleGitUpdate {
+public class ArticleUpdate {
 
     @NotBlank(message = "文章id不能为空")
     private String id;

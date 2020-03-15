@@ -1,12 +1,9 @@
 package com.kazma233.blog.controller.article;
 
-import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.entity.article.Article;
-import com.kazma233.blog.entity.article.exception.ArticleException;
 import com.kazma233.blog.entity.article.vo.ArticleQuery;
 import com.kazma233.blog.entity.article.vo.ArticleSimple;
 import com.kazma233.blog.entity.common.BaseResult;
-import com.kazma233.blog.entity.common.enums.Status;
 import com.kazma233.blog.service.article.IArticleService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,9 +25,7 @@ public class ArticleController {
 
     @GetMapping
     public BaseResult articleList(ArticleQuery articleQuery) {
-        PageInfo articlePageInfo = articleService.allPublish(articleQuery);
-
-        return BaseResult.success(articlePageInfo);
+        return BaseResult.success(articleService.allPublish(articleQuery));
     }
 
     @GetMapping("/{id}")

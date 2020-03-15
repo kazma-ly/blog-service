@@ -11,7 +11,7 @@ blog:
 mybatis:
   configuration:
     cache-enabled: false
-    #查询时，关闭关联对象及时加载以提高性能
+    # 查询时，关闭关联对象及时加载以提高性能
     lazy-loading-enabled: true
     # 当设置为true的时候，延迟加载的对象可能被任何延迟属性全部加载。否则，每个属性都按需加载
     aggressive-lazy-loading: false
@@ -42,37 +42,7 @@ mybatis:
   # 类名映射，直接写全名称，不使用这种方法
   # type-aliases-package:
 
-pagehelper:
-  helper-dialect: mysql
-  offset-as-page-num: true
-  # 设置为true时，使用RowBounds分页会进行count查询
-  row-bounds-with-count: true
-  # 设置为true时，如果pageSize=0或者RowBounds.limit = 0就会查询出全部的结果
-  page-size-zero: true
-  # 启用合理化时，如果pageNum<1会查询第一页，如果pageNum>pages会查询最后一页
-  # 禁用合理化时，如果pageNum<1或pageNum>pages会返回空数据
-  reasonable: false
-
 spring:
-  data:
-    mongodb:
-      host: 3.113.196.219
-      port: 27017
-      database: blog
-      authentication-database: admin
-      username: admin
-      password: pw123456
-  redis:
-    host: 3.113.196.219
-    port: 6379
-    password: pw123456
-    timeout: 1m
-    lettuce:
-      pool:
-        # 最大空闲连接
-        max-idle: 8
-        max-wait: 30s
-        max-active: 8
   datasource:
     url: jdbc:mysql://3.113.196.219:3306/blog?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     username: root
@@ -86,15 +56,14 @@ spring:
       connection-timeout: 30000
       idle-timeout: 30000
       connection-init-sql: SELECT 1
-  messages:
-    basename: i18n/i18n
-    encoding: UTF-8
   servlet:
     multipart:
       max-file-size: 3MB
       max-request-size: 3MB
   cache:
-    type: redis
+    type: JCACHE
+    jcache:
+      config: classpath:ehcache.xml
   mail:
     default-encoding: UTF-8
     host: smtp.163.com

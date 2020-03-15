@@ -26,10 +26,13 @@ public interface ArticleDao {
 
     List<ArticleCategoryVO> queryPublishArticle(ArticleQuery articleQuery);
 
+    Long queryPublishArticleSize(ArticleQuery articleQuery);
+
     List<ArticleCategoryBackendVO> queryArticle(ArticleBackendQuery articleBackendQuery);
+
+    Long queryArticleTotal(ArticleBackendQuery articleBackendQuery);
 
     @Select("select id, title, read_num, archive_date from blog_article_table where state = #{status} order by create_time desc")
     List<ArticleSimple> queryArticleSimpleByStatus(String status);
-
 
 }

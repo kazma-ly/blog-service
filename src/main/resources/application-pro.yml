@@ -12,24 +12,6 @@ mybatis:
   configuration:
     cache-enabled: true
 spring:
-  data:
-    mongodb:
-      host:
-      port:
-      database:
-      authentication-database:
-      username:
-      password:
-  redis:
-    host:
-    port:
-    password:
-    timeout: 10s
-    lettuce:
-      pool:
-        max-idle: 8
-        max-wait: 10s
-        max-active: 8
   datasource:
     url:
     username:

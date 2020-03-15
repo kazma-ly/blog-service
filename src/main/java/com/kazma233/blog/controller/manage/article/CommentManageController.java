@@ -1,7 +1,5 @@
 package com.kazma233.blog.controller.manage.article;
 
-import com.github.pagehelper.PageInfo;
-import com.kazma233.blog.entity.comment.vo.CommentArticleTitleVO;
 import com.kazma233.blog.entity.comment.vo.CommentQuery;
 import com.kazma233.blog.entity.comment.vo.CommentUpdate;
 import com.kazma233.blog.entity.common.BaseResult;
@@ -19,9 +17,7 @@ public class CommentManageController {
 
     @GetMapping
     public BaseResult all(CommentQuery commentQuery) {
-        PageInfo<CommentArticleTitleVO> commentArticlePage = commentService.queryAllCommentAndArticleTitle(commentQuery);
-
-        return BaseResult.success(commentArticlePage);
+        return BaseResult.success(commentService.queryAllCommentAndArticleTitle(commentQuery));
     }
 
     @PatchMapping

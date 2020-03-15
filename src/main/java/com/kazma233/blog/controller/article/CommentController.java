@@ -1,6 +1,5 @@
 package com.kazma233.blog.controller.article;
 
-import com.github.pagehelper.PageInfo;
 import com.kazma233.blog.entity.comment.vo.CommentAdd;
 import com.kazma233.blog.entity.comment.vo.CommentArticleQuery;
 import com.kazma233.blog.entity.common.BaseResult;
@@ -24,10 +23,8 @@ public class CommentController {
     }
 
     @GetMapping
-    public BaseResult<PageInfo> articleComment(CommentArticleQuery commentArticleQuery) {
-        PageInfo pageInfo = commentService.queryArticleComment(commentArticleQuery);
-
-        return BaseResult.success(pageInfo);
+    public BaseResult articleComment(CommentArticleQuery commentArticleQuery) {
+        return BaseResult.success(commentService.queryArticleComment(commentArticleQuery));
     }
 
 }

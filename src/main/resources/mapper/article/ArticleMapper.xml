@@ -90,6 +90,21 @@
         </if>
     </select>
 
+    <select id="queryPublishArticleSize" resultType="java.lang.Long">
+        select count(*)
+        from blog_article_table bat
+        left join blog_article_category bac on bat.category_id = bac.id
+        <where>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="uid != null">
+                and bat.uid = #{uid}
+            </if>
+            and state = 'ENABLE'
+        </where>
+    </select>
+
     <select id="queryArticle" resultType="com.kazma233.blog.entity.article.vo.ArticleCategoryBackendVO">
         select
         bat.id,
@@ -131,6 +146,31 @@
         <if test="offset != null">
             OFFSET #{offset}
         </if>
+    </select>
+
+    <select id="queryArticleTotal" resultType="java.lang.Long">
+        select count(*)
+        from blog_article_table bat
+        left join blog_article_category bac on bat.category_id = bac.id
+        <where>
+            <if test="title != null">
+                title like "%"#{title}"%"
+            </if>
+            <if test="categoryId != null">
+                and category_id = #{categoryId}
+            </if>
+            <if test="articleState != null">
+                and state = #{articleState}
+            </if>
+            <choose>
+                <when test="year != null">
+                    AND DATE_FORMAT(bat.update_time, '%Y') = #{year}
+                </when>
+                <when test="uid != null">
+                    AND bat.uid = #{uid}
+                </when>
+            </choose>
+        </where>
     </select>
 
     <insert id="insert" parameterType="com.kazma233.blog.entity.article.Article">
