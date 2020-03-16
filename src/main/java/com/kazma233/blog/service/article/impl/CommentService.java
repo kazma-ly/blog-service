@@ -48,7 +48,6 @@ public class CommentService implements ICommentService {
                 regerOriginId(commentAdd.getRegerOriginId()).
                 createTime(LocalDateTime.now()).
                 status(CommentStatus.SHOW.getCode()).
-                uid(UserUtils.getUserId()).
                 build();
 
         commentDao.insert(comment);

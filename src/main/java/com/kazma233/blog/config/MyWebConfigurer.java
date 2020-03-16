@@ -39,11 +39,8 @@ public class MyWebConfigurer implements WebMvcConfigurer {
                 addPathPatterns("/**").
                 excludePathPatterns(
                         "/users/login",
-                        "/users/register",
-                        "/users/avatar/*",
                         "/comments/**",
-                        "/articles/**",
-                        "/statistics/**"
+                        "/articles/**"
                 );
     }
 
