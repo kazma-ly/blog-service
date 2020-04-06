@@ -10,7 +10,6 @@ import com.kazma233.blog.entity.common.PageInfo;
 import com.kazma233.blog.service.article.IArticleService;
 import com.kazma233.blog.service.article.ICommentService;
 import com.kazma233.blog.utils.ThreadPoolUtils;
-import com.kazma233.blog.utils.UserUtils;
 import com.kazma233.blog.utils.id.IDGenerater;
 import com.kazma233.blog.utils.pageable.PageableUtils;
 import lombok.AllArgsConstructor;
@@ -57,8 +56,6 @@ public class CommentService implements ICommentService {
 
     @Override
     public PageInfo queryAllCommentAndArticleTitle(CommentQuery commentQuery) {
-        commentQuery.setUid(UserUtils.getUserId());
-
         List<CommentArticleTitleVO> commentArticleTitleList = commentDao.queryAllAndArticleTitleByArgs(commentQuery);
         Long total = commentDao.queryAllAndArticleTitleByArgsSize(commentQuery);
 

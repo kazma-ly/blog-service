@@ -44,7 +44,7 @@ mybatis:
 
 spring:
   datasource:
-    url: jdbc:mysql://3.113.196.219:3306/blog?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
+    url: jdbc:mysql://192.168.1.104:3306/blog?useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true
     username: root
     password: pw123456
     driver-class-name: com.mysql.cj.jdbc.Driver
