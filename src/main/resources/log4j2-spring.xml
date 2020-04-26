@@ -65,9 +65,9 @@
         <!--建立一个默认的root的logger，需要在root的level中指定输出的级别， -->
         <root level="${output_log_level}">
             <appender-ref ref="Console"/>
-            <!--<appender-ref ref="app_debug"/>-->
-            <appender-ref ref="app_info"/>
-            <appender-ref ref="app_error"/>
+<!--            <appender-ref ref="app_debug"/>-->
+<!--            <appender-ref ref="app_info"/>-->
+<!--            <appender-ref ref="app_error"/>-->
         </root>
     </loggers>
 
